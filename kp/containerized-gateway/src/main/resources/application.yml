@@ -1,0 +1,48 @@
+server:
+  port: ${PORT:8762}
+#  ssl:
+#    enabled: true
+#    protocol: TLS
+#    key-store: classpath:gateway.pfx
+#    key-store-password: gateway
+#    key-password: gateway
+#    keyStoreType: PKCS12
+#    keyAlias: gateway
+#    trust-store: classpath:gateway.pfx
+#    trust-store-password: gateway
+#    client-auth: want
+
+spring:
+  application:
+    name: containerized-gateway
+
+
+zuul:
+  routes:
+    bank-ms:
+      serviceId: bank-ms
+      sensitiveHeaders: 
+
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    nonSecurePortEnabled: false
+    securePortEnabled: true
+    securePort: ${server.port}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+#ribbon:
+#  IsSecure: true
+  
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
