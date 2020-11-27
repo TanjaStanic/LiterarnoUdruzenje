@@ -1,5 +1,5 @@
-#server:
-  #port: ${PORT:8441}
+server:
+  port: ${PORT:8441}
   #ssl:
     #enabled: true
     #protocol: TLS

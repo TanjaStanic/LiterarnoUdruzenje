@@ -18,14 +18,6 @@ management:
       exposure:
         include=*:
 
-
-zuul:
-  routes:
-    bank-ms:
-      serviceId: bank-ms
-      sensitiveHeaders: 
-
-
 eureka:
   instance:
     prefer-ip-address: true

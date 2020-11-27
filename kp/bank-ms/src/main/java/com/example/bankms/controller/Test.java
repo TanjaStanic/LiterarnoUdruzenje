@@ -17,4 +17,10 @@ public class Test {
         System.out.println("Pogodio banku");
         return ResponseEntity.ok().body("Hello from bank!");
     }
+
+    @GetMapping
+    public ResponseEntity<String> testRouting(){
+        return ResponseEntity.ok().body("I am bank-ms");
+    }
+
 }
