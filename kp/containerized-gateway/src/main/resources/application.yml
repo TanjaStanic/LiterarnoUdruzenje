@@ -12,9 +12,11 @@ server:
 #    trust-store-password: gateway
 #    client-auth: want
 
-spring:
-  application:
-    name: containerized-gateway
+management:
+  endpoints:
+    web:
+      exposure:
+        include=*:
 
 
 zuul:

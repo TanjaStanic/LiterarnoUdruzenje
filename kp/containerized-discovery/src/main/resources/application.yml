@@ -12,22 +12,19 @@ server:
 #    trust-store-password: discovery
 #    client-auth: want
 
-spring:
-  application:
-    name: containerized-discovery
 
 eureka:
   instance:
-    statusPageUrl: https://localhost:${server.port}/info
+    statusPageUrl: http://localhost:${server.port}/info
     prefer-ip-address: true
-    healthCheckUrl: https://localhost:${server.port}/health
-    homePageUrl: https://localhost:${server.port}
+    healthCheckUrl: http://localhost:${server.port}/health
+    homePageUrl: http://localhost:${server.port}
     hostname: localhost
   client:
     registerWithEureka: false
     fetchRegistry: false
     serviceUrl:
-      defaultZone: https://${eureka.instance.hostname}:${server.port}/eureka/
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
   server:
     enableSelfPreservation: false
 
