@@ -10,5 +10,6 @@ public class ContainerizedDiscoveryApplication
 {
 	public static void main(String[] args) {
 		SpringApplication.run(ContainerizedDiscoveryApplication.class, args);
+		System.out.println("hi from eureka");
 	}
 }

@@ -32,7 +32,7 @@ public class Test {
     public ResponseEntity<String> testComunication(){
         
         restTemplate = new RestTemplate();
-        String fromGateway = restTemplate.getForObject("http://localhost:8762/testGateway", String.class);
+        String fromGateway = restTemplate.getForObject("https://localhost:8762/testGateway", String.class);
 		System.out.println(fromGateway);
 		fromGateway+=", BankMS Test-done";
         return ResponseEntity.ok().body(fromGateway);
