@@ -4,7 +4,7 @@ server:
     enabled: true
     key-store: classpath:paypal.jks
     key-store-password: password
-    key-alias: :paypal
+    key-alias: paypal
 security:
   require-ssl: true
 eureka:
