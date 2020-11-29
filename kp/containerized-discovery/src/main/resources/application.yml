@@ -1,16 +1,14 @@
 server:
   port: 8761
-#  ssl:
-#    enabled: true
-#    protocol: TLS
-#    key-store: classpath:discovery.p12
-#    key-store-password: discovery
-#    key-password: discovery
-#    keyStoreType: PKCS12
-#    keyAlias: discovery
-#    trust-store: classpath:discovery.p12
-#    trust-store-password: discovery
-#    client-auth: want
+  ssl:
+    enabled: true
+    protocol: TLS
+    key-store: classpath:discovery.jks
+    key-store-password: password
+    key-password: password
+    keyStoreType: JKS
+    keyAlias: discovery
+    client-auth: want
 
 
 eureka:
