@@ -1,16 +1,13 @@
 server:
   port: ${PORT:8762}
-#  ssl:
-#    enabled: true
-#    protocol: TLS
-#    key-store: classpath:gateway.pfx
-#    key-store-password: gateway
-#    key-password: gateway
-#    keyStoreType: PKCS12
-#    keyAlias: gateway
-#    trust-store: classpath:gateway.pfx
-#    trust-store-password: gateway
-#    client-auth: want
+  ssl:
+    enabled: true
+    key-store: classpath:gateway.jks
+    key-store-password: password
+    key-alias: gateway
+    
+security:
+  require-ssl: true
 
 management:
   endpoints:
@@ -20,18 +17,16 @@ management:
 
 eureka:
   instance:
-    prefer-ip-address: true
+    hostname: gateway
+    prefer-ip-address: false
     nonSecurePortEnabled: false
     securePortEnabled: true
     securePort: ${server.port}
   client:
-    register-with-eureka: true
-    fetch-registry: true
+    securePortEnabled: true
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: https://localhost:8761/eureka/ 
 
-#ribbon:
-#  IsSecure: true
   
 hystrix:
   command:
@@ -40,3 +35,17 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 60000
+    gateway:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+ ribbon:
+    IsSecured: true
+    ConnectTimeout:  10000
+    ReadTimeout:  10000
+    eureka:
+      enabled: true
+    TrustStore: classpath:gateway.jks
+    TrustStorePassword : password
+    IsHostnameValidationRequired: false

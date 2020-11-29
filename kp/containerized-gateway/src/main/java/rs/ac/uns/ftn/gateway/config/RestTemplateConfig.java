@@ -11,7 +11,7 @@ public class RestTemplateConfig {
     @Bean
     public RestTemplate restTemplate() {
         RestTemplate restTemplate =  new RestTemplate();
-        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("https://localhost:8888"));
+        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:8888"));
         return restTemplate;
     }
 }

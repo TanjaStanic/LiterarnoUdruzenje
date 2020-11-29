@@ -2,47 +2,22 @@ server:
   port: ${PORT:8441}
   ssl:
     enabled: true
-    protocol: TLS
-    key-store: classpath:bank.jks	
-    key-store-password: password	
-    key-password: password
-    keyStoreType: JKS
-    keyAlias: bank
-   # trust-store: classpath:banka.p12
-  #  trust-store-password: banka
- #   client-auth: want
-
-spring:
-#  application:
-#    name: bank-ms
-  logging:
-    pattern:
-      console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([${springAppName:-},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}]){yellow} %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
-    level:
-      org.springframework: WARN
-      org.hibernate: WARN
-
+    key-store: classpath:bank.jks
+    key-store-password: password
+    key-alias: bank
+security:
+  require-ssl: true
 eureka:
-  client:
-    enabled: false
-    securePortEnabled: true
-    registerWithEureka: true
-    fetchRegistry: true
-    serviceUrl:
-      #defaultZone: ${DISCOVER:https://localhost:8761}/eureka/
-      defaultZone: https://localhost:8761/eureka/
   instance:
-    #nonSecurePortEnabled: false
-    #securePortEnabled: true
-    prefer-ip-address: true
-    #securePort: ${server.port}
-    statusPageUrl: http://localhost:${server.port}/info
-    healthCheckUrl: http://localhost:${server.port}/health
-    homePageUrl: http://localhost:${server.port}
-    secureVirtualHostName: ${spring.application.name}
-   # leaseRenewalIntervalInSeconds: 1
-   # leaseExpirationDurationInSeconds: 2
+    hostname: localhost
+    prefer-ip-address: false
+    nonSecurePortEnabled: false
+    securePortEnabled: true
+    securePort: ${server.port}
+  client:
+    securePortEnabled: true
+    serviceUrl:
+      defaultZone: https://localhost:8761/eureka/   
 
-ribbon:
-  eureka:
-    enabled: true
+
+

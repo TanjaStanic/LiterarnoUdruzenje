@@ -24,7 +24,7 @@ public class SSLConfig {
     @Autowired(required = false)
     private SSLContext sslContext;
 
-    @Bean("httpClient")
+    @Bean("httpsClient")
     @ConditionalOnProperty(name = "client.ssl.enabled", havingValue = "true")
     public HttpClient httpClientWithTLS() {
         return HttpClients.custom()
@@ -32,7 +32,7 @@ public class SSLConfig {
                 .build();
     }
 
-    @Bean("httpClient")
+    @Bean("httpsClient")
     @ConditionalOnProperty(name = "client.ssl.enabled", havingValue = "false")
     public HttpClient httpClientWithoutTLS() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
         return HttpClients.custom()
