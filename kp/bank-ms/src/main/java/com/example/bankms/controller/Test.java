@@ -40,11 +40,11 @@ public class Test {
     @GetMapping("/testBankMS")
     public ResponseEntity<String> testComunication(){
         
-        restTemplate = new RestTemplate();
-        String fromGateway = restTemplate.getForObject("http://localhost:8762/testGateway", String.class);
-		System.out.println(fromGateway);
-		fromGateway+=", BankMS Test-done";
-        return ResponseEntity.ok().body(fromGateway);
+    	 restTemplate = new RestTemplate();
+         String fromLuService = restTemplate.getForObject("http://localhost:8447/testLuService", String.class);
+ 		 System.out.println(fromLuService);
+ 		 fromLuService+=", Gateway Test-done";
+         return ResponseEntity.ok().body(fromLuService);
     }
    
     @RequestMapping("/service-instances/{applicationName}")
