@@ -48,15 +48,26 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
 
-  
+
 hystrix:
   command:
     default:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 240000
+            timeoutInMilliseconds: 60000
+    gateway:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+  ribbon:
+    IsSecured: true
+    ConnectTimeout:  10000
+    ReadTimeout:  10000
+    eureka:
+      enabled: true
+    TrustStore: classpath:gateway.jks
+    TrustStorePassword : password
+    IsHostnameValidationRequired: false
 
-ribbon:
-  ConnectTimeout: 60000
-  ReadTimeout: 60000

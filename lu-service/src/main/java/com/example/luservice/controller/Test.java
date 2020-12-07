@@ -31,9 +31,18 @@ public class Test {
 		return ResponseEntity.ok().body(fromPaymentInfo);
 
 	}
+
 	@GetMapping("/testLuService")
 	public String testCommunication() {
-		
 		return "Lu-service  test-done";
+	}
+
+	@GetMapping("/finallTest")
+	public ResponseEntity<String> finallTest(){
+
+	        String finall = restTemplate.getForObject("http://localhost:8445/testBankAcquirer", String.class);
+			System.out.println(finall);
+			finall+=", all tests are done";
+	        return ResponseEntity.ok().body(finall);
 	}
 }

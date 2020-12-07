@@ -28,7 +28,7 @@ public class Test {
 	@GetMapping("/testBankAcquirer")
 	public String testCommunication() {
 		restTemplate = new RestTemplate();
-        String fromBankAq = restTemplate.getForObject("http://localhost:8441/testBankMS", String.class);
+        String fromBankAq = restTemplate.getForObject("https://localhost:8441/testBankMS", String.class);
 		System.out.println(fromBankAq);
 		fromBankAq+=", Bank Acquirer Test-done";
 		return fromBankAq;

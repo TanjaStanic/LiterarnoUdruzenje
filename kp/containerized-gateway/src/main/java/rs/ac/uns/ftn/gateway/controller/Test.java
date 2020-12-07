@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class Test {
+
     @Autowired
     private RestTemplate restTemplate;
 
@@ -15,6 +16,14 @@ public class Test {
     public ResponseEntity<String> test(){
         String response = restTemplate.getForObject("https://localhost:8447/testLuService", String.class);
         return ResponseEntity.ok( response + "I am gateway");
+    }
+
+    
+    @GetMapping("/hello")
+    public ResponseEntity<String> hello(){
+        System.out.println("Pogodio");
+        return ResponseEntity.ok().body("Hello to you too!");
+        
     }
 
 }
