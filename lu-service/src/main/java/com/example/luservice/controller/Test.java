@@ -16,7 +16,7 @@ public class Test {
 
 	@GetMapping
 	public ResponseEntity<String> test() {
-		String fromBankMs = restTemplate.getForObject("/banking", String.class);
+		String fromBankMs = restTemplate.getForObject("/banking/", String.class);
 		System.out.println("Literarno udruzenje");
 		fromBankMs+=", BankMS responded Test completed";
 		return ResponseEntity.ok().body(fromBankMs);

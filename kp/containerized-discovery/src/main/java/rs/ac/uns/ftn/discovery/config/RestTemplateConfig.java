@@ -9,12 +9,9 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 @Configuration
 public class RestTemplateConfig {
 
-    @LoadBalanced
     @Bean
     public RestTemplate restTemplate() {
-        RestTemplate restTemplate =  new RestTemplate();
-        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("https://localhost:8762"));
-        return restTemplate;
+        return new RestTemplate();
     }
 
 }

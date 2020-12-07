@@ -23,14 +23,14 @@ spring:
 
 eureka:
   instance:
-    #hostname: localhost
+    hostname: localhost
     nonSecurePortEnabled: false
     securePortEnabled: true
     securePort: ${server.port}
-    prefer-ip-address: true
-    statusPageUrl: https://localhost:${server.port}/info
-    healthCheckUrl: https://localhost:${server.port}/health
-    homePageUrl: https://localhost:${server.port}
+    #prefer-ip-address: true
+    statusPageUrl: https://${eureka.instance.hostname}:${server.port}/info
+    healthCheckUrl: https://${eureka.instance.hostname}:${server.port}/health
+    homePageUrl: https://${eureka.instance.hostname}:${server.port}
     lease-expiration-duration-in-seconds: 20
     lease-renewal-interval-in-seconds: 10
   client:
@@ -42,6 +42,3 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
 
-ribbon:
-  eureka:
-    enabled: true

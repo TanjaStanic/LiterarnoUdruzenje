@@ -23,15 +23,17 @@ spring:
 eureka:
   instance:
     hostname: localhost
-    #prefer-ip-address: true
+    prefer-ip-address: false
+    securePortEnabled: true
+    nonSecurePortEnabled: false
     healthCheckUrl: https://${eureka.instance.hostname}:${server.port}/health
     homePageUrl: https://${eureka.instance.hostname}:${server.port}
     statusPageUrl: https://${eureka.instance.hostname}:${server.port}/admin/info
+  server:
+    waitTimeInMsWhenSyncEmpty: 0
   client:
     registerWithEureka: false
     fetchRegistry: false
-    serviceUrl:
-      defaultZone: https://${eureka.instance.hostname}:${server.port}/eureka/
 
 hystrix:
   command:

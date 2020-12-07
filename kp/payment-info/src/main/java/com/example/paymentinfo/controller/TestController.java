@@ -22,7 +22,7 @@ public class TestController {
     @GetMapping("test")
     public ResponseEntity<String> testBankMS(){
         System.out.println("Payment info");
-        String fromBankMs = restTemplate.getForObject("https://bank-ms/test/luservice", String.class);
+        String fromBankMs = restTemplate.getForObject("https://bank-ms/test", String.class);
         fromBankMs+=", BankMS responded Payment info";
         return ResponseEntity.ok().body(fromBankMs);
 
