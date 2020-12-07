@@ -18,7 +18,13 @@ public class Test {
 	
 	@Autowired
 	private RestTemplate restTemplate;
-	
+
+	@GetMapping
+	public ResponseEntity<String> test() {
+		System.out.println("Bank Acquirer");
+		return ResponseEntity.ok("Bank Acquirer");
+	}
+
 	@GetMapping("/testBankAcquirer")
 	public String testCommunication() {
 		restTemplate = new RestTemplate();

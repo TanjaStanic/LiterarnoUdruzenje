@@ -1,24 +1,46 @@
 server:
   port: ${PORT:8443}
+  ssl:
+    enabled: true
+    protocol: TLS
+    key-store: classpath:paypal.jks
+    key-store-password: paypal
+    key-password: paypal
+    keyStoreType: JKS
+    keyAlias: paypal-ms
+    trust-store: classpath:paypal_truststore.jks
+    trust-store-password: paypal
+    trust-store-type: JKS
+    client-auth: want
 
 spring:
-  application:
-      #logging:
-      #pattern:
-      #  console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([${springAppName:-},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}]){yellow} %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
-      # level:
-    #org.springframework: WARN
-    #org.hibernate: WARN
+  logging:
+    pattern:
+      console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([${springAppName:-},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}]){yellow} %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
+    level:
+      org.springframework: WARN
+      org.hibernate: WARN
 
 eureka:
-  client:
-    serviceUrl:
-      #defaultZone: ${DISCOVER:http://localhost:8761}/eureka/
-      defaultZone: http://localhost:8761/eureka/
-    #enabled: false
   instance:
-    leaseRenewalIntervalInSeconds: 1
-    leaseExpirationDurationInSeconds: 2
+    hostname: localhost
+    nonSecurePortEnabled: false
+    securePortEnabled: true
+    securePort: ${server.port}
+    #prefer-ip-address: true
+    statusPageUrl: https://${eureka.instance.hostname}:${server.port}/info
+    healthCheckUrl: https://${eureka.instance.hostname}:${server.port}/health
+    homePageUrl: https://${eureka.instance.hostname}:${server.port}
+    lease-expiration-duration-in-seconds: 20
+    lease-renewal-interval-in-seconds: 10
+  client:
+    enabled: true
+    instance-info-replication-interval-seconds: 10
+    registry-fetch-interval-seconds: 10
+    serviceUrl:
+      defaultZone:  ${EUREKA_URI:https://localhost:8761/eureka}
+    fetch-registry: true
+    register-with-eureka: true
 
 ribbon:
   eureka:

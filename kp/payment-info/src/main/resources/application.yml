@@ -1,5 +1,17 @@
 server:
   port: ${PORT:8444}
+  ssl:
+    enabled: true
+    protocol: TLS
+    key-store: classpath:paymentinfo.jks
+    key-store-password: paymentinfo
+    key-password: paymentinfo
+    keyStoreType: JKS
+    keyAlias: payment-info
+    trust-store: classpath:paymentinfo_truststore.jks
+    trust-store-password: paymentinfo
+    trust-store-type: JKS
+    client-auth: want
 
 spring:
     logging:
@@ -10,19 +22,25 @@ spring:
             org.hibernate: WARN
 
 eureka:
-  client:
-    registerWithEureka: true
-    fetchRegistry: true
-    serviceUrl:
-      #defaultZone: ${DISCOVER:http://localhost:8761}/eureka/
-      defaultZone: http://localhost:8761/eureka/
   instance:
+    #hostname: localhost
+    nonSecurePortEnabled: false
+    securePortEnabled: true
+    securePort: ${server.port}
     prefer-ip-address: true
-    statusPageUrl: http://localhost:${server.port}/info
-    healthCheckUrl: http://localhost:${server.port}/health
-    homePageUrl: http://localhost:${server.port}
-    leaseRenewalIntervalInSeconds: 1
-    leaseExpirationDurationInSeconds: 2
+    statusPageUrl: https://localhost:${server.port}/info
+    healthCheckUrl: https://localhost:${server.port}/health
+    homePageUrl: https://localhost:${server.port}
+    lease-expiration-duration-in-seconds: 20
+    lease-renewal-interval-in-seconds: 10
+  client:
+    enabled: true
+    instance-info-replication-interval-seconds: 10
+    registry-fetch-interval-seconds: 10
+    serviceUrl:
+      defaultZone:  ${EUREKA_URI:https://localhost:8761/eureka}
+    fetch-registry: true
+    register-with-eureka: true
 
 ribbon:
   eureka:

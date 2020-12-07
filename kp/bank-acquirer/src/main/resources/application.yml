@@ -1,0 +1,12 @@
+server:
+  ssl:
+    enabled: true
+    protocol: TLS
+    key-store: classpath:bankacq.jks
+    key-store-password: bankacq
+    key-password: bankacq
+    keyStoreType: JKS
+    keyAlias: bankacq
+    trust-store: classpath:bankacq_truststore.jks
+    trust-store-password: bankacq
+    trust-store-type: JKS

@@ -11,20 +11,10 @@ public class Test {
     @Autowired
     private RestTemplate restTemplate;
 
-    @GetMapping("/hello")
+    @GetMapping
     public ResponseEntity<String> test(){
-        System.out.println("Pogodio");
-        return ResponseEntity.ok().body("Hello to you too!");
-        
-    }
-    @GetMapping("/testGateway")
-    public ResponseEntity<String> testComunication(){
-        
-        restTemplate = new RestTemplate();
-        String fromLuService = restTemplate.getForObject("http://localhost:8447/testLuService", String.class);
-		System.out.println(fromLuService);
-		fromLuService+=", Gateway Test-done";
-        return ResponseEntity.ok().body(fromLuService);
+        String response = restTemplate.getForObject("https://localhost:8447/testLuService", String.class);
+        return ResponseEntity.ok( response + "I am gateway");
     }
 
 }

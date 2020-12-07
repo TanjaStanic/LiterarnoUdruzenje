@@ -10,11 +10,6 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 public class Test {
 	
-	@Bean
-	public RestTemplate restTemplate() {
-	    return new RestTemplate();
-	}
-	
 	@Autowired
 	private RestTemplate restTemplate;
 
@@ -23,19 +18,18 @@ public class Test {
         return ResponseEntity.ok().body("I am bank-ms");
     }
 
-    @GetMapping("/helloBank")
-    public ResponseEntity<String> test(){
-        System.out.println("Pogodio banku");
-        return ResponseEntity.ok().body("Hello from bank mc!");
+    @GetMapping("/test")
+    public ResponseEntity<String> testBankAcquirer(){
+        String fromBankAcq = restTemplate.getForObject("https://localhost:8445", String.class);
+        System.out.println("Bank MS");
+        fromBankAcq+=", BankAQ responded";
+        return ResponseEntity.ok().body(fromBankAcq);
     }
-    @GetMapping("/testBankMS")
-    public ResponseEntity<String> testComunication(){
-        
-        restTemplate = new RestTemplate();
-        String fromGateway = restTemplate.getForObject("https://localhost:8762/testGateway", String.class);
-		System.out.println(fromGateway);
-		fromGateway+=", BankMS Test-done";
-        return ResponseEntity.ok().body(fromGateway);
+
+    @GetMapping("/test/luservice")
+    public ResponseEntity<String> test(){
+        String response = restTemplate.getForObject("https://localhost:8447/testLuService", String.class);
+        return ResponseEntity.ok( response + "  I am bank ms");
     }
 
 
