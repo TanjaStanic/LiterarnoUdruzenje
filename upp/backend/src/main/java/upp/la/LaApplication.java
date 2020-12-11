@@ -1,7 +1,5 @@
 package upp.la;
 
-import org.camunda.bpm.engine.spring.ProcessEngineFactoryBean;
-import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -14,7 +12,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
 @EnableWebMvc
-@EnableProcessApplication
 @SpringBootApplication
 public class LaApplication {
 
