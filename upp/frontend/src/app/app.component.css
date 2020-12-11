@@ -7,5 +7,9 @@
 }
 
 .mat-nav-list{
-  background-color: coral;
+  background-color: #8b87ff;
+}
+
+.mat-toolbar {
+  background-color: #8b87ff;
 }
