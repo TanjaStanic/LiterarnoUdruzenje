@@ -29,7 +29,7 @@ public class Client {
     @Column
     private String name;
 
-    public Client(Long id, String merchantID, String merchantPassword, String email, String name, boolean active) {
+    public Client(Long id, String merchantID, String merchantPassword, String email, String name) {
         Assert.notNull(id, "Attribute id cannot be null.");
         this.id = id;
         init(email, name, merchantID, merchantPassword);
