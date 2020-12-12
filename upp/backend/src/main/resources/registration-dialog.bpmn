@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_11hm01v"
+                  targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
+    <bpmn:process id="first_process" name="First_process" isExecutable="true">
+        <bpmn:startEvent id="StartEvent_1" camunda:initiator="user">
+            <bpmn:outgoing>Flow_150hi7z</bpmn:outgoing>
+        </bpmn:startEvent>
+        <bpmn:endEvent id="Event_1ndnvht">
+            <bpmn:incoming>Flow_05vv33s</bpmn:incoming>
+        </bpmn:endEvent>
+        <bpmn:sequenceFlow id="Flow_150hi7z" sourceRef="StartEvent_1" targetRef="registrationId"/>
+        <bpmn:userTask id="registrationId" name="Registration" camunda:assignee="${user}">
+            <bpmn:extensionElements>
+                <camunda:formData>
+                    <camunda:formField id="nameId" label="Ime" type="string"/>
+                    <camunda:formField id="prezimeId" label="Prezime" type="string"/>
+                </camunda:formData>
+            </bpmn:extensionElements>
+            <bpmn:incoming>Flow_150hi7z</bpmn:incoming>
+            <bpmn:outgoing>Flow_0rtutbq</bpmn:outgoing>
+        </bpmn:userTask>
+        <bpmn:serviceTask id="saveDataId" name="Save data" camunda:class="upp.la.services.RegistrationService">
+            <bpmn:incoming>Flow_0rtutbq</bpmn:incoming>
+            <bpmn:outgoing>Flow_05vv33s</bpmn:outgoing>
+        </bpmn:serviceTask>
+        <bpmn:sequenceFlow id="Flow_0rtutbq" sourceRef="registrationId" targetRef="saveDataId"/>
+        <bpmn:sequenceFlow id="Flow_05vv33s" sourceRef="saveDataId" targetRef="Event_1ndnvht"/>
+    </bpmn:process>
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+        <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="first_process">
+            <bpmndi:BPMNEdge id="Flow_150hi7z_di" bpmnElement="Flow_150hi7z">
+                <di:waypoint x="188" y="117"/>
+                <di:waypoint x="250" y="117"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_0rtutbq_di" bpmnElement="Flow_0rtutbq">
+                <di:waypoint x="350" y="117"/>
+                <di:waypoint x="400" y="117"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_05vv33s_di" bpmnElement="Flow_05vv33s">
+                <di:waypoint x="500" y="117"/>
+                <di:waypoint x="782" y="117"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+                <dc:Bounds x="152" y="99" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Activity_18c0rz7_di" bpmnElement="registrationId">
+                <dc:Bounds x="250" y="77" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Activity_1ucnpkz_di" bpmnElement="saveDataId">
+                <dc:Bounds x="400" y="77" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Event_1ndnvht_di" bpmnElement="Event_1ndnvht">
+                <dc:Bounds x="782" y="99" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</bpmn:definitions>
