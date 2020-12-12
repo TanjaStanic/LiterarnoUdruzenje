@@ -54,11 +54,9 @@ public class Transaction {
         Assert.notNull(seller, "Attribute seller cannot be null.");
         Assert.notNull(status, "Attribute status cannot be null.");
         Assert.notNull(merchantOrderId, "Attribute merchantOrderId cannot be null.");
-        Assert.notNull(acquirerOrderId, "Attribute acquirerOrderId cannot be null.");
         Assert.notNull(amount, "Attribute amount cannot be null.");
         this.seller = seller;
         this.merchantOrderId = merchantOrderId;
-        this.acquirerTimestamp = acquirerTimestamp;
         this.status = status;
         this.amount = amount;
 
