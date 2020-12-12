@@ -1,0 +1,22 @@
+<div class="main-content">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+          <mat-card>
+            <h4>Registracija citaoca</h4>
+            <form [formGroup]="readerForm" (ngSubmit)="onSubmit()">
+              <mat-label for="role">Beta citalac</mat-label>
+                  <mat-radio-group id="role" formControlName="role" aria-label="Beta citalac">
+                     <mat-radio-button value="da">Da</mat-radio-button>
+                     <mat-radio-button value="ne">Ne</mat-radio-button>
+                  </mat-radio-group>
+              <div mat-dialog-actions>
+              <button mat-raised-button color="primary" class="pull-right">Register</button>
+              </div>
+            </form>
+          </mat-card>
+
+      </div>
+    </div>
+  </div>
+</div>

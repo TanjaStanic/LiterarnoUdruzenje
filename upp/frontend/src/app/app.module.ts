@@ -3,18 +3,31 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatButtonModule, MatCardModule, MatIconModule, MatListModule, MatSidenavModule, MatToolbarModule} from '@angular/material';
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatListModule, MatSelectModule,
+  MatSidenavModule,
+  MatToolbarModule,
+  MatDialogModule, MatRadioModule
+} from '@angular/material';
 import {RouterModule} from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import {AppRoutingModule} from './app-routing.module';
 import {ReactiveFormsModule} from '@angular/forms';
+import { ReaderDialogComponent } from './components/reader-dialog/reader-dialog.component';
+import { WriterDialogComponent } from './components/writer-dialog/writer-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ReaderDialogComponent,
+    WriterDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -27,9 +40,14 @@ import {ReactiveFormsModule} from '@angular/forms';
     AppRoutingModule,
     ReactiveFormsModule,
     MatCardModule,
-    MatButtonModule
+    MatButtonModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatRadioModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ReaderDialogComponent, WriterDialogComponent]
 })
 export class AppModule { }
