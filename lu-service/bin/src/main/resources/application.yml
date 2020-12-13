@@ -1,0 +1,12 @@
+server:
+  port: 8447
+  ssl:
+    enabled: true
+    key-store: classpath:luservice.jks
+    key-store-password: luservice
+    key-alias: luservice
+    key-store-type: JKS
+    trust-store: classpath:luservice_truststore.jks
+    trust-store-password: password
+    trust-store-type: JKS
+    client-auth: want
