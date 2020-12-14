@@ -24,6 +24,8 @@ public class User {
 
     private String state;
 
+    private Boolean enabled;
+
     public User() {
         super();
         // TODO Auto-generated constructor stub
@@ -85,4 +87,11 @@ public class User {
         this.state = state;
     }
 
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
 }
