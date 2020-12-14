@@ -1,1 +1,0 @@
-insert into card (id_card,pan,cvv,expiration_date) values (1, '123', '234', '2344');
