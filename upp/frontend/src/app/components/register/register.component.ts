@@ -41,6 +41,7 @@ export class RegisterComponent implements OnInit {
 
   onSubmit() {
     if (this.registerForm.invalid) {
+    	window.alert('Validation front failed !');
       return;
     }
     console.log('validna registracija');
@@ -66,7 +67,10 @@ export class RegisterComponent implements OnInit {
           console.log('Successfully fist task');
         },
         err => {
+        
           console.log('Error occured');
+          window.alert('Validation backend failed !');
+          window.location.href = 'http://localhost:4200/register';
         }
       );
       this.dialog.open(ReaderDialogComponent, {width: '50%', height: '50%', data: d});

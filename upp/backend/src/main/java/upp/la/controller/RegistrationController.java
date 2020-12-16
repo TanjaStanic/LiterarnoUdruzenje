@@ -43,10 +43,11 @@ public class RegistrationController {
         boolean validationOk = true;
         validationOk = validationService.checkRegistrationForm(formFields);
 
-        if(validationOk = false) {
-            throw new DuplicateEntity("Validation failed");
+        if(validationOk == false) {
+        	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            //throw new DuplicateEntity("Validation failed");
         }
-
+        System.out.println("val:" + validationOk);
         ProcessInstance pi =
             runtimeService.startProcessInstanceByKey("registration_process");
         HashMap<String, Object> map = this.mapListToDto(formFields);

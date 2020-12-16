@@ -106,7 +106,7 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${validationOk==false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0bstxig" name="Validation success" sourceRef="Gateway_164xift" targetRef="Gateway_0ji6a4z">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${validationOk==false}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${validationOk==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -121,7 +121,7 @@
       <bpmndi:BPMNEdge id="Flow_100z7kp_di" bpmnElement="Flow_100z7kp">
         <di:waypoint x="495" y="317" />
         <di:waypoint x="330" y="317" />
-        <di:waypoint x="330" y="273" />
+        <di:waypoint x="330" y="270" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="376" y="299" width="76" height="14" />
         </bpmndi:BPMNLabel>

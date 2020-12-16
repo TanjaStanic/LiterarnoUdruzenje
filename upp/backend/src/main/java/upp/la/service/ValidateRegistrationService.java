@@ -5,9 +5,10 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import upp.la.dto.FormFieldDto;
+import upp.la.repository.UserRepository;
 
 @Service
 public class ValidateRegistrationService implements JavaDelegate{
@@ -16,6 +17,9 @@ public class ValidateRegistrationService implements JavaDelegate{
 	private Pattern regexPattern;
     private Matcher regexMatcher;
 	
+    @Autowired
+    private UserRepository userRepository;
+    
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		
@@ -37,18 +41,69 @@ public class ValidateRegistrationService implements JavaDelegate{
 	}
 
 	public boolean checkRegistrationForm(List<FormFieldDto> formFields) {
-		boolean validationOk = true;
-		
-		//implementirati provjeru
-		return validationOk;
+		System.out.println("Dosao u check registration form");
+		for (FormFieldDto f : formFields) {
+			if (f.getFieldId().equals("firstNameId")) {
+				if (!(nameValidation(f.getFieldValue()))) {
+					return false;
+				}
+			}
+			if (f.getFieldId().equals("lastNameId")) {
+				if (!(nameValidation(f.getFieldValue()))) {
+					return false;
+				}
+			}
+			if (f.getFieldId().equals("cityId")) {
+				if (!(nameValidation(f.getFieldValue()))) {
+					return false;
+				}
+			}
+			if (f.getFieldId().equals("countryId")) {
+				if (!(nameValidation(f.getFieldValue()))) {
+					return false;
+				}
+			}
+			if (f.getFieldId().equals("emailId")) {	
+				if (!(emailValidation(f.getFieldValue()))) {
+					return false;
+				}
+			}
+			
+			//check if password is empty
+			if (f.getFieldId().equals("passwordId")) {
+				if (f.getFieldValue().trim().isEmpty()) {
+					return false;
+				}
+			}
+			
+			//chek if username is not empty or not unique
+			if (f.getFieldId().equals("userNameId")) {
+				if (f.getFieldValue().trim().isEmpty()) {
+					return false;
+				}
+				if (userRepository.existsByUserName(f.getFieldValue())) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
-	/*public boolean nameValidation(String name) {
+	public boolean nameValidation(String name) {
+		System.out.println("provjerio name");
+		//This method validate the name and return false if the name has nothing or has numbers or special characters
+		regexPattern = Pattern.compile("^\\pL+[\\pL\\pZ\\pP]{0,}$");
+		regexMatcher = regexPattern.matcher(name);
 		
-		return null;
+		return regexMatcher.matches();
 	}
+	
+	
 	
 	public boolean emailValidation(String email) {
-		return null;
-	}*/
+		regexPattern = Pattern.compile("^.+@.+\\..+$");
+		regexMatcher = regexPattern.matcher(email);
+		
+		return regexMatcher.matches();
+	}
 }
