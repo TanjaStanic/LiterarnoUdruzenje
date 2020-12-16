@@ -6,8 +6,10 @@ import java.util.regex.Matcher;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
+import org.springframework.stereotype.Service;
 import upp.la.dto.FormFieldDto;
 
+@Service
 public class ValidateRegistrationService implements JavaDelegate{
 
 	//for check string

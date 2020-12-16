@@ -24,7 +24,6 @@ public class RegistrationService implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
 
-
         List<FormFieldDto> registration =
             (List<FormFieldDto>) execution.getVariable("registration");
         List<FormFieldDto> betaNo = (List<FormFieldDto>) execution.getVariable("betaNo_registration");
@@ -37,6 +36,7 @@ public class RegistrationService implements JavaDelegate {
            }
         }
         User user = identityService.newUser(s);
+        upp.la.model.User userModel = new upp.la.model.User();
 
         for (FormFieldDto formField : registration) {
         	if (formField.getFieldId().equals("userNameId")) {
