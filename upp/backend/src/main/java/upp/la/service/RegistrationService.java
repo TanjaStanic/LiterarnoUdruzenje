@@ -31,10 +31,11 @@ public class RegistrationService implements JavaDelegate {
         List<FormFieldDto> betaYes_genres = (List<FormFieldDto>) execution.getVariable("betaYes_registration_genres");
         String s = "";
         for (FormFieldDto f: registration) {
-           if(f.getFieldId().equals("firstNameId")) {
+           if(f.getFieldId().equals("userNameId")) {
                s = f.getFieldValue();
            }
         }
+        System.out.println(s);
         User user = identityService.newUser(s);
         upp.la.model.User userModel = new upp.la.model.User();
 
@@ -70,16 +71,21 @@ public class RegistrationService implements JavaDelegate {
             //diskutovati setovanje beta citaoca i zanrova
             if (formField.getFieldId().equals("roleId")) {
             	
-            	if (formField.getFieldValue()=="Citalac") {
+            	if (formField.getFieldValue().equals("value_1")) {
             		userModel.setRole(Role.READER);
+
             	}
-            	else if (formField.getFieldValue()=="Pisac") {
+            	else if (formField.getFieldValue().equals("value_2")) {
             		userModel.setRole(Role.WRITER);
             	}
             	
             }
 
 
+        }
+
+        if(betaYes != null) {
+            userModel.setRole(Role.BETA_READER);
         }
 
         identityService.saveUser(user);

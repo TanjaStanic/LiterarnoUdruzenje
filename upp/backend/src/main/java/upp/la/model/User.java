@@ -50,5 +50,4 @@ public class User {
     	activated=false;
     }
 
-    
 }

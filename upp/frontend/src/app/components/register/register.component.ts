@@ -56,9 +56,10 @@ export class RegisterComponent implements OnInit {
     }
     d.push({fieldId : 'cityId', fieldValue: this.f.city.value});
     d.push({fieldId : 'countryId', fieldValue: this.f.country.value});
+    d.push({fieldId : 'userNameId', fieldValue: this.f.username.value});
 
     if (this.f.role.value === 'Citalac') {
-      const user = this.userService.registerUser(d, 'this.formFieldsDto.taskId');
+      const user = this.userService.registerUser(d);
       user.subscribe(
         res => {
 

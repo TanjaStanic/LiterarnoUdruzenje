@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upp.la.dto.FormFieldDto;
 import upp.la.dto.FormFieldsDto;
+import upp.la.exceptions.DuplicateEntity;
 import upp.la.service.ValidateRegistrationService;
 
 import java.util.ArrayList;
@@ -37,7 +38,14 @@ public class RegistrationController {
     @PostMapping(path = "/post", produces = "application/json")
     public @ResponseBody
     ResponseEntity<?> post(
-        @RequestBody List<FormFieldDto> formFields) {
+        @RequestBody List<FormFieldDto> formFields) throws DuplicateEntity {
+
+        boolean validationOk = true;
+        validationOk = validationService.checkRegistrationForm(formFields);
+
+        if(validationOk = false) {
+            throw new DuplicateEntity("Validation failed");
+        }
 
         ProcessInstance pi =
             runtimeService.startProcessInstanceByKey("registration_process");
@@ -55,7 +63,7 @@ public class RegistrationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
-    
+    /*
     @PostMapping(path = "/validateData/{taskId}", produces = "application/json")
     public @ResponseBody
     boolean validateData(
@@ -68,7 +76,7 @@ public class RegistrationController {
     	return validationOk;
     	
     }
-
+   */
 
     @PostMapping(path = "/betaNo", produces = "application/json")
     public @ResponseBody

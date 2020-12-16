@@ -13,7 +13,7 @@ export class UserService {
     return this.httpClient.get('http://localhost:8080/registration/get') as Observable<any>;
   }
 
-  registerUser(user, taskId) {
+  registerUser(user) {
     return this.httpClient.post('http://localhost:8080/registration/post/', user) as Observable<any>;
   }
 
