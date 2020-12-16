@@ -24,9 +24,19 @@ public class RegistrationService implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
 
-        List<FormFieldDto> registration = 
-        		(List<FormFieldDto>) execution.getVariable("registration");
-        User user = identityService.newUser("");
+        List<FormFieldDto> registration =
+            (List<FormFieldDto>) execution.getVariable("registration");
+        List<FormFieldDto> betaNo = (List<FormFieldDto>) execution.getVariable("betaNo_registration");
+        List<FormFieldDto> betaYes = (List<FormFieldDto>) execution.getVariable("betaYes_registration");
+        List<FormFieldDto> betaYes_genres = (List<FormFieldDto>) execution.getVariable("betaYes_registration_genres");
+        String s = "";
+        for (FormFieldDto f: registration) {
+           if(f.getFieldId().equals("userNameId")) {
+               s = f.getFieldValue();
+           }
+        }
+        System.out.println(s);
+        User user = identityService.newUser(s);
         upp.la.model.User userModel = new upp.la.model.User();
 
         for (FormFieldDto formField : registration) {
@@ -61,16 +71,21 @@ public class RegistrationService implements JavaDelegate {
             //diskutovati setovanje beta citaoca i zanrova
             if (formField.getFieldId().equals("roleId")) {
             	
-            	if (formField.getFieldValue()=="Citalac") {
+            	if (formField.getFieldValue().equals("value_1")) {
             		userModel.setRole(Role.READER);
+
             	}
-            	else if (formField.getFieldValue()=="Pisac") {
+            	else if (formField.getFieldValue().equals("value_2")) {
             		userModel.setRole(Role.WRITER);
             	}
             	
             }
 
 
+        }
+
+        if(betaYes != null) {
+            userModel.setRole(Role.BETA_READER);
         }
 
         identityService.saveUser(user);
