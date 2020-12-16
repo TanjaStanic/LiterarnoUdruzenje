@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ReaderDialogComponent} from '../reader-dialog/reader-dialog.component';
 import {MatDialog} from '@angular/material';
 import {WriterDialogComponent} from '../writer-dialog/writer-dialog.component';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-register',
@@ -12,7 +13,13 @@ import {WriterDialogComponent} from '../writer-dialog/writer-dialog.component';
 export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
-  constructor(private formBuilder: FormBuilder, public dialog: MatDialog) { }
+  private formFieldsDto = null;
+  private formFields = [];
+  private processInstance = '';
+  private enumValues = [];
+  constructor(private formBuilder: FormBuilder, public dialog: MatDialog,
+              private userService: UserService) {
+  }
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
@@ -37,11 +44,31 @@ export class RegisterComponent implements OnInit {
       return;
     }
     console.log('validna registracija');
-    if (this.f.role.value === 'citalac') {
-      this.dialog.open(ReaderDialogComponent, {width: '50%', height: '50%', data: 'test'});
-     // this.dialog.open(ReaderDialogComponent, {
-      //   width: '60%', disableClose: true, data: this.data
-     //  });
+    const d = new Array();
+    d.push({fieldId : 'firstNameId', fieldValue: this.f.name.value});
+    d.push({fieldId : 'lastNameId', fieldValue: this.f.surname.value});
+    d.push({fieldId : 'passwordId', fieldValue: this.f.password.value});
+    d.push({fieldId : 'emailId', fieldValue: this.f.email.value});
+    if (this.f.role.value === 'Citalac') {
+      d.push({fieldId : 'roleId', fieldValue: 'value_1'});
+    } else {
+      d.push({fieldId : 'roleId', fieldValue: 'value_2'});
+    }
+    d.push({fieldId : 'cityId', fieldValue: this.f.city.value});
+    d.push({fieldId : 'countryId', fieldValue: this.f.country.value});
+
+    if (this.f.role.value === 'Citalac') {
+      const user = this.userService.registerUser(d, 'this.formFieldsDto.taskId');
+      user.subscribe(
+        res => {
+
+          console.log('Successfully fist task');
+        },
+        err => {
+          console.log('Error occured');
+        }
+      );
+      this.dialog.open(ReaderDialogComponent, {width: '50%', height: '50%', data: d});
     } else {
       this.dialog.open(WriterDialogComponent, {width: '50%', height: '50%'});
     }

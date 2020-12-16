@@ -1,6 +1,8 @@
 package upp.la.dto;
 
-public class FormFieldDto {
+import java.io.Serializable;
+
+public class FormFieldDto implements Serializable {
     String fieldId;
     String fieldValue;
 

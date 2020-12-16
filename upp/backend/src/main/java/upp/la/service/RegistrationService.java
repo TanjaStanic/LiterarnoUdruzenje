@@ -21,7 +21,16 @@ public class RegistrationService implements JavaDelegate {
 
         List<FormFieldDto> registration =
             (List<FormFieldDto>) execution.getVariable("registration");
-        User user = identityService.newUser("");
+        List<FormFieldDto> betaNo = (List<FormFieldDto>) execution.getVariable("betaNo_registration");
+        List<FormFieldDto> betaYes = (List<FormFieldDto>) execution.getVariable("betaYes_registration");
+        List<FormFieldDto> betaYes_genres = (List<FormFieldDto>) execution.getVariable("betaYes_registration_genres");
+        String s = "";
+        for (FormFieldDto f: registration) {
+           if(f.getFieldId().equals("firstNameId")) {
+               s = f.getFieldValue();
+           }
+        }
+        User user = identityService.newUser(s);
         upp.la.model.User userModel = new upp.la.model.User();
 
         for (FormFieldDto formField : registration) {
