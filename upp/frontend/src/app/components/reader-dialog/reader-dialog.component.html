@@ -10,6 +10,12 @@
                      <mat-radio-button value="da">Da</mat-radio-button>
                      <mat-radio-button value="ne">Ne</mat-radio-button>
                   </mat-radio-group>
+              <mat-form-field appearance="fill">
+                <mat-label>Zanrovi</mat-label>
+                <mat-select id="genres" formControlName="genres" multiple>
+                  <mat-option *ngFor="let genre of genreList" [value]="genre">{{genre}}</mat-option>
+                </mat-select>
+              </mat-form-field>
               <div mat-dialog-actions>
               <button mat-raised-button color="primary" class="pull-right">Register</button>
               </div>
