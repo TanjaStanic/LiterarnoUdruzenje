@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upp.la.dto.FormFieldDto;
+import upp.la.service.ValidateRegistrationService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +26,10 @@ public class RegistrationController {
     TaskService taskService;
     @Autowired
     FormService formService;
+    @Autowired 
+    ValidateRegistrationService validationService;
 
+    
     @PostMapping(path = "/post/{taskId}", produces = "application/json")
     public @ResponseBody
     ResponseEntity<?> post(
@@ -46,6 +50,20 @@ public class RegistrationController {
         formService.submitTaskForm(taskId, map);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    
+    @PostMapping(path = "/validateData/{taskId}", produces = "application/json")
+    public @ResponseBody
+    boolean validateData(
+        @RequestBody List<FormFieldDto> formFields,
+        @PathVariable String taskId){
+    	
+    	boolean validationOk = true;
+    	validationOk = validationService.checkRegistrationForm(formFields);
+    	
+    	return validationOk;
+    	
     }
 
 
