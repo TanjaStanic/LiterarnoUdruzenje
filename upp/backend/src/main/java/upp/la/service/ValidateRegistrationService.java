@@ -1,7 +1,8 @@
 package upp.la.service;
 
 import java.util.List;
-
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
@@ -9,6 +10,10 @@ import upp.la.dto.FormFieldDto;
 
 public class ValidateRegistrationService implements JavaDelegate{
 
+	//for check string
+	private Pattern regexPattern;
+    private Matcher regexMatcher;
+	
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		
@@ -35,4 +40,13 @@ public class ValidateRegistrationService implements JavaDelegate{
 		//implementirati provjeru
 		return validationOk;
 	}
+	
+	/*public boolean nameValidation(String name) {
+		
+		return null;
+	}
+	
+	public boolean emailValidation(String email) {
+		return null;
+	}*/
 }
