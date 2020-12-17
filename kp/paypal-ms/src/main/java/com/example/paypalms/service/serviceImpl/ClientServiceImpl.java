@@ -19,7 +19,13 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client insert(Client client) {
-        return clientRepository.save(client);
+        Client found = findByEmail(client.getEmail());
+        if (found == null){
+            return clientRepository.save(client);
+        }else {
+            return null;
+        }
+
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.paypalms.controller;
 
+import com.example.paypalms.domain.Client;
 import com.example.paypalms.dto.RegisterClientDTO;
 import com.example.paypalms.service.ClientService;
 import org.springframework.http.ResponseEntity;
@@ -19,15 +20,19 @@ public class ClientController {
     }
 
     @GetMapping("/register")
-    public String registerForm(Model model){
+    public String registerForm(Model model) {
         model.addAttribute("registrationDTO", new RegisterClientDTO());
         return "registration";
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @ModelAttribute("registrationDTO")RegisterClientDTO registerClientDTO){
-        // save new client
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> register(@Valid @ModelAttribute("registrationDTO") RegisterClientDTO registerClientDTO) {
+        if (clientService.insert(new Client(registerClientDTO.getEmail(), registerClientDTO.getClientId(), registerClientDTO.getClientSecret())) != null) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 
 }

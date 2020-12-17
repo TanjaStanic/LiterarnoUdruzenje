@@ -1,8 +1,11 @@
 package com.example.paypalms.domain;
 
+import com.example.paypalms.dto.RegisterClientDTO;
+import com.example.paypalms.utils.AttributeEncryptor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnTransformer;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -21,10 +24,12 @@ public class Client {
     private String email;
 
     @Column
-    private String clientId;    //sifrovati
+    @Convert(converter = AttributeEncryptor.class)
+    private String clientId;
 
     @Column
-    private String clientSecret;    //sifrovati
+    @Convert(converter = AttributeEncryptor.class)
+    private String clientSecret;
 
     public Client(Long id, String email, String clientId, String clientSecret) {
         init(email, clientId, clientSecret);
@@ -44,4 +49,5 @@ public class Client {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
     }
+
 }

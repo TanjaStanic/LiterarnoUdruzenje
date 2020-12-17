@@ -136,6 +136,8 @@ public class PaymentServiceImpl implements PaymentService {
         Transaction transaction;
         try {
             transaction = transactionService.findById(transactionId);
+            transaction.setStatus(TransactionStatus.CANCELED);
+            transactionService.save(transaction);
         } catch (RuntimeException exception) {
             log.error("ERROR | TRANSACTION WITH ID: " + transactionId + " NOT FOUND");
             return null;

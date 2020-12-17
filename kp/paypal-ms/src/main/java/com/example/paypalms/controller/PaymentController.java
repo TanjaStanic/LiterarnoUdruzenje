@@ -59,7 +59,8 @@ public class PaymentController {
     }
 
     @GetMapping(value = "/cancel")
-    public @ResponseBody ResponseEntity<?> cancelPayment(@RequestParam Long transactionId) {
+    public @ResponseBody
+    ResponseEntity<?> cancelPayment(@RequestParam Long transactionId) {
         String redirectUrl = paymentService.cancelPayment(transactionId);
         if (redirectUrl == null) {
             return ResponseEntity.badRequest().build();

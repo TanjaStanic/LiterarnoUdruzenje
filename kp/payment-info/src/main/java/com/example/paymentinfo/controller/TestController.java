@@ -24,23 +24,14 @@ public class TestController {
         return ResponseEntity.ok().body("I am payment-info-ms");
     }
 
-/*    @GetMapping("test")
-    public ResponseEntity<String> testBankMS(){
-        System.out.println("Payment info");
-        String fromBankMs = restTemplate.getForObject("https://bank-ms/test", String.class);
-        fromBankMs+=", BankMS responded Payment info";
-        return ResponseEntity.ok().body(fromBankMs);
-
-    }*/
-
     @GetMapping("test")
     public ResponseEntity<?> paypalPayment() {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
         requestDTO.setAmount(15);
         requestDTO.setCurrencyCode("USD");
-        requestDTO.setErrorUrl("https://:localhost:8762/api/paypal/error");
-        requestDTO.setFailedUrl("https://:localhost:8762/api/paypal/error");
-        requestDTO.setSuccessUrl("https://:localhost:8762/api/paypal/succes");
+        requestDTO.setErrorUrl("https://localhost:8762/api/pc_info/");
+        requestDTO.setFailedUrl("https://localhost:8762/api/pc_info/");
+        requestDTO.setSuccessUrl("https://localhost:8762/api/pc_info/");
         requestDTO.setMerchantEmail("sb-zx3ys4123984@business.example.com");
         requestDTO.setMerchantOrderId(1234);
         requestDTO.setMerchantTimestamp(ZonedDateTime.now());
@@ -52,6 +43,5 @@ public class TestController {
         return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
 
     }
-
 
 }
