@@ -11,18 +11,16 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.time.ZonedDateTime;
+
 @SpringBootApplication
 @EnableDiscoveryClient
 public class PaypalMsApplication implements WebMvcConfigurer {
 
     public static void main(String[] args) {
         SpringApplication.run(PaypalMsApplication.class, args);
-    }
-
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("registration");
-        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        ZonedDateTime now = ZonedDateTime.now();
+        System.out.println(now);
     }
 
     @Override

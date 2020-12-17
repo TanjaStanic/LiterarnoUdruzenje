@@ -28,7 +28,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction findByPaymentId(Long paymentId) {
+    public Transaction findByPaymentId(String paymentId) {
         return transactionRepository.findByPaymentId(paymentId);
     }
 }

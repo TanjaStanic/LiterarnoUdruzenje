@@ -8,5 +8,5 @@ public interface TransactionService {
 
     Transaction findById(Long id);
 
-    Transaction findByPaymentId(Long paymentId);
+    Transaction findByPaymentId(String paymentId);
 }

@@ -40,10 +40,10 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public String createPayment(PaymentRequestDTO paymentRequest) throws PayPalRESTException {
         log.info("INITIATED | PayPal Payment | Amount: " + paymentRequest.getAmount());
-        Client client = clientService.findByEmail(paymentRequest.getSellerEmail());
-        Currency currency = currencyService.findByCode(paymentRequest.getCurrency());
+        Client client = clientService.findByEmail(paymentRequest.getMerchantEmail());
+        Currency currency = currencyService.findByCode(paymentRequest.getCurrencyCode());
         if (client == null || currency == null) {
-            log.error("CANCELED | PayPal Payment | Amount: " + paymentRequest.getAmount() + " " + paymentRequest.getCurrency());
+            log.error("CANCELED | PayPal Payment | Amount: " + paymentRequest.getAmount() + " " + paymentRequest.getCurrencyCode());
             return null;
         }
         Transaction transaction = new Transaction(paymentRequest.getMerchantOrderId(), client, new Date(),
@@ -55,11 +55,11 @@ public class PaymentServiceImpl implements PaymentService {
         payer.setPaymentMethod("paypal");
 
         RedirectUrls redirectUrls = new RedirectUrls();
-        redirectUrls.setCancelUrl("https://localhost:8762/api/paypal/cancel?transactionId=" + transaction.getId());
-        redirectUrls.setReturnUrl("https://localhost:8443/api/paypal/finish");
+        redirectUrls.setCancelUrl("https://localhost:8443/cancel?transactionId=" + transaction.getId());
+        redirectUrls.setReturnUrl("https://localhost:8443/finish");
 
         Amount amount = new Amount();
-        amount.setCurrency(paymentRequest.getCurrency());
+        amount.setCurrency(paymentRequest.getCurrencyCode());
         amount.setTotal(paymentRequest.getAmount().toString());
 
         com.paypal.api.payments.Transaction paypalTransaction = new com.paypal.api.payments.Transaction();
@@ -104,7 +104,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public String finishPayment(String paymentId, String payerId) {
 
-        Transaction transaction = transactionService.findByPaymentId(Long.parseLong(paymentId));
+        Transaction transaction = transactionService.findByPaymentId(paymentId);
         if (transaction != null) {
             Payment payment = new Payment();
             payment.setId(paymentId);

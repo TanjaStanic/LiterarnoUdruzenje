@@ -29,14 +29,5 @@ public class ClientController {
         // save new client
         return ResponseEntity.ok().build();
     }
-    @GetMapping("/success")
-    public String successPage(Model model){
-        return "success";
-    }
-
-    @GetMapping("/error")
-    public String errorPage(Model model){
-        return "error";
-    }
 
 }

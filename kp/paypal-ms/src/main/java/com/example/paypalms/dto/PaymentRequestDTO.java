@@ -14,7 +14,7 @@ import javax.validation.constraints.Positive;
 public class PaymentRequestDTO {
     @NotNull
     @Email
-    private String sellerEmail;
+    private String merchantEmail;
 
     @NotNull
     private Long merchantOrderId;
@@ -24,7 +24,7 @@ public class PaymentRequestDTO {
     private Double amount;
 
     @NotNull
-    private String currency;
+    private String currencyCode;
 
     @NotNull
     private String successUrl;
