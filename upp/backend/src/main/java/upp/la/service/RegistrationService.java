@@ -7,9 +7,13 @@ import org.camunda.bpm.engine.identity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import upp.la.dto.FormFieldDto;
+import upp.la.model.Genre;
 import upp.la.model.Role;
+import upp.la.repository.GenreRepository;
 import upp.la.repository.UserRepository;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -21,6 +25,9 @@ public class RegistrationService implements JavaDelegate {
     @Autowired
 	UserRepository userRepository;
 
+    @Autowired
+    GenreRepository genreRepository;
+
     @Override
     public void execute(DelegateExecution execution) throws Exception {
 
@@ -29,6 +36,8 @@ public class RegistrationService implements JavaDelegate {
         List<FormFieldDto> betaNo = (List<FormFieldDto>) execution.getVariable("betaNo_registration");
         List<FormFieldDto> betaYes = (List<FormFieldDto>) execution.getVariable("betaYes_registration");
         List<FormFieldDto> betaYes_genres = (List<FormFieldDto>) execution.getVariable("betaYes_registration_genres");
+
+
         String s = "";
         for (FormFieldDto f: registration) {
            if(f.getFieldId().equals("userNameId")) {
@@ -84,8 +93,15 @@ public class RegistrationService implements JavaDelegate {
 
         }
 
-        if(betaYes != null) {
+        if(betaYes != null && betaYes_genres != null) {
             userModel.setRole(Role.BETA_READER);
+            Collection<Genre> tmp = new ArrayList<>();
+            for(FormFieldDto f: betaYes_genres) {
+                tmp.add(genreRepository.findGenreById(Long.parseLong(f.getFieldValue())));
+            }
+
+            userModel.setGenres(tmp);
+
         }
 
         identityService.saveUser(user);

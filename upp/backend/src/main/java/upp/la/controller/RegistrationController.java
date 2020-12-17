@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import upp.la.dto.FormFieldDto;
 import upp.la.dto.FormFieldsDto;
 import upp.la.exceptions.DuplicateEntity;
+import upp.la.model.Genre;
+import upp.la.service.GenreService;
 import upp.la.service.ValidateRegistrationService;
 
 import java.util.ArrayList;
@@ -33,6 +35,8 @@ public class RegistrationController {
     FormService formService;
     @Autowired 
     ValidateRegistrationService validationService;
+    @Autowired
+    GenreService genreService;
 
 
     @PostMapping(path = "/post", produces = "application/json")
@@ -108,13 +112,24 @@ public class RegistrationController {
         List<FormFieldDto> dto_betaYes = new ArrayList<FormFieldDto>();
         dto_betaYes.add(formFields.get(0));
         List<FormFieldDto> dto_genres = new ArrayList<FormFieldDto>();
-        dto_genres.add(formFields.get(1));
+
+        String genres = formFields.get(1).getFieldValue();
+        String[] parts = genres.split(",");
+
+        for(String s : parts) {
+            FormFieldDto f = new FormFieldDto();
+            f.setFieldId(formFields.get(1).getFieldId());
+            f.setFieldValue(s);
+           dto_genres.add(f);
+        }
+
         HashMap<String, Object> map_betaYes = this.mapListToDto(dto_betaYes);
         HashMap<String, Object> map_genres = this.mapListToDto(dto_genres);
 
         List<Task> tasks = taskService.createTaskQuery().taskName("Registration reader").list();
         Task task = tasks.get(0);
         System.out.println(task.getName());
+
         // Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         String processInstanceId = task.getProcessInstanceId();
 
@@ -123,18 +138,17 @@ public class RegistrationController {
                 dto_betaYes);
         formService.submitTaskForm(task.getId(), map_betaYes);
 
-        /*
+
         tasks = taskService.createTaskQuery().taskName("Genres for beta reader").list();
         task = tasks.get(0);
         System.out.println(task.getName());
         // Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         processInstanceId = task.getProcessInstanceId();
 
-        //Create variable "registration"
         runtimeService.setVariable(processInstanceId,
                 "betaYes_registration_genres",
                 dto_genres);
-        formService.submitTaskForm(task.getId(), map_genres); */
+        formService.submitTaskForm(task.getId(), map_genres);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

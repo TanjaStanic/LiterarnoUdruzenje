@@ -13,7 +13,7 @@
               <mat-form-field appearance="fill">
                 <mat-label>Zanrovi</mat-label>
                 <mat-select id="genres" formControlName="genres" multiple>
-                  <mat-option *ngFor="let genre of genreList" [value]="genre.name">{{genre.name}}</mat-option>
+                  <mat-option *ngFor="let genre of genreList" [value]="genre.id">{{genre.name}}</mat-option>
                 </mat-select>
               </mat-form-field>
               <div mat-dialog-actions>

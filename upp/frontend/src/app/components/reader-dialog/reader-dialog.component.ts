@@ -38,7 +38,6 @@ export class ReaderDialogComponent implements OnInit {
     if (this.readerForm.invalid) {
       return;
     }
-
     const yes = [];
     const no = [];
     no.push({fieldId : 'betaReaderId', fieldValue: 'value_no'});

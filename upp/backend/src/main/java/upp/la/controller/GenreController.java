@@ -21,6 +21,7 @@ public class GenreController {
 
     @GetMapping(value = "/all")
     public ResponseEntity<List<Genre>> allGenres() {
+        System.out.println(genreService.findAll().size());
         return new ResponseEntity<>(genreService.findAll(), HttpStatus.OK);
     }
 }
