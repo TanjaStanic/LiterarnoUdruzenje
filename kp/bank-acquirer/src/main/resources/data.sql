@@ -9,7 +9,7 @@ insert into client (active,email,merchantid, merchant_password,name,account_id)
 	values (true,'test2@gmail.com',"merchantid2","merchantpass2","Marko Markovic",2);
 	
 insert into account(account_number,available_funds,owner_id) values ('12346',1000,1);
-insert into account(account_number,available_funds,owner_id) values ('12345',200, 2);
+insert into account(account_number,available_funds,owner_id) values ('12345',1000, 2);
 
 insert into card(cvv,expiration_date,pan,account_id) values ('333','03/20','1234-1234-1234-1234',1);
 insert into card(cvv,expiration_date,pan,account_id) values ('334','03/20','1234-1234-1234-1235',2);

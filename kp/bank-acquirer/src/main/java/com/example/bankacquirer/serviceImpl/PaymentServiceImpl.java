@@ -1,6 +1,7 @@
 package com.example.bankacquirer.serviceImpl;
 
 import com.example.bankacquirer.dto.CardDataDTO;
+import com.example.bankacquirer.dto.CompletedPaymentDTO;
 import com.example.bankacquirer.dto.PaymentConcentratorRequestDTO;
 import com.example.bankacquirer.dto.PaymentConcentratorResponseDTO;
 import com.example.bankacquirer.repository.AccountRepository;
@@ -10,8 +11,10 @@ import com.example.bankacquirer.repository.PcRequestRepository;
 import com.example.bankacquirer.repository.TransactionRepository;
 import com.example.bankacquirer.service.PaymentService;
 
+import java.time.ZonedDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -42,6 +45,7 @@ public class PaymentServiceImpl implements PaymentService{
 	
 	
 	private RestTemplate restTemplate;
+	
 	private String myBankId = "123412";
 	
 	@Override
@@ -63,9 +67,6 @@ public class PaymentServiceImpl implements PaymentService{
 		//CHECK IF ALL THE ELEMENTS ARE OK
 				
 		PaymentConcentratorRequest pcRequest = pcRequestRepository.getOne(pcRequestId);
-		if(pcRequest==null) {
-			System.out.println("is null");
-		}
 		Transaction transaction = new Transaction();
 		
 		transaction.setAmount(pcRequest.getAmount());
@@ -77,15 +78,15 @@ public class PaymentServiceImpl implements PaymentService{
 		String temp = cardDataDTO.getPanNumber().replace("-", "");
 		String number = temp.substring(0, 6);
 	
-		System.out.println("temp: " + temp + " num "+number);
 		// IF bank acquirer and bank issuer are the same
 		if (myBankId.contentEquals(number)) {
 			System.out.println("Bank-acq and bank Issuer are the same");
-			
-			
+						
 			Card card = cardRepository.findOneByPan(cardDataDTO.getPanNumber());
 			if (card==null) {
 				System.out.println("Bank-acq dosn't have card with thih pan number : " + cardDataDTO.getPanNumber());
+				transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
+				paymentFailed(pcRequest);
 				return pcRequest.getFailedUrl();
 			}
 			
@@ -99,24 +100,32 @@ public class PaymentServiceImpl implements PaymentService{
 						!(client.getName().equals(cardDataDTO.getCardHolder()))) {
 						
 					System.out.println("Other data elements on card are not the same.");
+					transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
+					paymentFailed(pcRequest);
 					return pcRequest.getFailedUrl();
 				}
 			}
 			
 			// check avalailable funds
 			if (pcRequest.getAmount()>account.getAvailableFunds()) {
-				System.out.println("No available funds!");
+				
+				System.out.println("No available funds!");				
+				transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
+				paymentFailed(pcRequest);
 				return pcRequest.getFailedUrl();
 			}
 			
 			//check data about merchant
 			Client merchant = clientRepository.findOneByMerchantID(pcRequest.getMerchantId());
 			if (merchant==null || !merchant.getMerchantPassword().equals(pcRequest.getMerchantPassword())) {
+				
 				System.out.println("Merchant Data is not good! Ne podudaraju se");
+				transaction.setStatus(TransactionStatus.ERROR);
+				paymentFailed(pcRequest);
 				return pcRequest.getErrorUrl();
 			}
 			
-			System.out.println("All good baby");
+			System.out.println("all good");
 			//everything is fine, do payment
 			Account merchantAccount = accountRepository.findOneByOwner(merchant);
 			account.setAvailableFunds(account.getAvailableFunds() - pcRequest.getAmount());
@@ -129,22 +138,54 @@ public class PaymentServiceImpl implements PaymentService{
 			clientRepository.save(client);
 			clientRepository.save(merchant);			
 			
+			transaction.setClient(client);
 			transaction.setStatus(TransactionStatus.SUCCESSFUL);
-			transactionRepository.save(transaction);
+			Transaction saved = transactionRepository.save(transaction);
+			
+			CompletedPaymentDTO cpDTO = new CompletedPaymentDTO();
+			cpDTO.setTransactionStatus(TransactionStatus.SUCCESSFUL);
+			cpDTO.setMerchantOrderID(pcRequest.getMerchantOrderId());
+			cpDTO.setAcquirerOrderID(saved.getId());
+			cpDTO.setAcquirerTimestamp(ZonedDateTime.now());
+			
+			
+			//otkomentarisati kada se dovrsi metoda u bank ms
+			
+			/*try {	
+				ResponseEntity<String> response = restTemplate.exchange("https://banking/api/complite-payment", HttpMethod.POST, 
+						new HttpEntity<CompletedPaymentDTO>(cpDTO), String.class);
+			} catch (Exception e) {
+				throw new RuntimeException("Coud not contact complite-payment in bankMS");
+		    }*/
 
 			return pcRequest.getSuccessUrl();
 			
 		}
 		
 		
-		// lse if bank acq and bank issuer are NOT the same, send request to PCC
+		// else if bank acq and bank issuer are NOT the same, send request to PCC
 		else {
 			System.out.println("Bank-acq and bank Issuer are NOT the same");
-			
+			//TO DO
 		}
 
 		
-		return "bozeeeeeeeee";
+		return pcRequest.getErrorUrl();
+	}
+	
+	public void paymentFailed(PaymentConcentratorRequest pcRequest) {
+		CompletedPaymentDTO cpDTO = new CompletedPaymentDTO();
+		cpDTO.setTransactionStatus(TransactionStatus.UNSUCCESSFUL);
+		cpDTO.setMerchantOrderID(pcRequest.getMerchantOrderId());
+
+		//otkomentarisati kada se dovrsi metoda u bank ms
+		/*
+		try {	
+			ResponseEntity<String> response = restTemplate.exchange("https://banking/api/complite-payment", HttpMethod.POST, 
+					new HttpEntity<CompletedPaymentDTO>(cpDTO), String.class);
+		} catch (Exception e) {
+			throw new RuntimeException("Coud not contact complite-payment in BANK ms");
+	    }*/
 	}
 
 
