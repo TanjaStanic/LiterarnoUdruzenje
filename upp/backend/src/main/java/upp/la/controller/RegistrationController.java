@@ -112,15 +112,12 @@ public class RegistrationController {
         HashMap<String, Object> map_betaYes = this.mapListToDto(dto_betaYes);
         HashMap<String, Object> map_genres = this.mapListToDto(dto_genres);
 
-        // System.out.println(map_genres.toString());
-
         List<Task> tasks = taskService.createTaskQuery().taskName("Registration reader").list();
         Task task = tasks.get(0);
         System.out.println(task.getName());
         // Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         String processInstanceId = task.getProcessInstanceId();
 
-        //Create variable "registration"
         runtimeService.setVariable(processInstanceId,
                 "betaYes_registration",
                 dto_betaYes);

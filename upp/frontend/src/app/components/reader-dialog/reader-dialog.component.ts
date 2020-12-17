@@ -2,6 +2,8 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../services/user.service';
+import {Genre} from '../../model/genre';
+import {GenreService} from '../../services/genre.service';
 
 @Component({
   selector: 'app-reader-dialog',
@@ -11,12 +13,14 @@ import {UserService} from '../../services/user.service';
 export class ReaderDialogComponent implements OnInit {
 
   readerForm: FormGroup;
-  genreList: string[] = ['Horor', 'Komedija', 'Drama', 'Akcija', 'Romantika', 'Istorija'];
+  genreList: Array<Genre>;
   constructor( public dialogRef: MatDialogRef<ReaderDialogComponent>,
                @Inject(MAT_DIALOG_DATA) public data: any,
                private formBuilder: FormBuilder,
-               private userService: UserService) {
-    console.log(data);
+               private userService: UserService,
+               private genreService: GenreService) {
+    this.genreList = this.genreService.getGenres();
+    console.log(this.genreList);
   }
 
   ngOnInit() {
