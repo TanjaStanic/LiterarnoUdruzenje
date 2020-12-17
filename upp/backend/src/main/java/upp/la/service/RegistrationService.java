@@ -1,4 +1,4 @@
-package upp.la.services;
+package upp.la.service;
 
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -7,6 +7,8 @@ import org.camunda.bpm.engine.identity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import upp.la.dto.FormFieldDto;
+import upp.la.model.Role;
+import upp.la.repository.UserRepository;
 
 import java.util.List;
 
@@ -15,17 +17,39 @@ public class RegistrationService implements JavaDelegate {
 
     @Autowired
     IdentityService identityService;
+    
+    @Autowired
+	UserRepository userRepository;
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
 
         List<FormFieldDto> registration =
             (List<FormFieldDto>) execution.getVariable("registration");
-        User user = identityService.newUser("");
+        List<FormFieldDto> betaNo = (List<FormFieldDto>) execution.getVariable("betaNo_registration");
+        List<FormFieldDto> betaYes = (List<FormFieldDto>) execution.getVariable("betaYes_registration");
+        List<FormFieldDto> betaYes_genres = (List<FormFieldDto>) execution.getVariable("betaYes_registration_genres");
+        String s = "";
+        for (FormFieldDto f: registration) {
+           if(f.getFieldId().equals("userNameId")) {
+               s = f.getFieldValue();
+           }
+        }
+        System.out.println(s);
+        User user = identityService.newUser(s);
         upp.la.model.User userModel = new upp.la.model.User();
 
         for (FormFieldDto formField : registration) {
-
+        	if (formField.getFieldId().equals("userNameId")) {
+        		//Staviti da je id userName ili ne?
+        		user.setId(formField.getFieldValue());
+                userModel.setUserName(formField.getFieldValue());
+            }
+        	if (formField.getFieldId().equals("passwordId")) {
+                //izvrsiti hesovanje i ostalo
+                user.setPassword(formField.getFieldValue());
+                userModel.setPassword(formField.getFieldValue());
+            }
             if (formField.getFieldId().equals("firstNameId")) {
                 user.setFirstName(formField.getFieldValue());
                 userModel.setFirstName(formField.getFieldValue());
@@ -37,22 +61,34 @@ public class RegistrationService implements JavaDelegate {
             if (formField.getFieldId().equals("emailId")) {
                 user.setEmail(formField.getFieldValue());
                 userModel.setEmail(formField.getFieldValue());
-            }
-            if (formField.getFieldId().equals("passwordId")) {
-                //izvrsiti hesovanje i ostalo
-                user.setPassword(formField.getFieldValue());
-                userModel.setPassword(formField.getFieldValue());
-            }
+            }            
             if (formField.getFieldId().equals("cityId")) {
                 userModel.setCity(formField.getFieldValue());
             }
-            if (formField.getFieldId().equals("stateId")) {
-                userModel.setState(formField.getFieldValue());
+            if (formField.getFieldId().equals("countryId")) {
+                userModel.setCountry(formField.getFieldValue());
             }
+            //diskutovati setovanje beta citaoca i zanrova
+            if (formField.getFieldId().equals("roleId")) {
+            	
+            	if (formField.getFieldValue().equals("value_1")) {
+            		userModel.setRole(Role.READER);
+
+            	}
+            	else if (formField.getFieldValue().equals("value_2")) {
+            		userModel.setRole(Role.WRITER);
+            	}
+            	
+            }
+
 
         }
 
+        if(betaYes != null) {
+            userModel.setRole(Role.BETA_READER);
+        }
+
         identityService.saveUser(user);
-        //napraviti repository za cuvanje usera u bazu
+        userRepository.save(userModel);
     }
 }
