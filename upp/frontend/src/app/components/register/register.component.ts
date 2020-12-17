@@ -4,6 +4,7 @@ import {ReaderDialogComponent} from '../reader-dialog/reader-dialog.component';
 import {MatDialog} from '@angular/material';
 import {WriterDialogComponent} from '../writer-dialog/writer-dialog.component';
 import {UserService} from '../../services/user.service';
+import {GenreService} from '../../services/genre.service';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +19,9 @@ export class RegisterComponent implements OnInit {
   private processInstance = '';
   private enumValues = [];
   constructor(private formBuilder: FormBuilder, public dialog: MatDialog,
-              private userService: UserService) {
+              private userService: UserService,
+              private genreService: GenreService) {
+    this.genreService.getAllGenres();
   }
 
   ngOnInit() {
@@ -67,7 +70,7 @@ export class RegisterComponent implements OnInit {
           console.log('Successfully fist task');
         },
         err => {
-        
+
           console.log('Error occured');
           window.alert('Validation backend failed !');
           window.location.href = 'http://localhost:4200/register';
