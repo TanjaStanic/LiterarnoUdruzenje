@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
+import com.example.bankacquirer.dto.CardDataDTO;
 import com.example.bankacquirer.dto.PaymentConcentratorRequestDTO;
 import com.example.bankacquirer.dto.PaymentConcentratorResponseDTO;
 import com.example.bankacquirer.service.PaymentService;
@@ -18,7 +18,7 @@ import com.example.bankacquirer.service.PaymentService;
 @RequestMapping("/payment")
 public class PaymentController {
 
-	
+	@Autowired
 	private PaymentService paymentService;
 	
 	@RequestMapping(value = "/create-response", method = RequestMethod.POST)
@@ -27,6 +27,18 @@ public class PaymentController {
 		PaymentConcentratorResponseDTO pcResponseDTO = paymentService.createResponse(paymentConcentratorRequestDTO);
 		
 		return new ResponseEntity<>(pcResponseDTO, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/confirm-payment/{pcRequestId}", method = RequestMethod.POST)
+	private ResponseEntity<?>  confirmPayment(@RequestBody CardDataDTO cardDataDto,@PathVariable Long pcRequestId) {
+		
+		System.out.println("info: " + cardDataDto.getCardHolder()+ ", " + cardDataDto.getCvv()+ ", " + cardDataDto.getPanNumber()+ ", "
+		+ cardDataDto.getMm()+ ", " + cardDataDto.getYy() );
+		
+		String response = paymentService.confirmPayment(cardDataDto, pcRequestId);
+		return  new ResponseEntity<>(response, HttpStatus.OK);
+
+		
 	}
 	
 

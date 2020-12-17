@@ -40,7 +40,8 @@
           <div>
             <form id="forma" th:action="@{'https://localhost:8445/payment/confirm-payment/' + ${paymentRequestId}}" method="POST" role="form">
               <div class="form-group">
-                <label for="cardHolder">Full name (on the card)</label> <input
+                <label for="cardHolder">Full name (on the card)</label> 
+                <input
                   type="text" name="cardHolder" id="cardHolder" placeholder="John Doe" required
                   class="form-control">
               </div>
