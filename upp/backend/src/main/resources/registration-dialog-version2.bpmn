@@ -84,6 +84,7 @@
         <camunda:formData>
           <camunda:formField id="genresListId" type="enum" />
         </camunda:formData>
+        <camunda:taskListener class="upp.la.service.GenreServiceDelegate" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_02b81kb</bpmn:incoming>
       <bpmn:outgoing>Flow_01tzdr1</bpmn:outgoing>
