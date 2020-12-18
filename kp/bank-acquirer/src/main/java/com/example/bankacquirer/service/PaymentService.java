@@ -10,6 +10,8 @@ import com.example.bankacquirer.dto.PaymentConcentratorRequestDTO;
 @Service
 public interface PaymentService {
 	
+	public boolean checkRequest(PaymentConcentratorRequestDTO pcRequestDTO);
 	public PaymentConcentratorResponseDTO createResponse(PaymentConcentratorRequestDTO pcRequestDTO);
 	public String confirmPayment(CardDataDTO cardDataDTO, Long pcRequestId);
+	
 }
