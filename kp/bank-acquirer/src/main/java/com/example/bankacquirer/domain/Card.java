@@ -22,7 +22,7 @@ public class Card {
 	@Column(nullable = false)
 	private String cvv;
 
-	@Column(nullable = false)
+	@Column(name="expiration_date",nullable = false)
 	private String expirationDate;
 	
 	@ManyToOne

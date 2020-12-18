@@ -17,20 +17,20 @@ public class Bank {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column
     private String name;
 
     @Column
     private String address;
     
-    @Column(unique = true)
+    @Column
     private String email;
 
-    @Column(unique = true)
+    @Column
   //  @Size(min=10, max = 10)
     private String accountNumber;
     
-    @Column(unique = true)
+    @Column
    // @Size(min=6, max =6)
     private String uniqueBankNumber;
 

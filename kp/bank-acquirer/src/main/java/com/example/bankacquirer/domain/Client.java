@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Getter
 @Setter
@@ -17,7 +19,7 @@ public class Client {
 	
 	@Column
 	private String merchantID; // sifrovati
-	
+
 	@Column
 	private String merchantPassword; //sifrovati
 	
@@ -29,4 +31,8 @@ public class Client {
    
     @Column
     private boolean active;
+    
+    @JsonIgnore
+    @OneToOne
+    private Account account;
 }

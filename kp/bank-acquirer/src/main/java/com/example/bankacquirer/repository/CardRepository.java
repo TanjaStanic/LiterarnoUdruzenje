@@ -6,5 +6,5 @@ import com.example.bankacquirer.domain.Card;
 
 @Repository
 public interface CardRepository extends JpaRepository<Card, Long>{
-
+	Card findOneByPan(String pan);
 }
