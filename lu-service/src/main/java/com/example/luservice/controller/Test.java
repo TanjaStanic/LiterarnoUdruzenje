@@ -14,35 +14,13 @@ public class Test {
 		this.restTemplate = restTemplate;
 	}
 
-	@GetMapping
-	public ResponseEntity<String> test() {
-		String fromBankMs = restTemplate.getForObject("/banking/", String.class);
-		System.out.println("Literarno udruzenje");
-		fromBankMs+=", BankMS responded Test completed";
-		return ResponseEntity.ok().body(fromBankMs);
-
-	}
 
 	@GetMapping("payment/info")
 	public ResponseEntity<String> paymentInfo() {
-		String fromPaymentInfo = restTemplate.getForObject("/pc_info/test", String.class);
+		// get my payment methods
+		String fromPaymentInfo = restTemplate.getForObject("/pc_info/", String.class);
 		System.out.println("Literarno udruzenje");
-		fromPaymentInfo+=", Payment Info responded Test completed";
 		return ResponseEntity.ok().body(fromPaymentInfo);
-
 	}
 
-	@GetMapping("/testLuService")
-	public String testCommunication() {
-		return "Lu-service  test-done";
-	}
-
-	@GetMapping("/finallTest")
-	public ResponseEntity<String> finallTest(){
-
-	        String finall = restTemplate.getForObject("http://localhost:8445/testBankAcquirer", String.class);
-			System.out.println(finall);
-			finall+=", all tests are done";
-	        return ResponseEntity.ok().body(finall);
-	}
 }
