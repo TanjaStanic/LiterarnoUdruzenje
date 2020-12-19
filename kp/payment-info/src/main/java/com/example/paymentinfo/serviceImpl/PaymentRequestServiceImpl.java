@@ -14,4 +14,10 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
 		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public PaymentRequestDTO getPaymentUrl(PaymentRequestDTO requestDTO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

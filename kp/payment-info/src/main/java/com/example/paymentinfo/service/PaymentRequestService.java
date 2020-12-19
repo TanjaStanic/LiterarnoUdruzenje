@@ -7,5 +7,5 @@ import com.example.paymentinfo.dto.PaymentRequestDTO;
 @Service
 public interface PaymentRequestService {
 	    PaymentRequestDTO getPaymentRequest(Long merchantOrderId);
-
+	    PaymentRequestDTO getPaymentUrl(PaymentRequestDTO requestDTO);
 }

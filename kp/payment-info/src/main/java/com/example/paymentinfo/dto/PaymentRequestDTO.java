@@ -23,5 +23,6 @@ public class PaymentRequestDTO {
     private String failedUrl;
     private String errorUrl;
     private String currencyCode;
+	private String paymentUrl;
 
 }
