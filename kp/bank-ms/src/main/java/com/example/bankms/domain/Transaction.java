@@ -22,7 +22,7 @@ public class Transaction {
     @ManyToOne
     private Client seller;
 
-    @Column
+    @Column(unique = true)
     private long paymentID;
 
     @Column
