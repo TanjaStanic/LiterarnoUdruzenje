@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -16,7 +17,7 @@ public class PaymentRequestDTO {
     private String merchantEmail;
     private double amount;
     private long merchantOrderId;
-    private ZonedDateTime merchantTimestamp;
+    private Date merchantTimestamp;
     private String successUrl;
     private String failedUrl;
     private String errorUrl;

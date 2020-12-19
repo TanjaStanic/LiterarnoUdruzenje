@@ -36,24 +36,25 @@ import com.example.bankacquirer.domain.TransactionStatus;
 @Log4j2
 public class PaymentServiceImpl implements PaymentService{
 
-	@Autowired
-	PcRequestRepository pcRequestRepository;
-	
-	@Autowired
-	CardRepository cardRepository;
-	
-	@Autowired
-	ClientRepository clientRepository;
-	
-	@Autowired
-	AccountRepository accountRepository;
-	
-	@Autowired
-	TransactionRepository transactionRepository;
-	
-	
+	private PcRequestRepository pcRequestRepository;
+	private CardRepository cardRepository;
+	private ClientRepository clientRepository;
+	private AccountRepository accountRepository;
+	private TransactionRepository transactionRepository;
 	private RestTemplate restTemplate;
-	
+
+	@Autowired
+	public PaymentServiceImpl(PcRequestRepository pcRequestRepository, CardRepository cardRepository,
+							  ClientRepository clientRepository, AccountRepository accountRepository,
+							  TransactionRepository transactionRepository, RestTemplate restTemplate) {
+		this.pcRequestRepository = pcRequestRepository;
+		this.cardRepository = cardRepository;
+		this.clientRepository = clientRepository;
+		this.accountRepository = accountRepository;
+		this.transactionRepository = transactionRepository;
+		this.restTemplate = restTemplate;
+	}
+
 	private String myBankId = "123412";
 	
 
@@ -175,7 +176,7 @@ public class PaymentServiceImpl implements PaymentService{
 				System.out.println("Merchant Data is not good!");
 				transaction.setStatus(TransactionStatus.ERROR);
 				paymentFailed(pcRequest);
-				log.info("ERROR | Transaction error | Marchant does'n match");
+				log.error("ERROR | Transaction error | Marchant does'n match");
 				return pcRequest.getErrorUrl();
 			}
 			
@@ -208,10 +209,11 @@ public class PaymentServiceImpl implements PaymentService{
 			//otkomentarisati kada se dovrsi metoda u bank ms
 			
 			try {	
-				ResponseEntity<String> response = restTemplate.exchange("https://bank-ms/api/complite-payment", HttpMethod.POST, 
+				ResponseEntity<String> response = restTemplate.exchange("https://localhost:8441/api/complete-payment", HttpMethod.POST,
 						new HttpEntity<CompletedPaymentDTO>(cpDTO), String.class);
 			} catch (Exception e) {
-				throw new RuntimeException("Coud not contact complite-payment in bankMS");
+				log.error("Could not contact complete-payment in bankMS");
+				log.error(e.getMessage());
 		    }
 
 			return pcRequest.getSuccessUrl();
@@ -237,11 +239,11 @@ public class PaymentServiceImpl implements PaymentService{
 		
 		//otkomentarisati kada se dovrsi metoda u bank ms
 		
-		try {	
-			ResponseEntity<String> response = restTemplate.exchange("https://bank-ms/api/complite-payment", HttpMethod.POST, 
+		try {
+			ResponseEntity<String> response = restTemplate.exchange("https://localhost:8441/api/complete-payment", HttpMethod.POST,
 					new HttpEntity<CompletedPaymentDTO>(cpDTO), String.class);
 		} catch (Exception e) {
-			throw new RuntimeException("Coud not contact complite-payment in BANK ms");
+			log.error(e.getMessage());
 	    }
 	}
 

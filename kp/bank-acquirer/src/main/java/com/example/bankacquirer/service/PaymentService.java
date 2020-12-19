@@ -7,11 +7,12 @@ import org.springframework.stereotype.Service;
 import com.example.bankacquirer.dto.CardDataDTO;
 import com.example.bankacquirer.dto.PaymentConcentratorRequestDTO;
 
-@Service
 public interface PaymentService {
-	
-	public boolean checkRequest(PaymentConcentratorRequestDTO pcRequestDTO);
-	public PaymentConcentratorResponseDTO createResponse(PaymentConcentratorRequestDTO pcRequestDTO);
-	public String confirmPayment(CardDataDTO cardDataDTO, Long pcRequestId);
-	
+
+    boolean checkRequest(PaymentConcentratorRequestDTO pcRequestDTO);
+
+    PaymentConcentratorResponseDTO createResponse(PaymentConcentratorRequestDTO pcRequestDTO);
+
+    String confirmPayment(CardDataDTO cardDataDTO, Long pcRequestId);
+
 }

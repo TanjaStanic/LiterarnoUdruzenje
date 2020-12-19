@@ -9,12 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class Test {
-	
-	//premjestiti u config class kasnije
-	@Bean
-	public RestTemplate restTemplate() {
-	    return new RestTemplate();
-	}
+
 	
 	@Autowired
 	private RestTemplate restTemplate;
