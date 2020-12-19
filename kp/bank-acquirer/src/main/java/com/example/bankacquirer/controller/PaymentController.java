@@ -24,6 +24,9 @@ public class PaymentController {
 	@RequestMapping(value = "/create-response", method = RequestMethod.POST)
 	private ResponseEntity<?> createResponse(@RequestBody PaymentConcentratorRequestDTO paymentConcentratorRequestDTO) {
 		
+		if (!paymentService.checkRequest(paymentConcentratorRequestDTO)) {
+			return new ResponseEntity<>(null, HttpStatus.UNPROCESSABLE_ENTITY);
+		}
 		PaymentConcentratorResponseDTO pcResponseDTO = paymentService.createResponse(paymentConcentratorRequestDTO);
 		
 		return new ResponseEntity<>(pcResponseDTO, HttpStatus.OK);
