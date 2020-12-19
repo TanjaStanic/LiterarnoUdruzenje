@@ -1,7 +1,6 @@
 package com.example.paymentinfo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +16,13 @@ import com.example.paymentinfo.service.PaymentRequestService;
 @Controller
 @RequestMapping("/api")
 public class PaymentRequestController {
-	
 
-	@Autowired
 	private PaymentRequestService paymentService;
-	
+
+	public PaymentRequestController(PaymentRequestService paymentService) {
+		this.paymentService = paymentService;
+	}
+
 	@GetMapping("get-payment-url")
     public ResponseEntity<String> testRouting() {
 		System.out.println("ULAZIIIIIIIIIIII");
