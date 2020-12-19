@@ -13,11 +13,14 @@ import com.example.bankacquirer.service.PaymentService;
 
 import lombok.extern.log4j.Log4j2;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -93,7 +96,7 @@ public class PaymentServiceImpl implements PaymentService{
 		
 		pcReq = pcRequestRepository.save(pcReq);
 		log.info("CREATED | Payment Concentrator Requests | Payment Id: " + pcReq.getId());
-		return new PaymentConcentratorResponseDTO(pcReq.getId(),"https://localhost:8445/card-data");
+		return new PaymentConcentratorResponseDTO(pcReq.getId(),"https://localhost:8445/card-data/"+pcReq.getId());
 	}
 
 	@Override
@@ -199,17 +202,17 @@ public class PaymentServiceImpl implements PaymentService{
 			cpDTO.setTransactionStatus(TransactionStatus.SUCCESSFUL);
 			cpDTO.setMerchantOrderID(pcRequest.getMerchantOrderId());
 			//cpDTO.setAcquirerOrderID(saved.getId());
-			//cpDTO.setAcquirerTimestamp(ZonedDateTime.now());
-			
+			cpDTO.setAcquirerTimestamp(ZonedDateTime.now());
+			cpDTO.setPaymentID(pcRequest.getId());
 			
 			//otkomentarisati kada se dovrsi metoda u bank ms
 			
-			/*try {	
-				ResponseEntity<String> response = restTemplate.exchange("https://banking/api/complite-payment", HttpMethod.POST, 
+			try {	
+				ResponseEntity<String> response = restTemplate.exchange("https://bank-ms/api/complite-payment", HttpMethod.POST, 
 						new HttpEntity<CompletedPaymentDTO>(cpDTO), String.class);
 			} catch (Exception e) {
 				throw new RuntimeException("Coud not contact complite-payment in bankMS");
-		    }*/
+		    }
 
 			return pcRequest.getSuccessUrl();
 			
@@ -230,15 +233,16 @@ public class PaymentServiceImpl implements PaymentService{
 		CompletedPaymentDTO cpDTO = new CompletedPaymentDTO();
 		cpDTO.setTransactionStatus(TransactionStatus.UNSUCCESSFUL);
 		cpDTO.setMerchantOrderID(pcRequest.getMerchantOrderId());
-
+		cpDTO.setPaymentID(pcRequest.getId());
+		
 		//otkomentarisati kada se dovrsi metoda u bank ms
-		/*
+		
 		try {	
-			ResponseEntity<String> response = restTemplate.exchange("https://banking/api/complite-payment", HttpMethod.POST, 
+			ResponseEntity<String> response = restTemplate.exchange("https://bank-ms/api/complite-payment", HttpMethod.POST, 
 					new HttpEntity<CompletedPaymentDTO>(cpDTO), String.class);
 		} catch (Exception e) {
 			throw new RuntimeException("Coud not contact complite-payment in BANK ms");
-	    }*/
+	    }
 	}
 
 }
