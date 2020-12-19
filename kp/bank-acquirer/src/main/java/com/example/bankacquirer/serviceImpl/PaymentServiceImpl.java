@@ -11,6 +11,7 @@ import com.example.bankacquirer.repository.PcRequestRepository;
 import com.example.bankacquirer.repository.TransactionRepository;
 import com.example.bankacquirer.service.PaymentService;
 
+import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ import com.example.bankacquirer.domain.TransactionStatus;
 
 
 @Service
+@Log4j2
 public class PaymentServiceImpl implements PaymentService{
 
 	@Autowired
@@ -57,21 +59,24 @@ public class PaymentServiceImpl implements PaymentService{
 		if (pcRequestDTO.getMerchantId()==null || pcRequestDTO.getMerchantPassword()==null ||
 				pcRequestDTO.getMerchantTimestamp()==null || pcRequestDTO.getSuccessUrl()==null ||
 				pcRequestDTO.getFailedUrl()==null || pcRequestDTO.getErrorUrl()==null) {
-			
+			log.info("ERROR | Payment Concentrator Requests | Some of parameters are missing");
 			System.out.println("Some of requests parameters are missing");
 			return false;
 		}
 		if (pcRequestDTO.getAmount()<=0) {
+			log.info("ERROR | Payment Concentrator Requests | Amount can not be null");
 			System.out.println("Amount can not be negative or zero");
 			return false;
 		}
 		
 		Client merchant = clientRepository.findOneByMerchantID(pcRequestDTO.getMerchantId());
 		if (merchant==null || merchant.getAccount()==null) {
+			log.info("ERROR | Payment Concentrator Requests | Merchant acc i doesnt exists in this bank or doesn't have account in this bank");
 			System.out.println("Merchant acc i doesnt exists in this bank or doesn't have account in this bank!");		
 			return false;
 		}
 		if ( !merchant.getMerchantPassword().equals(pcRequestDTO.getMerchantPassword())) {
+			log.info("ERROR | Payment Concentrator Requests | Merchant password is not ok!");
 			System.out.println("Merchant password is not ok!");	
 			return false;
 		}
@@ -86,8 +91,8 @@ public class PaymentServiceImpl implements PaymentService{
 				pcRequestDTO.getMerchantTimestamp(), pcRequestDTO.getSuccessUrl(),
 				pcRequestDTO.getFailedUrl(), pcRequestDTO.getErrorUrl());
 		
-		pcRequestRepository.save(pcReq);
-
+		pcReq = pcRequestRepository.save(pcReq);
+		log.info("CREATED | Payment Concentrator Requests | Payment Id: " + pcReq.getId());
 		return new PaymentConcentratorResponseDTO(pcReq.getId(),"https://localhost:8445/card-data");
 	}
 
@@ -125,6 +130,7 @@ public class PaymentServiceImpl implements PaymentService{
 			}
 			if (!cardFound) {
 				System.out.println("Bank-acq dosn't have card with thih pan number : " + cardDataDTO.getPanNumber());
+				log.info("CANCELED | Transaction canceled | There is no such card in the bank");
 				transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
 				paymentFailed(pcRequest);
 				return pcRequest.getFailedUrl();
@@ -144,6 +150,7 @@ public class PaymentServiceImpl implements PaymentService{
 					System.out.println("Other data elements on card are not the same.");
 					transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
 					paymentFailed(pcRequest);
+					log.info("CANCELED | Transaction canceled | Card data doesn't match");
 					return pcRequest.getFailedUrl();
 				}
 			}
@@ -154,6 +161,7 @@ public class PaymentServiceImpl implements PaymentService{
 				System.out.println("No available funds!");				
 				transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
 				paymentFailed(pcRequest);
+				log.info("CANCELED | Transaction canceled | No available funds: "+ account.getAvailableFunds());
 				return pcRequest.getFailedUrl();
 			}
 			
@@ -164,6 +172,7 @@ public class PaymentServiceImpl implements PaymentService{
 				System.out.println("Merchant Data is not good!");
 				transaction.setStatus(TransactionStatus.ERROR);
 				paymentFailed(pcRequest);
+				log.info("ERROR | Transaction error | Marchant does'n match");
 				return pcRequest.getErrorUrl();
 			}
 			
@@ -183,6 +192,8 @@ public class PaymentServiceImpl implements PaymentService{
 			transaction.setClient(client);
 			transaction.setStatus(TransactionStatus.SUCCESSFUL);
 			Transaction saved = transactionRepository.save(transaction);
+			
+			log.info("COMPLETED | Bank Payment | Transaction successful");
 			
 			CompletedPaymentDTO cpDTO = new CompletedPaymentDTO();
 			cpDTO.setTransactionStatus(TransactionStatus.SUCCESSFUL);
