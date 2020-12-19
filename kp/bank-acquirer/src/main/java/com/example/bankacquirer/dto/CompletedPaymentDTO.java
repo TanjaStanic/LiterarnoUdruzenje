@@ -14,16 +14,19 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CompletedPaymentDTO {
-	@NotNull
+   
+    @NotNull
     private TransactionStatus transactionStatus;
     @NotNull
     private Long merchantOrderID;
-    @NotNull
+    
     private Long acquirerOrderID;
-    @NotNull
+    
     private ZonedDateTime acquirerTimestamp;
     @NotNull
     private long paymentID;
-   // @NotNull
-    private String url;
+   
+    private Long issuerOrderID;
+
+    private ZonedDateTime issuerTimestamp;
 }
