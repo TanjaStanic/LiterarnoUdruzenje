@@ -5,6 +5,7 @@ import com.example.bankms.dto.PaymentRequestDTO;
 import com.example.bankms.service.ClientService;
 import com.example.bankms.service.PaymentService;
 import com.example.bankms.service.TransactionService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 @RestController
 @RequestMapping("/api")
+@Log4j2
 public class PaymentController {
 
     private final PaymentService paymentService;
@@ -26,6 +28,8 @@ public class PaymentController {
     public ResponseEntity<?> createPaymentTransaction(@RequestBody PaymentRequestDTO request) {
         try{
             String response = paymentService.initiatePayment(request);
+            // response je url fronta bankacq gde kupac unosi podatke o kartici
+            // i taj link treba da se salje literarnom udruzenju
             return ResponseEntity.ok().body(response);
         }catch (Exception exception){
             return ResponseEntity.badRequest().body("Transaction failed.");
@@ -35,6 +39,6 @@ public class PaymentController {
     @PostMapping("/complete-payment")
     public ResponseEntity<?> completePayment(@RequestBody CompletedPaymentDTO completedPayment){
         paymentService.completePayment(completedPayment);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(completedPayment.getTransactionStatus().toString());
     }
 }

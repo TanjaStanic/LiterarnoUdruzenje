@@ -28,15 +28,21 @@ public class Transaction {
     @Column
     private Long merchantOrderId;
 
-    @Column
+    @Column(nullable = true)
     private Long acquirerOrderId;
 
-    @Column
+    @Column(nullable = true)
     private ZonedDateTime acquirerTimestamp;
 
     @Column
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
+
+    @Column(nullable = true)
+    private Long issuerOrderID;
+
+    @Column(nullable = true)
+    private ZonedDateTime issuerTimestamp;
 
     @Column
     private Double amount;

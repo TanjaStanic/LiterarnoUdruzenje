@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 @RestController
-@RequestMapping("/api")
 public class ClientController {
 
     private final ClientService clientService;

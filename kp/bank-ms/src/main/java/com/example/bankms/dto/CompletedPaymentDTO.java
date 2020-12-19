@@ -19,12 +19,15 @@ public class CompletedPaymentDTO {
     private TransactionStatus transactionStatus;
     @NotNull
     private Long merchantOrderID;
-    @NotNull
+
     private Long acquirerOrderID;
-    @NotNull
+
     private ZonedDateTime acquirerTimestamp;
     @NotNull
     private long paymentID;
-    @NotNull
-    private String url;
+
+    private Long issuerOrderID;
+
+    private ZonedDateTime issuerTimestamp;
+
 }
