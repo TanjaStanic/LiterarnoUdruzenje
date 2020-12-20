@@ -26,4 +26,7 @@ public class PaymentMethod {
     @Column
     private boolean subscriptionSupported;
 
+    @Column
+    private String applicationName;
+
 }

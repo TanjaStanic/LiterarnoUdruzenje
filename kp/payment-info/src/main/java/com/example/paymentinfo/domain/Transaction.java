@@ -24,6 +24,9 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
 
+    @Column(unique = true)
+    private Long merchantOrderId;
+
     @Column
     private String paymentID;
 
@@ -33,9 +36,10 @@ public class Transaction {
     @ManyToOne
     private Currency currency;
 
-    public Transaction(Client seller, TransactionStatus status, String paymentID, Double amount, Currency currency) {
+    public Transaction(Client seller, TransactionStatus status, Long merchantOrderId, String paymentID, Double amount, Currency currency) {
         this.seller = seller;
         this.status = status;
+        this.merchantOrderId = merchantOrderId;
         this.paymentID = paymentID;
         this.amount = amount;
         this.currency = currency;

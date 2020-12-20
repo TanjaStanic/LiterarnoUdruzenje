@@ -50,7 +50,7 @@ public class PaymentServiceImpl implements PaymentService {
                     transaction.setPaymentID(responseDTO.getBody().getPaymentId());
                     transaction = transactionService.save(transaction);
                     TransactionDto transactionDto = new TransactionDto(transaction.getSeller().getEmail(),
-                            transaction.getStatus(), Long.toString(transaction.getPaymentID()), transaction.getAmount(), transaction.getCurrency().getCode());
+                            transaction.getStatus(), transaction.getMerchantOrderId(), Long.toString(transaction.getPaymentID()), transaction.getAmount(), transaction.getCurrency().getCode());
                     this.sendTransactionUpdate(transactionDto);
 
                     return responseDTO.getBody().getPaymentUrl();
@@ -62,7 +62,7 @@ public class PaymentServiceImpl implements PaymentService {
                     log.error("ERROR | Could not contact acquirer, transaction failed.");
                     log.error(e.getMessage());
                     TransactionDto transactionDto = new TransactionDto(transaction.getSeller().getEmail(),
-                            transaction.getStatus(), Long.toString(transaction.getPaymentID()), transaction.getAmount(), transaction.getCurrency().getCode());
+                            transaction.getStatus(), transaction.getMerchantOrderId(), Long.toString(transaction.getPaymentID()), transaction.getAmount(), transaction.getCurrency().getCode());
                     this.sendTransactionUpdate(transactionDto);
                     throw new RuntimeException("Could not contact acquirer, transaction failed.");
                 }
@@ -83,7 +83,7 @@ public class PaymentServiceImpl implements PaymentService {
         transaction.setIssuerTimestamp(completedPayment.getIssuerTimestamp());
         transaction = transactionService.save(transaction);
         TransactionDto transactionDto = new TransactionDto(transaction.getSeller().getEmail(),
-                transaction.getStatus(), Long.toString(transaction.getPaymentID()), transaction.getAmount(), transaction.getCurrency().getCode());
+                transaction.getStatus(),transaction.getMerchantOrderId(), Long.toString(transaction.getPaymentID()), transaction.getAmount(), transaction.getCurrency().getCode());
         try {
             this.sendTransactionUpdate(transactionDto);
         } catch (Exception exception) {

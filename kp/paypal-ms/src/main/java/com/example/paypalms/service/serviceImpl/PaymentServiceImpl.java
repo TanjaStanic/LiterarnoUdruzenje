@@ -63,6 +63,7 @@ public class PaymentServiceImpl implements PaymentService {
         transactionDto.setStatus(transaction.getStatus());
         transactionDto.setAmount(transaction.getAmount());
         transactionDto.setCurrencyCode(transaction.getCurrency().getCode());
+        transactionDto.setMerchantOrderId(transaction.getMerchantOrderId());
 
         Payer payer = new Payer();
         payer.setPaymentMethod("paypal");
@@ -103,11 +104,13 @@ public class PaymentServiceImpl implements PaymentService {
             }
             transaction.setPaymentId(newPayment.getId());
             transactionDto.setPaymentID(newPayment.getId());
+            transactionDto.setMerchantOrderId(transaction.getMerchantOrderId());
 
         } catch (PayPalRESTException exception) {
             transaction.setStatus(TransactionStatus.CANCELED);
             transaction = transactionService.save(transaction);
             transactionDto.setStatus(transaction.getStatus());
+            transactionDto.setMerchantOrderId(transaction.getMerchantOrderId());
             this.sendTransactionUpdate(transactionDto);
             throw exception;
         }
@@ -115,6 +118,7 @@ public class PaymentServiceImpl implements PaymentService {
         transaction = transactionService.save(transaction);
         log.info("CREATED | PayPal Payment | Amount: " + paymentRequest.getAmount());
         transactionDto.setStatus(transaction.getStatus());
+        transactionDto.setMerchantOrderId(transaction.getMerchantOrderId());
 
         this.sendTransactionUpdate(transactionDto);
         //redirect the customer to the paypal site
@@ -139,6 +143,7 @@ public class PaymentServiceImpl implements PaymentService {
             transactionDto.setAmount(transaction.getAmount());
             transactionDto.setCurrencyCode(transaction.getCurrency().getCode());
             transactionDto.setPaymentID(transaction.getPaymentId());
+            transactionDto.setMerchantOrderId(transaction.getMerchantOrderId());
 
             APIContext context = new APIContext(client.getClientId(), client.getClientSecret(), executionMode);
             try {
@@ -149,6 +154,7 @@ public class PaymentServiceImpl implements PaymentService {
                 log.error("CANCELED | PayPal Payment Execution");
                 log.error(exception.getMessage());
                 transactionDto.setStatus(transaction.getStatus());
+                transactionDto.setMerchantOrderId(transaction.getMerchantOrderId());
                 this.sendTransactionUpdate(transactionDto);
                 return transaction.getErrorUrl();
             }
@@ -156,6 +162,7 @@ public class PaymentServiceImpl implements PaymentService {
             transaction = transactionService.save(transaction);
             log.info("COMPLETED | PayPal Payment Execution");
             transactionDto.setStatus(transaction.getStatus());
+            transactionDto.setMerchantOrderId(transaction.getMerchantOrderId());
             this.sendTransactionUpdate(transactionDto);
             return transaction.getSuccessUrl();
         }
@@ -176,6 +183,7 @@ public class PaymentServiceImpl implements PaymentService {
             transactionDto.setAmount(transaction.getAmount());
             transactionDto.setCurrencyCode(transaction.getCurrency().getCode());
             transactionDto.setPaymentID(transaction.getPaymentId());
+            transactionDto.setMerchantOrderId(transaction.getMerchantOrderId());
             this.sendTransactionUpdate(transactionDto);
 
         } catch (RuntimeException exception) {

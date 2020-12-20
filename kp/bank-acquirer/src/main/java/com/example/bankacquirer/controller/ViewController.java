@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ViewController {
 	
 	@RequestMapping(value = "/card-data/{paymentRequestId}") 
-	public String form(@PathVariable Integer paymentRequestId, Model model) { 
+	public String form(@PathVariable Long paymentRequestId, Model model) {
 		model.addAttribute("paymentRequestId", paymentRequestId);
 		return "form";
 	}

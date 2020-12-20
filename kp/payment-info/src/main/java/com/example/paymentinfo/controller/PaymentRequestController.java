@@ -1,54 +1,77 @@
 package com.example.paymentinfo.controller;
 
 
+import com.example.paymentinfo.domain.PaymentRequest;
+import com.example.paymentinfo.repository.PaymentRequestRepository;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.paymentinfo.dto.PaymentRequestDTO;
-import com.example.paymentinfo.dto.PaymentResponseDTO;
 import com.example.paymentinfo.service.PaymentRequestService;
 import com.example.paymentinfo.service.TransactionService;
+import org.springframework.web.client.RestTemplate;
 
-@Controller
+
+@RestController
 @RequestMapping("/api")
+@Log4j2
 public class PaymentRequestController {
 
-	private PaymentRequestService paymentService;
-	private TransactionService transactionService;
-	
-	public PaymentRequestController(PaymentRequestService paymentService) {
-		this.paymentService = paymentService;
-	}
-	
-	
-	@PostMapping("/initiate-payment-request")
-	public String createRequest(PaymentRequestDTO pReqDTO){
-		
-		transactionService.initializeTransaction(pReqDTO);
-		
-		return "https://localhost:8444/view/payment-methods";
-	}
-	
-	
+    private PaymentRequestService paymentService;
+    private TransactionService transactionService;
+    private PaymentRequestRepository paymentRequestRepository;
+    private RestTemplate restTemplate;
 
-	@GetMapping("get-payment-url")
-    public ResponseEntity<String> testRouting() {
-		System.out.println("ULAZIIIIIIIIIIII");
-        return ResponseEntity.ok().body("I am payment-info-ms");
+    public PaymentRequestController(PaymentRequestService paymentService, TransactionService transactionService,
+                                    PaymentRequestRepository paymentRequestRepository, RestTemplate restTemplate) {
+        this.paymentService = paymentService;
+        this.transactionService = transactionService;
+        this.paymentRequestRepository = paymentRequestRepository;
+        this.restTemplate = restTemplate;
     }
 
-	/*@PostMapping("/get-payment-url")
-	public ResponseEntity<String> getPaymentUrl(@RequestBody PaymentRequestDTO request) {
+    @PostMapping("/initiate-payment-request")
+    public ResponseEntity<byte[]> createRequest(@RequestBody PaymentRequestDTO requestDTO) {
 
-    System.out.println("ULAZIIIIIIIIIIII");
-    PaymentRequestDTO paymentData = paymentService.getPaymentUrl(request);
-    return ResponseEntity.ok(paymentData.getPaymentUrl());
-}*/
-	
+        PaymentRequest request = new PaymentRequest();
+        request.setMerchantOrderId(requestDTO.getMerchantOrderId());
+        request.setMerchantEmail(requestDTO.getMerchantEmail());
+        request.setSuccessUrl(requestDTO.getSuccessUrl());
+        request.setFailedUrl(requestDTO.getFailedUrl());
+        request.setErrorUrl(requestDTO.getErrorUrl());
+        request.setAmount(requestDTO.getAmount());
+        request.setCurrencyCode(requestDTO.getCurrencyCode());
+        request.setMerchantTimestamp(requestDTO.getMerchantTimestamp());
+
+        // TODO Log this
+        paymentRequestRepository.save(request);
+
+        transactionService.initializeTransaction(requestDTO);
+
+        HttpHeaders headersRedirect = new HttpHeaders();
+        headersRedirect.add("Location", "https://localhost:8444/view/payment-methods/" + requestDTO.getMerchantEmail() + "/" + requestDTO.getMerchantOrderId());
+        headersRedirect.add("Access-Control-Allow-Origin", "*");
+        return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+
+    }
+
+    @GetMapping("/{paymentMethod}/{sellerEmail}/{merchantOrderId}")
+    public ResponseEntity<?> redirectPaymentRequest(@PathVariable String paymentMethod, @PathVariable String sellerEmail, @PathVariable long merchantOrderId) {
+
+        PaymentRequest paymentRequest = paymentRequestRepository.findByMerchantOrderId(merchantOrderId);
+
+        HttpEntity<PaymentRequest> entity = new HttpEntity<>(paymentRequest);
+        ResponseEntity<String> redirectUrl = restTemplate.postForEntity("https://" + paymentMethod + "/", entity, String.class);
+
+        HttpHeaders headersRedirect = new HttpHeaders();
+        headersRedirect.add("Location", redirectUrl.getBody());
+        headersRedirect.add("Access-Control-Allow-Origin", "*");
+        return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+
+    }
 
 }

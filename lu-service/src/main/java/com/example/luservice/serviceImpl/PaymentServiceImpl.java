@@ -42,13 +42,9 @@ public class PaymentServiceImpl implements PaymentService {
 		
 		//generate 10 numbers id
 		long generatedId = 0;
-		boolean unique = false;
-		while (!unique) {
-			generatedId = (long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L;
-			if (transactionRepository.findByMerchantOrderId(generatedId)==null) {
-				unique=true;
-			}
-		}
+
+		generatedId = (long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L;
+
 		pReqDto.setMerchantOrderId(generatedId);
 		pReqDto.setAmount(amount);
 		pReqDto.setSuccessUrl("https://localhost:8447/view/success");

@@ -9,4 +9,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     Transaction findByPaymentID(String paymentId);
 
+    Transaction findByMerchantOrderId(long merchantOrderId);
+
 }

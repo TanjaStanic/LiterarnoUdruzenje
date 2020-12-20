@@ -27,20 +27,20 @@ public class PaymentController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createPayment(@RequestBody @Valid PaymentRequestDTO paymentRequest) {
+    public ResponseEntity<?> createPayment(@RequestBody @Valid PaymentRequestDTO paymentRequest) {
         String redirectUrl;
         try {
             redirectUrl = paymentService.createPayment(paymentRequest);
             if (redirectUrl == null) {
                 log.error("CANCELED | PayPal Payment | Amount: " + paymentRequest.getAmount() + " " + paymentRequest.getCurrencyCode());
-                return ResponseEntity.badRequest().build();
+                redirectUrl = paymentRequest.getErrorUrl();
             }
         } catch (PayPalRESTException e) {
             log.error("CANCELED | PayPal Payment | Amount: " + paymentRequest.getAmount() + " " + paymentRequest.getCurrencyCode());
-            return ResponseEntity.badRequest().build();
+            redirectUrl = paymentRequest.getFailedUrl();
         }
 
-        return ResponseEntity.ok(redirectUrl);
+       return ResponseEntity.ok(redirectUrl);
     }
 
     @GetMapping(value = "/finish")

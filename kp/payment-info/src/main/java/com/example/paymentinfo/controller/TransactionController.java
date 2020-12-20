@@ -35,10 +35,10 @@ public class TransactionController {
         if (seller == null) {
             return ResponseEntity.badRequest().build();
         }
-        Transaction t = transactionService.findByPaymentID(transaction.getPaymentID());
+        Transaction t = transactionService.findByMerchantOrderId(transaction.getMerchantOrderId());
 
         if (t == null) {
-            t = new Transaction(seller, transaction.getStatus(), transaction.getPaymentID(), transaction.getAmount(), currency);
+            return ResponseEntity.badRequest().build();
         } else {
             t.setPaymentID(transaction.getPaymentID());
             t.setStatus(transaction.getStatus());
@@ -49,6 +49,7 @@ public class TransactionController {
         }
 
         transactionService.save(t);
+        // TODO Log this
         return ResponseEntity.ok().build();
     }
 }

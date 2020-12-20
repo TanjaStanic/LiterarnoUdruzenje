@@ -10,9 +10,11 @@
 <h2  style="margin-left: 40%">Izaberite način plaćanja</h2>
 <br/><br/>
 <div style="margin-left: 45%">
-    <div><a th:href="${'https://localhost:8447/api/transaction/1/'+hashedId}"> Bank<img src="https://img.icons8.com/color/96/000000/bank-building.png"></a></div>
-    <div><a th:href="${'https://localhost:8447/api/transaction/2/'+hashedId}" >PayPal<img src="https://img.icons8.com/color/96/000000/paypal.png"></a></div>
-    <div><a th:href="${'https://localhost:8447/api/transaction/3/'+hashedId}">Bitcoin<img src="https://img.icons8.com/office/80/000000/bitcoin.png"></a></div>
+    <div th:each="paymentMethod: ${paymentMethods}">
+        <div><a th:href="${paymentMethod.value}"><span th:text="${paymentMethod.key}"></span></a></div>
+
+    </div>
+
 
 </div>
 

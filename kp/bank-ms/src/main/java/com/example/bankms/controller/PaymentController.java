@@ -7,15 +7,12 @@ import com.example.bankms.service.PaymentService;
 import com.example.bankms.service.TransactionService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 @RestController
-@RequestMapping("/api")
 @Log4j2
+@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 public class PaymentController {
 
     private final PaymentService paymentService;
@@ -24,7 +21,7 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    @PostMapping("/initiate-payment")
+    @PostMapping
     public ResponseEntity<?> createPaymentTransaction(@RequestBody PaymentRequestDTO request) {
         try{
             String response = paymentService.initiatePayment(request);

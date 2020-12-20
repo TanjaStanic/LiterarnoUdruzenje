@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 @RestController
 public class TestController {
@@ -34,7 +35,7 @@ public class TestController {
         requestDTO.setSuccessUrl("https://localhost:8762/api/pc_info/");
         requestDTO.setMerchantEmail("sb-zx3ys4123984@business.example.com");
         requestDTO.setMerchantOrderId(1234);
-        requestDTO.setMerchantTimestamp(ZonedDateTime.now());
+        requestDTO.setMerchantTimestamp(new Date());
         ResponseEntity<String> fromPaypalMs = restTemplate.postForEntity("https://paypal-ms/", requestDTO, String.class);
 
         HttpHeaders headersRedirect = new HttpHeaders();

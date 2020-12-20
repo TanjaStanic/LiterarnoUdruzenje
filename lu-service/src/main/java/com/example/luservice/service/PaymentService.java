@@ -9,6 +9,8 @@ import com.example.luservice.model.PaymentMethod;
 
 @Service
 public interface PaymentService {
+
     boolean newSellerPaymentMethods(List<PaymentMethod> paymentMethods, Long userId);
+
     PaymentRequestDTO createPaymentRequest(String clientID, double amount);
 }

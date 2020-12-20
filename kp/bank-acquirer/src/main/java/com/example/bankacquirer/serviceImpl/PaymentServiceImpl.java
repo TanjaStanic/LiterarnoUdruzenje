@@ -98,12 +98,14 @@ public class PaymentServiceImpl implements PaymentService{
 		//generate 10 numbers id
 		long generatedId = 0;
 		boolean unique = false;
-		while (!unique) {
+		generatedId = (long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L;
+		System.out.println(generatedId);
+/*		while (!unique) {
 			generatedId = (long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L;
 			if (pcRequestRepository.findById(generatedId)==null) {
 				unique=true;
 			}
-		}
+		}*/
 		
 		pcReq.setId(generatedId);
 		pcReq = pcRequestRepository.save(pcReq);
@@ -220,7 +222,7 @@ public class PaymentServiceImpl implements PaymentService{
 			//otkomentarisati kada se dovrsi metoda u bank ms
 			
 			try {	
-				ResponseEntity<String> response = restTemplate.exchange("https://localhost:8441/api/complete-payment", HttpMethod.POST,
+				ResponseEntity<String> response = restTemplate.exchange("https://localhost:8441/complete-payment", HttpMethod.POST,
 						new HttpEntity<CompletedPaymentDTO>(cpDTO), String.class);
 			} catch (Exception e) {
 				log.error("Could not contact complete-payment in bankMS");
@@ -251,7 +253,7 @@ public class PaymentServiceImpl implements PaymentService{
 		//otkomentarisati kada se dovrsi metoda u bank ms
 		
 		try {
-			ResponseEntity<String> response = restTemplate.exchange("https://localhost:8441/api/complete-payment", HttpMethod.POST,
+			ResponseEntity<String> response = restTemplate.exchange("https://localhost:8441/complete-payment", HttpMethod.POST,
 					new HttpEntity<CompletedPaymentDTO>(cpDTO), String.class);
 		} catch (Exception e) {
 			log.error(e.getMessage());

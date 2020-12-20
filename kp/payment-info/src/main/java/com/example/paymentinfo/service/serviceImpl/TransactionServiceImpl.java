@@ -7,16 +7,20 @@ import com.example.paymentinfo.dto.PaymentRequestDTO;
 import com.example.paymentinfo.repository.ClientRepository;
 import com.example.paymentinfo.repository.TransactionRepository;
 import com.example.paymentinfo.service.TransactionService;
+
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 @Service
+@Log4j2
 public class TransactionServiceImpl implements TransactionService {
 
     private TransactionRepository transactionRepository;
     private ClientRepository clientRepository;
 
-    public TransactionServiceImpl(TransactionRepository transactionRepository) {
+    public TransactionServiceImpl(TransactionRepository transactionRepository, ClientRepository clientRepository) {
         this.transactionRepository = transactionRepository;
+        this.clientRepository = clientRepository;
     }
 
     @Override
@@ -37,8 +41,14 @@ public class TransactionServiceImpl implements TransactionService {
 		t.setStatus(TransactionStatus.CREATED);
 		t.setAmount(pReqDTO.getAmount());
 		t.setSeller(seller);
-		
-		
-		return null;
+		t.setMerchantOrderId(pReqDTO.getMerchantOrderId());
+		t = transactionRepository.save(t);
+        // TODO Log this
+		return t;
 	}
+
+    @Override
+    public Transaction findByMerchantOrderId(long merchantOrderId) {
+        return transactionRepository.findByMerchantOrderId(merchantOrderId);
+    }
 }
