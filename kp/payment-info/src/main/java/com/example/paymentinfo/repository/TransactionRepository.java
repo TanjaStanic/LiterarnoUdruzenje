@@ -5,7 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import com.example.paymentinfo.domain.Transaction;
 
-@Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
+
+    Transaction findByPaymentID(long paymentId);
 
 }

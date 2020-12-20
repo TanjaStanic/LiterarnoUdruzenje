@@ -1,5 +1,6 @@
 package com.example.bankms.domain;
 
+import com.example.bankms.utils.AttributeEncryptor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,9 +19,11 @@ public class Client {
     private Long id;
 
     @Column
+    @Convert(converter = AttributeEncryptor.class)
     private String merchantID; // sifrovati
 
     @Column
+    @Convert(converter = AttributeEncryptor.class)
     private String merchantPassword; //sifrovati
 
     @Column

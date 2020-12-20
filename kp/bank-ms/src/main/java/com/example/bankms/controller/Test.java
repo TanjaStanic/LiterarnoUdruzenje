@@ -2,6 +2,8 @@ package com.example.bankms.controller;
 
 import java.util.List;
 
+import com.example.bankms.domain.Client;
+import com.example.bankms.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -15,7 +17,9 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class Test {
-	
+
+    @Autowired
+    private ClientRepository clientRepository;
 	@Autowired
 	private DiscoveryClient discoveryClient;
 	
@@ -24,6 +28,11 @@ public class Test {
 
     @GetMapping
     public ResponseEntity<String> testRouting(){
+        /*Client client1 = new Client("merchantid", "merchantpass", "test@gmail.com", "Pero Peric");
+        Client client2 = new Client("merchantid2", "merchantpass2", "test2@gmail.com", "Marko Markovic");
+        clientRepository.save(client1);
+        clientRepository.save(client2);*/
+
         return ResponseEntity.ok().body("I am bank-ms");
     }
 

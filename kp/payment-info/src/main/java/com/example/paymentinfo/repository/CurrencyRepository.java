@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import com.example.paymentinfo.domain.Currency;
 
-@Repository
 public interface CurrencyRepository extends JpaRepository<Currency, Long> {
-
+    Currency findByCode(String code);
 }

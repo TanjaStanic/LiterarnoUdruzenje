@@ -5,7 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import com.example.paymentinfo.domain.Client;
 
-@Repository
+
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
+    Client findByEmail(String email);
 }
