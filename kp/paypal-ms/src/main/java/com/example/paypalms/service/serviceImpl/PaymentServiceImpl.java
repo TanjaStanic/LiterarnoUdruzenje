@@ -4,6 +4,7 @@ import com.example.paypalms.domain.Client;
 import com.example.paypalms.domain.Currency;
 import com.example.paypalms.domain.Transaction;
 import com.example.paypalms.dto.PaymentRequestDTO;
+import com.example.paypalms.dto.TransactionDto;
 import com.example.paypalms.enums.TransactionStatus;
 import com.example.paypalms.service.ClientService;
 import com.example.paypalms.service.CurrencyService;
@@ -14,7 +15,10 @@ import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,11 +34,14 @@ public class PaymentServiceImpl implements PaymentService {
     private CurrencyService currencyService;
     @Value("${execution.mode}")
     private String executionMode;
+    private RestTemplate restTemplate;
 
-    public PaymentServiceImpl(ClientService clientService, TransactionService transactionService, CurrencyService currencyService) {
+    public PaymentServiceImpl(ClientService clientService, TransactionService transactionService,
+                              CurrencyService currencyService, RestTemplate restTemplate) {
         this.clientService = clientService;
         this.transactionService = transactionService;
         this.currencyService = currencyService;
+        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -50,6 +57,12 @@ public class PaymentServiceImpl implements PaymentService {
                 TransactionStatus.INITIATED, paymentRequest.getAmount(), currency, paymentRequest.getSuccessUrl(),
                 paymentRequest.getErrorUrl(), paymentRequest.getFailedUrl());
         transaction = transactionService.save(transaction);
+
+        TransactionDto transactionDto = new TransactionDto();
+        transactionDto.setSellerEmail(paymentRequest.getMerchantEmail());
+        transactionDto.setStatus(transaction.getStatus());
+        transactionDto.setAmount(transaction.getAmount());
+        transactionDto.setCurrencyCode(transaction.getCurrency().getCode());
 
         Payer payer = new Payer();
         payer.setPaymentMethod("paypal");
@@ -89,14 +102,21 @@ public class PaymentServiceImpl implements PaymentService {
                 }
             }
             transaction.setPaymentId(newPayment.getId());
+            transactionDto.setPaymentID(newPayment.getId());
+
         } catch (PayPalRESTException exception) {
             transaction.setStatus(TransactionStatus.CANCELED);
-            transactionService.save(transaction);
+            transaction = transactionService.save(transaction);
+            transactionDto.setStatus(transaction.getStatus());
+            this.sendTransactionUpdate(transactionDto);
             throw exception;
         }
         transaction.setStatus(TransactionStatus.CREATED);
-        transactionService.save(transaction);
+        transaction = transactionService.save(transaction);
         log.info("CREATED | PayPal Payment | Amount: " + paymentRequest.getAmount());
+        transactionDto.setStatus(transaction.getStatus());
+
+        this.sendTransactionUpdate(transactionDto);
         //redirect the customer to the paypal site
         return redirectUrl;
     }
@@ -113,19 +133,30 @@ public class PaymentServiceImpl implements PaymentService {
             paymentExecution.setPayerId(payerId);
 
             Client client = transaction.getClient();
+            TransactionDto transactionDto = new TransactionDto();
+            transactionDto.setSellerEmail(client.getEmail());
+            transactionDto.setStatus(transaction.getStatus());
+            transactionDto.setAmount(transaction.getAmount());
+            transactionDto.setCurrencyCode(transaction.getCurrency().getCode());
+            transactionDto.setPaymentID(transaction.getPaymentId());
 
             APIContext context = new APIContext(client.getClientId(), client.getClientSecret(), executionMode);
             try {
                 Payment executedPayment = payment.execute(context, paymentExecution);
             } catch (PayPalRESTException exception) {
                 transaction.setStatus(TransactionStatus.CANCELED);
-                transactionService.save(transaction);
+                transaction = transactionService.save(transaction);
                 log.error("CANCELED | PayPal Payment Execution");
+                log.error(exception.getMessage());
+                transactionDto.setStatus(transaction.getStatus());
+                this.sendTransactionUpdate(transactionDto);
                 return transaction.getErrorUrl();
             }
             transaction.setStatus(TransactionStatus.COMPLETED);
-            transactionService.save(transaction);
+            transaction = transactionService.save(transaction);
             log.info("COMPLETED | PayPal Payment Execution");
+            transactionDto.setStatus(transaction.getStatus());
+            this.sendTransactionUpdate(transactionDto);
             return transaction.getSuccessUrl();
         }
         return null;
@@ -138,10 +169,34 @@ public class PaymentServiceImpl implements PaymentService {
             transaction = transactionService.findById(transactionId);
             transaction.setStatus(TransactionStatus.CANCELED);
             transactionService.save(transaction);
+
+            TransactionDto transactionDto = new TransactionDto();
+            transactionDto.setSellerEmail(transaction.getClient().getEmail());
+            transactionDto.setStatus(transaction.getStatus());
+            transactionDto.setAmount(transaction.getAmount());
+            transactionDto.setCurrencyCode(transaction.getCurrency().getCode());
+            transactionDto.setPaymentID(transaction.getPaymentId());
+            this.sendTransactionUpdate(transactionDto);
+
         } catch (RuntimeException exception) {
             log.error("ERROR | TRANSACTION WITH ID: " + transactionId + " NOT FOUND");
             return null;
         }
         return transaction.getFailedUrl();
+    }
+
+    public void sendTransactionUpdate(TransactionDto transaction) {
+        try {
+
+            HttpEntity<TransactionDto> entity = new HttpEntity<>(transaction);
+
+            restTemplate.exchange("https://payment-info/transactions", HttpMethod.POST, entity, String.class);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            log.error("ERROR | Could not contact payment-info.");
+            log.error(exception.getMessage());
+        }
+
     }
 }

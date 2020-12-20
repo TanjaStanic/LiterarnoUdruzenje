@@ -1,15 +1,11 @@
-package com.example.bankms.dto;
+package com.example.paypalms.dto;
 
-import com.example.bankms.enums.TransactionStatus;
+import com.example.paypalms.enums.TransactionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Getter

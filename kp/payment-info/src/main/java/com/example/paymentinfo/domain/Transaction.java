@@ -11,33 +11,33 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Transaction {
-	
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@ManyToOne
-	private Client seller;
 
-	@Column
-	@Enumerated(EnumType.STRING)
-	private TransactionStatus status;
 
-	@Column(unique = true)
-	private long paymentID;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column
-	private Double amount;
-	
-	@ManyToOne
-	private Currency currency;
+    @ManyToOne
+    private Client seller;
 
-	public Transaction(Client seller, TransactionStatus status, long paymentID, Double amount, Currency currency) {
-		this.seller = seller;
-		this.status = status;
-		this.paymentID = paymentID;
-		this.amount = amount;
-		this.currency = currency;
-	}
+    @Column
+    @Enumerated(EnumType.STRING)
+    private TransactionStatus status;
+
+    @Column
+    private String paymentID;
+
+    @Column
+    private Double amount;
+
+    @ManyToOne
+    private Currency currency;
+
+    public Transaction(Client seller, TransactionStatus status, String paymentID, Double amount, Currency currency) {
+        this.seller = seller;
+        this.status = status;
+        this.paymentID = paymentID;
+        this.amount = amount;
+        this.currency = currency;
+    }
 }

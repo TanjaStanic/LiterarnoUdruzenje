@@ -16,7 +16,7 @@ public class TransactionDto {
     @NotNull
     private String sellerEmail;
     private TransactionStatus status;
-    private long paymentID;
+    private String paymentID;
     private Double amount;
     private String currencyCode;
 

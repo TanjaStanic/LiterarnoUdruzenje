@@ -27,7 +27,7 @@ public class TestController {
     @GetMapping("test")
     public ResponseEntity<?> paypalPayment() {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
-        requestDTO.setAmount(15);
+        requestDTO.setAmount(5000);
         requestDTO.setCurrencyCode("USD");
         requestDTO.setErrorUrl("https://localhost:8762/api/pc_info/");
         requestDTO.setFailedUrl("https://localhost:8762/api/pc_info/");

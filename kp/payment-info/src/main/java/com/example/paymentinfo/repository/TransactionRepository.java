@@ -7,6 +7,6 @@ import com.example.paymentinfo.domain.Transaction;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    Transaction findByPaymentID(long paymentId);
+    Transaction findByPaymentID(String paymentId);
 
 }

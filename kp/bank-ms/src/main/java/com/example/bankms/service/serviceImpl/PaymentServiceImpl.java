@@ -4,10 +4,7 @@ import com.example.bankms.domain.Client;
 import com.example.bankms.domain.Currency;
 import com.example.bankms.domain.Transaction;
 
-import com.example.bankms.dto.BankAcquirerRequestDTO;
-import com.example.bankms.dto.BankAcquirerResponseDTO;
-import com.example.bankms.dto.CompletedPaymentDTO;
-import com.example.bankms.dto.PaymentRequestDTO;
+import com.example.bankms.dto.*;
 import com.example.bankms.enums.TransactionStatus;
 import com.example.bankms.service.ClientService;
 import com.example.bankms.service.CurrencyService;
@@ -37,7 +34,7 @@ public class PaymentServiceImpl implements PaymentService {
         this.restTemplate = restTemplate;
     }
 
-    public String initiatePayment(PaymentRequestDTO request){
+    public String initiatePayment(PaymentRequestDTO request) {
         Client seller = clientService.findByEmail(request.getMerchantEmail());
         Currency currency = currencyService.findByCode(request.getCurrencyCode());
         if (seller != null) {
@@ -45,20 +42,28 @@ public class PaymentServiceImpl implements PaymentService {
             if (transaction != null) {
 
                 BankAcquirerRequestDTO bankRequest = new BankAcquirerRequestDTO(request.getAmount(), seller.getMerchantID(),
-                                seller.getMerchantPassword(), request.getMerchantOrderId(), request.getMerchantTimestamp(),
-                                request.getSuccessUrl(), request.getFailedUrl(), request.getErrorUrl(), currency);
+                        seller.getMerchantPassword(), request.getMerchantOrderId(), request.getMerchantTimestamp(),
+                        request.getSuccessUrl(), request.getFailedUrl(), request.getErrorUrl(), currency);
                 try {
                     ResponseEntity<BankAcquirerResponseDTO> responseDTO = restTemplate.postForEntity("https://localhost:8445/payment/create-response", bankRequest,
                             BankAcquirerResponseDTO.class);
                     transaction.setPaymentID(responseDTO.getBody().getPaymentId());
-                    transactionService.save(transaction);
+                    transaction = transactionService.save(transaction);
+                    TransactionDto transactionDto = new TransactionDto(transaction.getSeller().getEmail(),
+                            transaction.getStatus(), Long.toString(transaction.getPaymentID()), transaction.getAmount(), transaction.getCurrency().getCode());
+                    this.sendTransactionUpdate(transactionDto);
+
                     return responseDTO.getBody().getPaymentUrl();
 
                 } catch (Exception e) {
 
                     transaction.setStatus(TransactionStatus.ERROR);
-                    transactionService.save(transaction);
+                    transaction = transactionService.save(transaction);
                     log.error("ERROR | Could not contact acquirer, transaction failed.");
+                    log.error(e.getMessage());
+                    TransactionDto transactionDto = new TransactionDto(transaction.getSeller().getEmail(),
+                            transaction.getStatus(), Long.toString(transaction.getPaymentID()), transaction.getAmount(), transaction.getCurrency().getCode());
+                    this.sendTransactionUpdate(transactionDto);
                     throw new RuntimeException("Could not contact acquirer, transaction failed.");
                 }
 
@@ -76,7 +81,31 @@ public class PaymentServiceImpl implements PaymentService {
         transaction.setStatus(completedPayment.getTransactionStatus());
         transaction.setIssuerOrderID(completedPayment.getIssuerOrderID());
         transaction.setIssuerTimestamp(completedPayment.getIssuerTimestamp());
-        transactionService.save(transaction);
+        transaction = transactionService.save(transaction);
+        TransactionDto transactionDto = new TransactionDto(transaction.getSeller().getEmail(),
+                transaction.getStatus(), Long.toString(transaction.getPaymentID()), transaction.getAmount(), transaction.getCurrency().getCode());
+        try {
+            this.sendTransactionUpdate(transactionDto);
+        } catch (Exception exception) {
+            log.error("ERROR | Could not contact payment-info.");
+            log.error(exception.getMessage());
+        }
+
+    }
+
+    public void sendTransactionUpdate(TransactionDto transaction) {
+        try {
+
+            HttpEntity<TransactionDto> entity = new HttpEntity<>(transaction);
+
+            restTemplate.exchange("https://localhost:8444/transactions", HttpMethod.POST, entity, String.class);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            log.error("ERROR | Could not contact payment-info.");
+            log.error(exception.getMessage());
+        }
+
 
     }
 

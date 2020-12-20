@@ -6,5 +6,5 @@ public interface TransactionService {
 
     Transaction save(Transaction transaction);
 
-    Transaction findByPaymentID(long paymentId);
+    Transaction findByPaymentID(String paymentId);
 }

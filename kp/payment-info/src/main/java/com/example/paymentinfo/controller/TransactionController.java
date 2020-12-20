@@ -36,16 +36,19 @@ public class TransactionController {
             return ResponseEntity.badRequest().build();
         }
         Transaction t = transactionService.findByPaymentID(transaction.getPaymentID());
-        if (t != null) {
+
+        if (t == null) {
             t = new Transaction(seller, transaction.getStatus(), transaction.getPaymentID(), transaction.getAmount(), currency);
         } else {
             t.setPaymentID(transaction.getPaymentID());
             t.setStatus(transaction.getStatus());
             t.setAmount(transaction.getAmount());
+            if (currency != null) {
+                t.setCurrency(currency);
+            }
         }
 
         transactionService.save(t);
-
         return ResponseEntity.ok().build();
     }
 }
