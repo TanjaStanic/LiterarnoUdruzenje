@@ -13,12 +13,15 @@ import javax.persistence.Column;
 import java.util.Collection;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -26,17 +29,17 @@ public class User {
     private Long id;
 
     @Column
-    private String userName;
+    private String username;
 
     @Column
     private String password;
-    
+
     @Column
     private String firstName;
 
     @Column
     private String lastName;
-    
+
     @Column
     private String email;
 
@@ -45,10 +48,7 @@ public class User {
 
     @Column
     private String country;
-    
-    @Column
-    private Role role;
-    
+
     @Column
     private Boolean activated;
     
@@ -64,4 +64,10 @@ public class User {
     	activated=false;
     }
 
+    @ManyToMany(mappedBy = "users")
+    private Set<Role> roles;
+
+    public User() {
+        this.activated = false;
+    }
 }

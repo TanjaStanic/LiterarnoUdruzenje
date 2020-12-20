@@ -1,5 +1,7 @@
 package upp.la.dto;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.camunda.bpm.engine.form.FormField;
 
 import lombok.Getter;
@@ -22,6 +24,4 @@ public class FormFieldsDto {
         this.processInstanceId = processInstanceId;
         this.formFields = formFields;
     }
-
-   
 }
