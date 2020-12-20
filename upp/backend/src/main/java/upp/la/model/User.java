@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Set;
 
 @Entity
@@ -64,8 +65,8 @@ public class User {
     	activated=false;
     }
 
-    @ManyToMany(mappedBy = "users")
-    private Set<Role> roles;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public User() {
         this.activated = false;

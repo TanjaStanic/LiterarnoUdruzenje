@@ -13,7 +13,6 @@ import upp.la.model.User;
 import upp.la.repository.UserRepository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class AuthUserDetailsService implements UserDetailsService {
     User user = userRepository.findByUsername(username);
     if (user == null) {
       return new org.springframework.security.core.userdetails.User(
-          " ", " ", true, true, true, true, getAuthorities(Arrays.asList(null)));
+          " ", " ", true, true, true, true, new ArrayList<>());
     }
 
     return new org.springframework.security.core.userdetails.User(
@@ -39,30 +38,15 @@ public class AuthUserDetailsService implements UserDetailsService {
         true,
         true,
         true,
-        getAuthorities(user.getRoles()));
+        getAuthorities(user.getRole()));
   }
 
-  private Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {
+  private Collection<? extends GrantedAuthority> getAuthorities(Role role) {
 
-    return getGrantedAuthorities(getPermissions(roles));
-  }
-
-  private List<String> getPermissions(Collection<Role> roles) {
-
-    List<String> permissions = new ArrayList<>();
-
-    for (Role role : roles) {
-      permissions.add(role.getName()); // Role as a permission
-    }
-
-    return permissions;
-  }
-
-  private List<GrantedAuthority> getGrantedAuthorities(List<String> privileges) {
     List<GrantedAuthority> authorities = new ArrayList<>();
-    for (String privilege : privileges) {
-      authorities.add(new SimpleGrantedAuthority(privilege));
-    }
+
+    authorities.add(new SimpleGrantedAuthority(role.toString()));
+
     return authorities;
   }
 }

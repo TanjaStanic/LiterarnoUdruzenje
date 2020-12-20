@@ -19,6 +19,7 @@ import upp.la.exceptions.ValidationError;
 import upp.la.service.ValidateRegistrationService;
 import upp.la.service.internal.RegistrationServiceInt;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +45,13 @@ public class RegistrationController {
     ApplicationEventPublisher eventPublisher;
     @Autowired
     RegistrationServiceInt registrationServiceInt;
+
+    //ONLY FOR AUTH TEST
+    @GetMapping(value = "/test-auth")
+    @RolesAllowed({"READER", "WRITER"}) //Name of the allowed role
+    public @ResponseBody ResponseEntity<?> testAuth() {
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @PostMapping(path = "/post", produces = "application/json")
     public @ResponseBody

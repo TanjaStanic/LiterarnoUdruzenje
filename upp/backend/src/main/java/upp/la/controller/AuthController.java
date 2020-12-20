@@ -15,6 +15,7 @@ import upp.la.config.JwtTokenUtils;
 import upp.la.exceptions.AuthorizationError;
 import upp.la.exceptions.EntityNotFound;
 import upp.la.model.JwtAuthenticationRequest;
+import upp.la.model.Role;
 import upp.la.model.User;
 import upp.la.repository.UserRepository;
 import upp.la.service.internal.RegistrationServiceInt;
@@ -45,7 +46,6 @@ public class AuthController {
                   request.getUsername(), request.getPassword()));
 
       SecurityContextHolder.getContext().setAuthentication(authenticate);
-      // User user = (User) authenticate.getPrincipal();
 
       Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
 
@@ -67,6 +67,7 @@ public class AuthController {
     return new ResponseEntity<>(HttpStatus.ACCEPTED);
   }
 
+  // ONLY FOR AUTH TEST
   @GetMapping(value = "/test-register")
   public ResponseEntity<?> createNew() throws IOException {
 
@@ -81,7 +82,7 @@ public class AuthController {
             "asd",
             "asdf",
             true,
-            null);
+            Role.READER);
     registrationServiceInt.registerNew(test1);
 
     return new ResponseEntity<>("OKAY", HttpStatus.CREATED);

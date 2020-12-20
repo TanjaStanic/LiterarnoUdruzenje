@@ -9,15 +9,12 @@ import upp.la.error.ErrorMessages;
 import upp.la.exceptions.EntityNotFound;
 import upp.la.model.ConfirmationToken;
 import upp.la.model.EmailTemplate;
-import upp.la.model.Role;
 import upp.la.model.User;
 import upp.la.repository.ConfirmationTokenRepository;
-import upp.la.repository.RoleRepository;
 import upp.la.repository.UserRepository;
+import upp.la.util.Requests;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
 public class RegistrationServiceInt {
@@ -25,19 +22,11 @@ public class RegistrationServiceInt {
 
   @Autowired UserRepository userRepository;
 
-  @Autowired RoleRepository roleRepository;
-
   @Lazy @Autowired PasswordEncoder passwordEncoder;
 
   @Autowired ConfirmationTokenRepository confirmationTokenRepository;
 
   public User registerNew(User user) throws IOException {
-    Set<Role> roles = new HashSet<Role>();
-
-    roles.add(roleRepository.findByName("ADMIN"));
-
-    user.setRoles(roles);
-
     user.setPassword(passwordEncoder.encode(user.getPassword()));
 
     User saved = userRepository.save(user);
@@ -54,7 +43,7 @@ public class RegistrationServiceInt {
                 env.getProperty("app.registration-url")
                     + confirmationToken.getConfirmationToken()));
 
-    // Requests.sendEmail(email);
+    Requests.sendEmail(email);
 
     return saved;
   }
