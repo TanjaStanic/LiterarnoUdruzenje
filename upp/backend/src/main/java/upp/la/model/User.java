@@ -1,23 +1,11 @@
 package upp.la.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Column;
-import java.util.Collection;
-
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -52,23 +40,19 @@ public class User {
 
     @Column
     private Boolean activated;
-    
+
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
 	@JoinTable(
-	        name = "User_Genres", 
-	        joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") }, 
+	        name = "User_Genres",
+	        joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },
 	        inverseJoinColumns = { @JoinColumn(name = "genre_id", referencedColumnName = "id") }
 	  )
     private Collection<Genre> genres;
-    
-    public User(){
-    	activated=false;
-    }
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User() {
-        this.activated = false;
+    public User(){
+    	activated=false;
     }
 }

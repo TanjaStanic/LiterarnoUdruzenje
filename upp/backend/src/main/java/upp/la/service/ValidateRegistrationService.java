@@ -81,7 +81,7 @@ public class ValidateRegistrationService implements JavaDelegate{
 				if (f.getFieldValue().trim().isEmpty()) {
 					return false;
 				}
-				if (userRepository.existsByUserName(f.getFieldValue())) {
+				if (userRepository.existsByUsername(f.getFieldValue())) {
 					return false;
 				}
 			}

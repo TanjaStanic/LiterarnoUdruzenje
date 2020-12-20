@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upp.la.dto.FormFieldDto;
 import upp.la.dto.FormFieldsDto;
+import upp.la.error.ErrorMessages;
 import upp.la.exceptions.DuplicateEntity;
 import upp.la.model.Genre;
 import upp.la.service.GenreService;
@@ -38,9 +39,6 @@ public class RegistrationController {
     ValidateRegistrationService validationService;
     @Autowired
     GenreService genreService;
-
-    @Autowired
-    ValidateRegistrationService validationService;
     @Autowired
     ApplicationEventPublisher eventPublisher;
     @Autowired
@@ -58,9 +56,11 @@ public class RegistrationController {
     ResponseEntity<?> post(
         @RequestBody List<FormFieldDto> formFields) throws ValidationError {
 
-        if(validationOk == false) {
-        	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            //throw new DuplicateEntity("Validation failed");
+        boolean validationOk = true;
+        validationOk = validationService.checkRegistrationForm(formFields);
+
+        if(!validationOk) {
+            throw new ValidationError(ErrorMessages.VALIDATION_ERROR());
         }
         System.out.println("val:" + validationOk);
         ProcessInstance pi =
