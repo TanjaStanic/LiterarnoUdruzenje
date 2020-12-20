@@ -29,5 +29,10 @@ public class ViewController {
     public String getPaymentMethods(Model model) {
         return "paymentMethods";
     }
+    
+    @GetMapping("/order")
+    public String getOrder(Model model) {
+        return "order";
+    }
 
 }

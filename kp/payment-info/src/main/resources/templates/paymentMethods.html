@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <title>Dostupne metode plaćanja</title>
+</head>
+<body>
+
+<h2  style="margin-left: 40%">Izaberite način plaćanja</h2>
+<br/><br/>
+<div style="margin-left: 45%">
+    <div><a th:href="${'https://localhost:8447/api/transaction/1/'+hashedId}"> Bank<img src="https://img.icons8.com/color/96/000000/bank-building.png"></a></div>
+    <div><a th:href="${'https://localhost:8447/api/transaction/2/'+hashedId}" >PayPal<img src="https://img.icons8.com/color/96/000000/paypal.png"></a></div>
+    <div><a th:href="${'https://localhost:8447/api/transaction/3/'+hashedId}">Bitcoin<img src="https://img.icons8.com/office/80/000000/bitcoin.png"></a></div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</body>
+</html>

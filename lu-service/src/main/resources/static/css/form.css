@@ -1,0 +1,23 @@
+.rounded-lg {
+  border-radius: 1rem;
+}
+
+.bg-color {
+	background: #f5f5f5;
+}
+
+.btn-blue, .btn-primary:active {
+	color: #fff;
+	background: #007acc;
+	vertical-align: middle;
+	border: none;
+}
+
+/* Change color of buttons when hovered or focused*/
+.btn-blue:hover, .btn-primary:focus {
+	color: #fff;
+	outline: none;
+	background: #004d80;
+}
+
+
