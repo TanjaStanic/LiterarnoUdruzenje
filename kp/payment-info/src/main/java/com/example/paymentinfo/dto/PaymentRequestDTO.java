@@ -25,8 +25,6 @@ public class PaymentRequestDTO {
     private String errorUrl;
     private String currencyCode;
 	private String paymentUrl;
-	
-	private String merchantId;
-    private String merchantPassword;
+
 
 }
