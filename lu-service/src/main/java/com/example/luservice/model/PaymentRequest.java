@@ -8,9 +8,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class PaymentRequest {
-    @Id
+   
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -41,87 +49,6 @@ public class PaymentRequest {
     @Column
     private String hashedOrderId;
 
-    public PaymentRequest() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getMerchantId() {
-        return merchantId;
-    }
-
-    public void setMerchantId(String merchantId) {
-        this.merchantId = merchantId;
-    }
-
-    public String getMerchantPassword() {
-        return merchantPassword;
-    }
-
-    public void setMerchantPassword(String merchantPassword) {
-        this.merchantPassword = merchantPassword;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public Long getMerchantOrderId() {
-        return merchantOrderId;
-    }
-
-    public void setMerchantOrderId(Long merchantOrderId) {
-        this.merchantOrderId = merchantOrderId;
-    }
-
-    public Date getMerchantTimestamp() {
-        return merchantTimestamp;
-    }
-
-    public void setMerchantTimestamp(Date merchantTimestamp) {
-        this.merchantTimestamp = merchantTimestamp;
-    }
-
-    public String getSuccessUrl() {
-        return successUrl;
-    }
-
-    public void setSuccessUrl(String successUrl) {
-        this.successUrl = successUrl;
-    }
-
-    public String getFailedUrl() {
-        return failedUrl;
-    }
-
-    public void setFailedUrl(String failedUrl) {
-        this.failedUrl = failedUrl;
-    }
-
-    public String getErrorUrl() {
-        return errorUrl;
-    }
-
-    public void setErrorUrl(String errorUrl) {
-        this.errorUrl = errorUrl;
-    }
-
-    public String getHashedOrderId() {
-        return hashedOrderId;
-    }
-
-    public void setHashedOrderId(String hashedOrderId) {
-        this.hashedOrderId = hashedOrderId;
-    }
+   
 
 }

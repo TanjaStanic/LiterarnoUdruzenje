@@ -49,5 +49,28 @@ public class PaymentRequestServiceImpl implements PaymentRequestService {
 
 	     return paymentRequest;
 	}
+	
+	/*@Override
+	public PaymentRequest createPaymentRequest(String clientID, double amount) {
+		// TODO Auto-generated method stub
+		 Client foundSeller = clientRepository.findClientById(Long.parseLong(clientID));
+
+	     PaymentRequest paymentRequest = new PaymentRequest();
+//	     paymentRequest.setMerchantId(foundSeller.getMerchantId());
+	     paymentRequest.setMerchantPassword("123");
+
+	     Random random = new Random();
+	     paymentRequest.setMerchantOrderId((long)random.nextInt());
+	     paymentRequest.setAmount(amount);
+	     paymentRequest.setMerchantTimestamp(new Date());
+	     paymentRequest.setSuccessUrl("/success");
+	     paymentRequest.setErrorUrl("/error");
+	     paymentRequest.setFailedUrl("/fail");
+
+
+	     paymentRequestRepository.save(paymentRequest);
+
+	     return paymentRequest;
+	}*/
 
 }

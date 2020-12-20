@@ -12,16 +12,29 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.example.paymentinfo.dto.PaymentRequestDTO;
 import com.example.paymentinfo.dto.PaymentResponseDTO;
 import com.example.paymentinfo.service.PaymentRequestService;
+import com.example.paymentinfo.service.TransactionService;
 
 @Controller
 @RequestMapping("/api")
 public class PaymentRequestController {
 
 	private PaymentRequestService paymentService;
-
+	private TransactionService transactionService;
+	
 	public PaymentRequestController(PaymentRequestService paymentService) {
 		this.paymentService = paymentService;
 	}
+	
+	
+	@PostMapping("/initiate-payment-request")
+	public String createRequest(PaymentRequestDTO pReqDTO){
+		
+		transactionService.initializeTransaction(pReqDTO);
+		
+		return "https://localhost:8444/view/payment-methods";
+	}
+	
+	
 
 	@GetMapping("get-payment-url")
     public ResponseEntity<String> testRouting() {

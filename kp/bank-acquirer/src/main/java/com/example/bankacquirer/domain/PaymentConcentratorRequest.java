@@ -19,8 +19,7 @@ import lombok.Setter;
 public class PaymentConcentratorRequest {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id; //dodati da je max size 10
+	private long id;
 	
 	@Column(nullable = false)
 	private double amount;

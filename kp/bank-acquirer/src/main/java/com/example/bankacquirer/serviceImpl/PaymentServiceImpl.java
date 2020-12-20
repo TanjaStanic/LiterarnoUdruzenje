@@ -95,6 +95,17 @@ public class PaymentServiceImpl implements PaymentService{
 				pcRequestDTO.getMerchantTimestamp(), pcRequestDTO.getSuccessUrl(),
 				pcRequestDTO.getFailedUrl(), pcRequestDTO.getErrorUrl());
 		
+		//generate 10 numbers id
+		long generatedId = 0;
+		boolean unique = false;
+		while (!unique) {
+			generatedId = (long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L;
+			if (pcRequestRepository.findById(generatedId)==null) {
+				unique=true;
+			}
+		}
+		
+		pcReq.setId(generatedId);
 		pcReq = pcRequestRepository.save(pcReq);
 		log.info("CREATED | Payment Concentrator Requests | Payment Id: " + pcReq.getId());
 		return new PaymentConcentratorResponseDTO(pcReq.getId(),"https://localhost:8445/card-data/"+pcReq.getId());

@@ -1,6 +1,7 @@
 package com.example.paymentinfo.dto;
 
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
@@ -18,11 +19,14 @@ public class PaymentRequestDTO {
     private String merchantEmail;
     private double amount;
     private long merchantOrderId;
-    private ZonedDateTime merchantTimestamp;
+    private Date merchantTimestamp;
     private String successUrl;
     private String failedUrl;
     private String errorUrl;
     private String currencyCode;
 	private String paymentUrl;
+	
+	private String merchantId;
+    private String merchantPassword;
 
 }
