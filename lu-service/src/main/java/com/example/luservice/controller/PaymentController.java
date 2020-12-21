@@ -58,13 +58,21 @@ public class PaymentController {
         try {
             response = restTemplate.exchange("https://localhost:8444/api/initiate-payment-request", HttpMethod.POST,
                     new HttpEntity<PaymentRequestDTO>(requestDTO), String.class);
-        } catch (Exception e) {
+        } catch (Exception e) {   	
             System.out.println("Could not contact payment center");
+            return (ResponseEntity<?>) ResponseEntity.badRequest().body("Could not contact payment center");
         }
         HttpHeaders headersRedirect = new HttpHeaders();
         headersRedirect.add("Location", response.getBody());
         headersRedirect.add("Access-Control-Allow-Origin", "*");
-        return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+        
+        try {
+        	return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+        }
+        catch (Exception e) {   	
+            return (ResponseEntity<?>) ResponseEntity.badRequest().body("Could not contact" + response.getBody());
+        }
+        
 
     }
 
@@ -86,11 +94,17 @@ public class PaymentController {
                     new HttpEntity<PaymentRequestDTO>(requestDTO), String.class);
         } catch (Exception e) {
             System.out.println("Could not contact payment center");
+            return (ResponseEntity<?>) ResponseEntity.badRequest().body("Could not contact payment center");
         }
         HttpHeaders headersRedirect = new HttpHeaders();
         headersRedirect.add("Location", response.getBody());
         headersRedirect.add("Access-Control-Allow-Origin", "*");
-        return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+        try {
+        	return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+        }
+        catch (Exception e) {   	
+            return (ResponseEntity<?>) ResponseEntity.badRequest().body("Could not contact" + response.getBody());
+        }
     }
 
     @GetMapping("bankError")
@@ -111,11 +125,17 @@ public class PaymentController {
                     new HttpEntity<PaymentRequestDTO>(requestDTO), String.class);
         } catch (Exception e) {
             System.out.println("Could not contact payment center");
+            return (ResponseEntity<?>) ResponseEntity.badRequest().body("Could not contact payment center");
         }
         HttpHeaders headersRedirect = new HttpHeaders();
         headersRedirect.add("Location", response.getBody());
         headersRedirect.add("Access-Control-Allow-Origin", "*");
-        return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+        try {
+        	return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+        }
+        catch (Exception e) {   	
+            return (ResponseEntity<?>) ResponseEntity.badRequest().body("Could not contact" + response.getBody());
+        }
     }
 
     @GetMapping("paypal")
@@ -136,10 +156,16 @@ public class PaymentController {
                     new HttpEntity<PaymentRequestDTO>(requestDTO), String.class);
         } catch (Exception e) {
             System.out.println("Could not contact payment center");
+            return (ResponseEntity<?>) ResponseEntity.badRequest().body("Could not contact payment center");
         }
         HttpHeaders headersRedirect = new HttpHeaders();
         headersRedirect.add("Location", response.getBody());
         headersRedirect.add("Access-Control-Allow-Origin", "*");
-        return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+        try {
+        	return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+        }
+        catch (Exception e) {   	
+            return (ResponseEntity<?>) ResponseEntity.badRequest().body("Could not contact" + response.getBody());
+        }
     }
 }

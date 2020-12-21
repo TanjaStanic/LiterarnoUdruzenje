@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/api")
-
+@Log4j2
 public class PaymentRequestController {
 
     private PaymentRequestService paymentService;
@@ -47,8 +47,10 @@ public class PaymentRequestController {
         request.setCurrencyCode(requestDTO.getCurrencyCode());
         request.setMerchantTimestamp(requestDTO.getMerchantTimestamp());
 
-        // TODO Log this
-        paymentRequestRepository.save(request);
+
+        request = paymentRequestRepository.save(request);
+        log.info("CREATED | Payment Requests | Payment Id: " + request.getId());
+        
         transactionService.initializeTransaction(requestDTO);
         return ResponseEntity.ok("https://localhost:8444/view/payment-methods/" + requestDTO.getMerchantEmail() + "/" + requestDTO.getMerchantOrderId());
 

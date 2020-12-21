@@ -12,6 +12,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 @Service
+@Log4j2
 public class TransactionServiceImpl implements TransactionService {
 
     private TransactionRepository transactionRepository;
@@ -42,7 +43,8 @@ public class TransactionServiceImpl implements TransactionService {
 		t.setSeller(seller);
 		t.setMerchantOrderId(pReqDTO.getMerchantOrderId());
 		t = transactionRepository.save(t);
-        // TODO Log this
+        
+		log.info("CREATED | Transaction | Transction Id: " + t.getId());
 		return t;
 	}
 
