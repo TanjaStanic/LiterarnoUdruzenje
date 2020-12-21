@@ -150,7 +150,7 @@ public class PaymentServiceImpl implements PaymentService{
 				log.info("CANCELED | Transaction canceled | There is no such card in the bank");
 				transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
 				paymentFailed(pcRequest);
-				return pcRequest.getFailedUrl();
+				return pcRequest.getErrorUrl();
 			}
 			
 			
@@ -168,7 +168,7 @@ public class PaymentServiceImpl implements PaymentService{
 					transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
 					paymentFailed(pcRequest);
 					log.info("CANCELED | Transaction canceled | Card data doesn't match");
-					return pcRequest.getFailedUrl();
+					return pcRequest.getErrorUrl();
 				}
 			}
 			
@@ -240,7 +240,6 @@ public class PaymentServiceImpl implements PaymentService{
 			//TO DO
 		}
 
-		
 		return pcRequest.getErrorUrl();
 	}
 	

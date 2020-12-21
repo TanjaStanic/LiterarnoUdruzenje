@@ -2,10 +2,7 @@ package com.example.luservice.controller;
 
 import com.example.luservice.model.PaymentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,20 +47,25 @@ public class PaymentController {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
         requestDTO.setMerchantOrderId((long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L);
         requestDTO.setMerchantEmail("test@gmail.com");
-        requestDTO.setSuccessUrl("https://9gag.com");
-        requestDTO.setFailedUrl("https://www.facebook.com");
-        requestDTO.setErrorUrl("https://www.google.com");
+        requestDTO.setSuccessUrl("https://localhost:8447/view/success");
+        requestDTO.setFailedUrl("https://localhost:8447/view/failed");
+        requestDTO.setErrorUrl("https://localhost:8447/view/error");
         requestDTO.setAmount(500);
         requestDTO.setCurrencyCode("USD");
         requestDTO.setMerchantTimestamp(new Date());
         transactionService.initializeTransaction(requestDTO);
+        ResponseEntity<String> response = null;
         try {
-            ResponseEntity<String> response = restTemplate.exchange("https://localhost:8444/api/initiate-payment-request", HttpMethod.POST,
+            response = restTemplate.exchange("https://localhost:8444/api/initiate-payment-request", HttpMethod.POST,
                     new HttpEntity<PaymentRequestDTO>(requestDTO), String.class);
         } catch (Exception e) {
             System.out.println("Could not contact payment center");
         }
-        return ResponseEntity.ok().build();
+        HttpHeaders headersRedirect = new HttpHeaders();
+        headersRedirect.add("Location", response.getBody());
+        headersRedirect.add("Access-Control-Allow-Origin", "*");
+        return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+
     }
 
     @GetMapping("bankFail")
@@ -71,20 +73,24 @@ public class PaymentController {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
         requestDTO.setMerchantOrderId((long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L);
         requestDTO.setMerchantEmail("test@gmail.com");
-        requestDTO.setSuccessUrl("https://9gag.com");
-        requestDTO.setFailedUrl("https://www.facebook.com");
-        requestDTO.setErrorUrl("https://www.google.com");
+        requestDTO.setSuccessUrl("https://localhost:8447/view/success");
+        requestDTO.setFailedUrl("https://localhost:8447/view/failed");
+        requestDTO.setErrorUrl("https://localhost:8447/view/error");
         requestDTO.setAmount(10000);
         requestDTO.setCurrencyCode("USD");
         requestDTO.setMerchantTimestamp(new Date());
         transactionService.initializeTransaction(requestDTO);
+        ResponseEntity<String> response = null;
         try {
-            ResponseEntity<String> response = restTemplate.exchange("https://localhost:8444/api/initiate-payment-request", HttpMethod.POST,
+            response = restTemplate.exchange("https://localhost:8444/api/initiate-payment-request", HttpMethod.POST,
                     new HttpEntity<PaymentRequestDTO>(requestDTO), String.class);
         } catch (Exception e) {
             System.out.println("Could not contact payment center");
         }
-        return ResponseEntity.ok().build();
+        HttpHeaders headersRedirect = new HttpHeaders();
+        headersRedirect.add("Location", response.getBody());
+        headersRedirect.add("Access-Control-Allow-Origin", "*");
+        return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
     }
 
     @GetMapping("bankError")
@@ -92,20 +98,24 @@ public class PaymentController {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
         requestDTO.setMerchantOrderId((long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L);
         requestDTO.setMerchantEmail("test@gmail.com");
-        requestDTO.setSuccessUrl("https://9gag.com");
-        requestDTO.setFailedUrl("https://www.facebook.com");
-        requestDTO.setErrorUrl("https://www.google.com");
-        requestDTO.setAmount(10000);
+        requestDTO.setSuccessUrl("https://localhost:8447/view/success");
+        requestDTO.setFailedUrl("https://localhost:8447/view/failed");
+        requestDTO.setErrorUrl("https://localhost:8447/view/error");
+        requestDTO.setAmount(100);
         requestDTO.setCurrencyCode("USD");
         requestDTO.setMerchantTimestamp(new Date());
         transactionService.initializeTransaction(requestDTO);
+        ResponseEntity<String> response = null;
         try {
-            ResponseEntity<String> response = restTemplate.exchange("https://localhost:8444/api/initiate-payment-request", HttpMethod.POST,
+            response = restTemplate.exchange("https://localhost:8444/api/initiate-payment-request", HttpMethod.POST,
                     new HttpEntity<PaymentRequestDTO>(requestDTO), String.class);
         } catch (Exception e) {
             System.out.println("Could not contact payment center");
         }
-        return ResponseEntity.ok().build();
+        HttpHeaders headersRedirect = new HttpHeaders();
+        headersRedirect.add("Location", response.getBody());
+        headersRedirect.add("Access-Control-Allow-Origin", "*");
+        return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
     }
 
     @GetMapping("paypal")
@@ -113,19 +123,23 @@ public class PaymentController {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
         requestDTO.setMerchantOrderId((long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L);
         requestDTO.setMerchantEmail("sb-zx3ys4123984@business.example.com");
-        requestDTO.setSuccessUrl("https://9gag.com");
-        requestDTO.setFailedUrl("https://www.facebook.com");
-        requestDTO.setErrorUrl("https://www.google.com");
+        requestDTO.setSuccessUrl("https://localhost:8447/view/success");
+        requestDTO.setFailedUrl("https://localhost:8447/view/failed");
+        requestDTO.setErrorUrl("https://localhost:8447/view/error");
         requestDTO.setAmount(10000);
         requestDTO.setCurrencyCode("USD");
         requestDTO.setMerchantTimestamp(new Date());
         transactionService.initializeTransaction(requestDTO);
+        ResponseEntity<String> response = null;
         try {
-            ResponseEntity<String> response = restTemplate.exchange("https://localhost:8444/api/initiate-payment-request", HttpMethod.POST,
+            response = restTemplate.exchange("https://localhost:8444/api/initiate-payment-request", HttpMethod.POST,
                     new HttpEntity<PaymentRequestDTO>(requestDTO), String.class);
         } catch (Exception e) {
             System.out.println("Could not contact payment center");
         }
-        return ResponseEntity.ok().build();
+        HttpHeaders headersRedirect = new HttpHeaders();
+        headersRedirect.add("Location", response.getBody());
+        headersRedirect.add("Access-Control-Allow-Origin", "*");
+        return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
     }
 }

@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/api")
-@Log4j2
+
 public class PaymentRequestController {
 
     private PaymentRequestService paymentService;
@@ -35,7 +35,7 @@ public class PaymentRequestController {
     }
 
     @PostMapping("/initiate-payment-request")
-    public ResponseEntity<byte[]> createRequest(@RequestBody PaymentRequestDTO requestDTO) {
+    public ResponseEntity<String> createRequest(@RequestBody PaymentRequestDTO requestDTO) {
 
         PaymentRequest request = new PaymentRequest();
         request.setMerchantOrderId(requestDTO.getMerchantOrderId());
@@ -49,13 +49,8 @@ public class PaymentRequestController {
 
         // TODO Log this
         paymentRequestRepository.save(request);
-
         transactionService.initializeTransaction(requestDTO);
-
-        HttpHeaders headersRedirect = new HttpHeaders();
-        headersRedirect.add("Location", "https://localhost:8444/view/payment-methods/" + requestDTO.getMerchantEmail() + "/" + requestDTO.getMerchantOrderId());
-        headersRedirect.add("Access-Control-Allow-Origin", "*");
-        return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+        return ResponseEntity.ok("https://localhost:8444/view/payment-methods/" + requestDTO.getMerchantEmail() + "/" + requestDTO.getMerchantOrderId());
 
     }
 
