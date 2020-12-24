@@ -19,8 +19,7 @@ public class PaypalMsApplication implements WebMvcConfigurer {
 
     public static void main(String[] args) {
         SpringApplication.run(PaypalMsApplication.class, args);
-        ZonedDateTime now = ZonedDateTime.now();
-        System.out.println(now);
+
     }
 
     @Override

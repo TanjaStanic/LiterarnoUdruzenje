@@ -1,9 +1,15 @@
 -- merchantid, merchantpass
 insert into client(email,merchantid, merchant_password,name)
- 	values ('test@gmail.com',"R8uXnFPez8ilQlToCABQ8w==","HoeVKkr2cjg3o5vw+fda6Q==","Pero Peric");
+ 	values ('test@gmail.com',"RBBEP5uy/qre/uG+lKP+3w==","ityKc+2hQVye+i5FV2FQWA==","Pero Peric");
 -- merchantid2, merchantpass2
  insert into client (email,merchantid, merchant_password,name)
- 	values ('test2@gmail.com',"0IpdPLyw1IEZzJjSPHFrTg==","F6EvLrq3T9hzrzqRkKyS8A==","Marko Markovic");
+ 	values ('test2@gmail.com',"8fqDJvRIsTt/+uDfGziCNQ==","7g958ZFGlg+9me/kFN3uEQ==","Marko Markovic");
+
+insert into bank_db.crypto (iv, text) values ("Nirmw54CdIcKBIKj", "RBBEP5uy/qre/uG+lKP+3w==");
+insert into bank_db.crypto (iv, text) values ("LJ2YntLnpcRJU6sX", "ityKc+2hQVye+i5FV2FQWA==");
+insert into bank_db.crypto (iv, text) values ("10OpgqobEgBmDzTz", "8fqDJvRIsTt/+uDfGziCNQ==");
+insert into bank_db.crypto (iv, text) values ("NkBfIiylJ8BxGm8E", "7g958ZFGlg+9me/kFN3uEQ==");
+
 
 insert into currency (`code`, `name`)  values ('RSD', 'Serbian dinar');
 insert into currency (`code`, `name`)  values ('EUR', 'Euro');

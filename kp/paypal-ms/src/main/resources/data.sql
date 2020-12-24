@@ -4,4 +4,8 @@ insert into paypal_db.currency (`code`, `name`)  values ('BAM', 'Convertible mar
 insert into paypal_db.currency (`code`, `name`)  values ('USD', 'United States dollar');
 
 -- Literarno udruzenje
-insert into paypal_db.client (`client_id`, `client_secret`, `email`)  values ('rFBqd28dqxnloZ5fjLv42Cn4Gkqb/sUBzeeklXLpHhwj/8IileGRC43Y9xoxOA6dfDzIhvLkhLy/zIenxUk2ERZa37pniUJFYwWFLHaaeeFgkigdSL2OmCeBn4bKICnJ', 'E+OTMT+l364hqqdDYKO0/mnpHU7NCcTZCWMP8yZgRSI42wDljJM7YVpKmUjRtky7z/SzMCB+PxN1uhOKfnixoDevegZgirE97FzK7RSxTYpgkigdSL2OmCeBn4bKICnJ', 'sb-zx3ys4123984@business.example.com');
+insert into paypal_db.client (`client_id`, `client_secret`, `email`)
+ values ('fYa7wChWdp7cFDBevRLpl8wfN6LXmn6XQCA0RQohAnUHhInkE0VqS7qMCuEbVRQwIJ60r3PgnwiSQSxnDmUTU6rsIS1+LosKbaGcGsXXiJW6jruJiRgld806foS1nnrr', 'C+Gb1rOyrUYi8kW+ryDpsTVZZJBN31uKYIHMVhHAv0WoXuLPxc8oqX4+Mi2uOA3xsPfjuZwpkiF8IfQblQLle4enAiU+1Krs77/hV1uxu/AMbixlOONk41SEeNZwCoy2', 'sb-zx3ys4123984@business.example.com');
+
+insert into crypto (iv, text) values ("utnsQAGFOzUdQ3eE", "fYa7wChWdp7cFDBevRLpl8wfN6LXmn6XQCA0RQohAnUHhInkE0VqS7qMCuEbVRQwIJ60r3PgnwiSQSxnDmUTU6rsIS1+LosKbaGcGsXXiJW6jruJiRgld806foS1nnrr");
+insert into crypto (iv, text) values ("FSgzSBHGBud5OIBS", "C+Gb1rOyrUYi8kW+ryDpsTVZZJBN31uKYIHMVhHAv0WoXuLPxc8oqX4+Mi2uOA3xsPfjuZwpkiF8IfQblQLle4enAiU+1Krs77/hV1uxu/AMbixlOONk41SEeNZwCoy2");

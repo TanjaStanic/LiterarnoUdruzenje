@@ -28,7 +28,7 @@ public class Test {
 
     @GetMapping
     public ResponseEntity<String> testRouting(){
-        /*Client client1 = new Client("merchantid", "merchantpass", "test@gmail.com", "Pero Peric");
+      /*  Client client1 = new Client("merchantid", "merchantpass", "test@gmail.com", "Pero Peric");
         Client client2 = new Client("merchantid2", "merchantpass2", "test2@gmail.com", "Marko Markovic");
         clientRepository.save(client1);
         clientRepository.save(client2);*/

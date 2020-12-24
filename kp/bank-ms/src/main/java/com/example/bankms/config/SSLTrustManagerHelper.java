@@ -13,16 +13,16 @@ import java.security.cert.CertificateException;
 @Configuration
 public class SSLTrustManagerHelper {
 
-    @Value("server.ssl.key-store")
+    @Value("${server.ssl.key-store}")
     private String keyStore;
 
-    @Value("server.ssl.key-store-password")
+    @Value("${server.ssl.key-store-password}")
     private String keyStorePassword;
 
-    @Value("server.ssl.trust-store")
+    @Value("@{server.ssl.trust-store}")
     private String trustStore;
 
-    @Value("server.ssl.trust-store-password")
+    @Value("${server.ssl.trust-store-password}")
     private String trustStorePassword;
 
     @Bean
