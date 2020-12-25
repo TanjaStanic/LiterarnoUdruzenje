@@ -17,4 +17,12 @@ public class ErrorMessages {
     public static String CONVERSION_FAILED() {
         return "Data conversion failed.";
     }
+
+    public static String TOKEN_ERROR() {
+        return "Error processing confirmation token.";
+    }
+
+    public static String VALIDATION_ERROR() {
+        return "Validation failed. Check input";
+    }
 }

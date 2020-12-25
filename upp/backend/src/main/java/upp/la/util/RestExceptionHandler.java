@@ -19,67 +19,71 @@ import static org.springframework.http.HttpStatus.*;
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
-        return new ResponseEntity<>(apiError, apiError.getStatus());
-    }
+  private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
+    return new ResponseEntity<>(apiError, apiError.getStatus());
+  }
 
-    @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-                                                                  HttpHeaders headers,
-                                                                  HttpStatus status,
-                                                                  WebRequest request) {
-        String error = "Malformed JSON request";
-        return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error, ex));
-    }
+  @Override
+  protected ResponseEntity<Object> handleHttpMessageNotReadable(
+      HttpMessageNotReadableException ex,
+      HttpHeaders headers,
+      HttpStatus status,
+      WebRequest request) {
+    String error = "Malformed JSON request";
+    return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error, ex));
+  }
 
-    @ExceptionHandler(ConversionFailedError.class)
-    protected ResponseEntity<Object> handleConversionFailedError(
-        ConversionFailedError ex) {
-        ApiError apiError = new ApiError(UNPROCESSABLE_ENTITY);
-        apiError.setMessage(ex.getMessage());
-        apiError.setEx(ex);
-        return buildResponseEntity(apiError);
-    }
+  @ExceptionHandler(ConversionFailedError.class)
+  protected ResponseEntity<Object> handleConversionFailedError(ConversionFailedError ex) {
+    ApiError apiError = new ApiError(UNPROCESSABLE_ENTITY);
+    apiError.setMessage(ex.getMessage());
+    apiError.setEx(ex);
+    return buildResponseEntity(apiError);
+  }
 
-    @ExceptionHandler(DuplicateEntity.class)
-    protected ResponseEntity<Object> handleDuplicateEntity(
-        DuplicateEntity ex) {
-        ApiError apiError = new ApiError(INTERNAL_SERVER_ERROR);
-        apiError.setMessage(ex.getMessage());
-        apiError.setEx(ex);
-        return buildResponseEntity(apiError);
-    }
+  @ExceptionHandler(DuplicateEntity.class)
+  protected ResponseEntity<Object> handleDuplicateEntity(DuplicateEntity ex) {
+    ApiError apiError = new ApiError(INTERNAL_SERVER_ERROR);
+    apiError.setMessage(ex.getMessage());
+    apiError.setEx(ex);
+    return buildResponseEntity(apiError);
+  }
 
-    @ExceptionHandler(EntityNotFound.class)
-    protected ResponseEntity<Object> handleEntityNotFound(
-        EntityNotFound ex) {
-        ApiError apiError = new ApiError(NOT_FOUND);
-        apiError.setMessage(ex.getMessage());
-        apiError.setEx(ex);
-        return buildResponseEntity(apiError);
-    }
+  @ExceptionHandler(EntityNotFound.class)
+  protected ResponseEntity<Object> handleEntityNotFound(EntityNotFound ex) {
+    ApiError apiError = new ApiError(NOT_FOUND);
+    apiError.setMessage(ex.getMessage());
+    apiError.setEx(ex);
+    return buildResponseEntity(apiError);
+  }
 
-    @ExceptionHandler(UnexpectedError.class)
-    protected ResponseEntity<Object> handleUnexpectedError(
-        UnexpectedError ex) {
-        ApiError apiError = new ApiError(INTERNAL_SERVER_ERROR);
-        apiError.setMessage(ex.getMessage());
-        apiError.setEx(ex);
-        return buildResponseEntity(apiError);
-    }
+  @ExceptionHandler(UnexpectedError.class)
+  protected ResponseEntity<Object> handleUnexpectedError(UnexpectedError ex) {
+    ApiError apiError = new ApiError(INTERNAL_SERVER_ERROR);
+    apiError.setMessage(ex.getMessage());
+    apiError.setEx(ex);
+    return buildResponseEntity(apiError);
+  }
 
-    @ExceptionHandler(AuthorizationError.class)
-    protected ResponseEntity<Object> handleInvalidEmailorPasswordError(
-        AuthorizationError ex) {
-        ApiError apiError = new ApiError(UNPROCESSABLE_ENTITY);
-        apiError.setMessage(ex.getMessage());
-        apiError.setEx(ex);
-        return buildResponseEntity(apiError);
-    }
+  @ExceptionHandler(AuthorizationError.class)
+  protected ResponseEntity<Object> handleInvalidEmailorPasswordError(AuthorizationError ex) {
+    ApiError apiError = new ApiError(UNPROCESSABLE_ENTITY);
+    apiError.setMessage(ex.getMessage());
+    apiError.setEx(ex);
+    return buildResponseEntity(apiError);
+  }
 
-    /*ERROR HANDLING
-     * Add new custom exception like ItemNotFound
-     * Make methods throw that exception
-     * Exceptions automatically get forwarded to this handler
-     * Create handler like ItemNotFound handler called handle....*/
+  @ExceptionHandler(ValidationError.class)
+  protected ResponseEntity<Object> handleValidaitonError(AuthorizationError ex) {
+    ApiError apiError = new ApiError(UNPROCESSABLE_ENTITY);
+    apiError.setMessage(ex.getMessage());
+    apiError.setEx(ex);
+    return buildResponseEntity(apiError);
+  }
+
+  /*ERROR HANDLING
+   * Add new custom exception like ItemNotFound
+   * Make methods throw that exception
+   * Exceptions automatically get forwarded to this handler
+   * Create handler like ItemNotFound handler called handle....*/
 }

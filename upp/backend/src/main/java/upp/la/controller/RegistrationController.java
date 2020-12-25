@@ -3,21 +3,24 @@ package upp.la.controller;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.form.FormField;
-import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upp.la.dto.FormFieldDto;
 import upp.la.dto.FormFieldsDto;
+import upp.la.error.ErrorMessages;
 import upp.la.exceptions.DuplicateEntity;
 import upp.la.model.Genre;
 import upp.la.service.GenreService;
+import upp.la.exceptions.ValidationError;
 import upp.la.service.ValidateRegistrationService;
+import upp.la.service.internal.RegistrationServiceInt;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +29,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/registration")
 public class RegistrationController {
-
     @Autowired
     private RuntimeService runtimeService;
     @Autowired
@@ -37,25 +39,39 @@ public class RegistrationController {
     ValidateRegistrationService validationService;
     @Autowired
     GenreService genreService;
+    @Autowired
+    ApplicationEventPublisher eventPublisher;
+    @Autowired
+    RegistrationServiceInt registrationServiceInt;
 
+    //ONLY FOR AUTH TEST
+    @GetMapping(value = "/test-auth")
+    @RolesAllowed({"READER", "WRITER"}) //Name of the allowed role
+    public @ResponseBody ResponseEntity<?> testAuth() {
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @PostMapping(path = "/post", produces = "application/json")
     public @ResponseBody
     ResponseEntity<?> post(
-        @RequestBody List<FormFieldDto> formFields) throws DuplicateEntity {
+        @RequestBody List<FormFieldDto> formFields) throws ValidationError {
 
         boolean validationOk = true;
         validationOk = validationService.checkRegistrationForm(formFields);
 
-        if(validationOk == false) {
-        	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            //throw new DuplicateEntity("Validation failed");
+        if(!validationOk) {
+            throw new ValidationError(ErrorMessages.VALIDATION_ERROR());
         }
         System.out.println("val:" + validationOk);
         ProcessInstance pi =
             runtimeService.startProcessInstanceByKey("registration_process");
+
         HashMap<String, Object> map = this.mapListToDto(formFields);
-        Task task = taskService.createTaskQuery().processInstanceId(pi.getId()).list().get(0);
+
+        Task task = taskService.createTaskQuery()
+                               .processInstanceId(pi.getId())
+                               .list()
+                               .get(0);
         // Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         String processInstanceId = task.getProcessInstanceId();
 
@@ -63,34 +79,22 @@ public class RegistrationController {
         runtimeService.setVariable(processInstanceId,
                                    "registration",
                                    formFields);
+
         formService.submitTaskForm(task.getId(), map);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    
-    /*
-    @PostMapping(path = "/validateData/{taskId}", produces = "application/json")
-    public @ResponseBody
-    boolean validateData(
-        @RequestBody List<FormFieldDto> formFields,
-        @PathVariable String taskId){
-    	
-    	boolean validationOk = true;
-    	validationOk = validationService.checkRegistrationForm(formFields);
-    	
-    	return validationOk;
-    	
-    }
-   */
 
     @PostMapping(path = "/betaNo", produces = "application/json")
     public @ResponseBody
     ResponseEntity<?> BetaNo(
-            @RequestBody List<FormFieldDto> formFields) {
+        @RequestBody List<FormFieldDto> formFields) {
 
         HashMap<String, Object> map = this.mapListToDto(formFields);
         System.out.println(map.toString());
-        List<Task> tasks = taskService.createTaskQuery().taskName("Registration reader").list();
+        List<Task> tasks = taskService.createTaskQuery()
+                                      .taskName("Registration reader")
+                                      .list();
         Task task = tasks.get(0);
         System.out.println(task.getName());
         // Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
@@ -98,8 +102,8 @@ public class RegistrationController {
 
         //Create variable "registration"
         runtimeService.setVariable(processInstanceId,
-                "betaNo_registration",
-                formFields);
+                                   "betaNo_registration",
+                                   formFields);
         formService.submitTaskForm(task.getId(), map);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -108,7 +112,7 @@ public class RegistrationController {
     @PostMapping(path = "/betaYes", produces = "application/json")
     public @ResponseBody
     ResponseEntity<?> BetaYes(
-            @RequestBody List<FormFieldDto> formFields) {
+        @RequestBody List<FormFieldDto> formFields) {
         List<FormFieldDto> dto_betaYes = new ArrayList<FormFieldDto>();
         dto_betaYes.add(formFields.get(0));
         List<FormFieldDto> dto_genres = new ArrayList<FormFieldDto>();
@@ -134,8 +138,8 @@ public class RegistrationController {
         String processInstanceId = task.getProcessInstanceId();
 
         runtimeService.setVariable(processInstanceId,
-                "betaYes_registration",
-                dto_betaYes);
+                                   "betaYes_registration",
+                                   dto_betaYes);
         formService.submitTaskForm(task.getId(), map_betaYes);
 
 
@@ -152,7 +156,6 @@ public class RegistrationController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 
 
     private HashMap<String, Object> mapListToDto(List<FormFieldDto> list) {
