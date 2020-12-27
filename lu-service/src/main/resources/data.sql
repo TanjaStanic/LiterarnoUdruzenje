@@ -1,15 +1,23 @@
-insert into client(active,email,merchantid, merchant_password,name,account_id) 
-	values (true,'test@gmail.com',"merchantid","merchantpass","Literarno Udruzenje 1",1);
-	
-insert into client (active,email,merchantid, merchant_password,name,account_id) 
-	values (true,'test2@gmail.com',"merchantid2","merchantpass2","Literarno Udruzenje 2",2);
+-- SuperJakaLozinka1!
+insert into client (tax_identification_number, company_registration_number, email, name, password, active, enabled, last_password_reset_date, user_id)
+ values ("123", "123", "test@gmail.com", "Pero Peric", "$2a$10$g4CW8HjzjezXXW8z5jowD.ITgaES5wF/mijmoWJ//bpntP1oczjC6", true, true, null, 1);
 
-insert into payment_method (id, name, create_transactionuri, check_statusuri, is_bank, isPayPal, isBitcoin) values (1, 'Bank', https://localhost:8762/bank-ms/api/pay, null, true, false, false);
-insert into payment_method (id, name, create_transactionuri, check_statusuri, is_bank, isPayPal, isBitcoin) values (2, 'PayPal', 'https://localhost:8762/paypal-ms/api/pay', 'https://localhost:8762/paypal_service/api/status', false, true, false);
-insert into payment_method (id, name, create_transactionuri, check_statusuri, is_bank, isPayPal, isBitcoin) values (3, 'Bitcoin', 'https://localhost:8762/bitcoin-ms/api/order', 'https://localhost:8762/bitcoin_service/api/order/status', false, false, true);
-	
-insert into client_payment_methods(client_id, payment_methods_id) VALUES (1, 1);
-insert into client_payment_methods(client_id, payment_methods_id) VALUES (1, 3);
-insert into client_payment_methods(client_id, payment_methods_id) VALUES (2, 1);
-insert into client_payment_methods(client_id, payment_methods_id) VALUES (2, 2);
-insert into client_payment_methods(client_id, payment_methods_id) VALUES (2, 3);
+ insert into client (tax_identification_number, company_registration_number, email, name, password, active, enabled, last_password_reset_date, user_id)
+  values ("12345", "12345", "sb-zx3ys4123984@business.example.com", "Mico Micic", "$2a$10$g4CW8HjzjezXXW8z5jowD.ITgaES5wF/mijmoWJ//bpntP1oczjC6", true, true, null, 2);
+
+insert into roles (name) values ("ADMIN");
+insert into roles (name) values ("READER");
+insert into roles (name) values ("BETA_READER");
+insert into roles (name) values ("WRITER");
+insert into roles (name) values ("EDITOR");
+insert into roles (name) values ("BOARD_MEMBER");
+-- SuperJakaLozinka1!
+insert into users (email, name, password, city, country, enabled, role_id) values ("admin@example.com", "John Doe", "$2a$10$g4CW8HjzjezXXW8z5jowD.ITgaES5wF/mijmoWJ//bpntP1oczjC6", "Novi Sad", "Serbia", true, 1);
+insert into users (email, name, password, city, country, enabled, role_id) values ("jezurka.jezic@example.com", "Jezurka Jezic", "$2a$10$g4CW8HjzjezXXW8z5jowD.ITgaES5wF/mijmoWJ//bpntP1oczjC6", "Novi Sad", "Serbia", true, 2);
+--insert into users (email, name, password, enabled, role_id) values ();
+
+insert into books (name, description, authors, genres, price) values("Pride and Prejudice", "Lorem ipsum", "Jane Austen", "Romance", "999");
+insert into books (name, description, authors, genres, price) values("Faust", "Lorem ipsum", "Johann Wolfgang von Goethe", "Tragedy", "899");
+insert into books (name, description, authors, genres, price) values("Hamlet", "Lorem ipsum", "William Shakespeare", "Drama, Tragedy", "799");
+insert into books (name, description, authors, genres, price) values("The Hobbit", "Lorem ipsum", "J.R.R. Tolkien", "Epic", "1999");
+insert into books (name, description, authors, genres, price) values("Grimms’ Fairy Tales", "Lorem ipsum", "Jacob Grimm, Wilhelm Grimm", "Fairy tale, Folklore", "999");

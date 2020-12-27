@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+
+    <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css}"
+            rel="stylesheet" type="text/css"/>
+</head>
+<body class="bg-color">
+<div class="container py-5">
+
+    <div class="row mb-4">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 " style="color:#007acc;">Register</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-7 mx-auto">
+            <div class="bg-white rounded-lg shadow-sm p-5">
+
+                <div>
+                    <form id="forma" class="needs-validation" th:action="@{'https://localhost:8447/auth/register'}"
+                          method="POST" role="form"
+                          th:object="${newUserDto}"
+                          oninput='passwordConfirm.setCustomValidity(passwordConfirm.value != password.value ? "Passwords do not match." : "")'>
+
+                        <div class="form-group">
+                            <label for="name">Full name</label>
+                            <input type=text name="name" id="name" placeholder="Full name" required class="form-control"
+                                   th:field="*{name}"><br/>
+                            <div class="invalid-feedback">Please fill out this field.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type=email name="email" id="email" placeholder="Username" required
+                                   class="form-control" th:field="*{email}"><br/>
+                            <div class="invalid-feedback">Please fill out this field.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type=text name="city" id="city" placeholder="City" required class="form-control"
+                                   th:field="*{city}"><br/>
+                            <div class="invalid-feedback">Please fill out this field.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Country</label>
+                            <input type=text name="country" id="country" placeholder="Country" required
+                                   class="form-control" th:field="*{country}"><br/>
+                            <div class="invalid-feedback">Please fill out this field.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <div class="input-group">
+                                <input type="password" name="password" id="password" placeholder="Password"
+                                       class="form-control" required th:field="*{password}"><br/>
+                                <div class="invalid-feedback">Please fill out this field.</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="passwordConfirm">Confirm password</label>
+                            <div class="input-group">
+                                <input type="password" name="passwordConfirm" id="passwordConfirm"
+                                       placeholder="Confirm password" class="form-control" required
+                                       th:field="*{passwordConfirm}"><br/>
+                                <div class="invalid-feedback">Please fill out this field.</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <hr/>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success btn-lg">Submit</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>

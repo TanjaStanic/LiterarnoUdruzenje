@@ -1,0 +1,25 @@
+.wrraper {
+  background-image: url("/assets/background.jpg");
+  height: 100%;
+  padding: 5em;
+}
+
+.text {
+  text-align: center;
+  color: teal;
+  font-size: 75px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.button {
+  background-color: teal;
+  color: black;
+  border: 0;
+  padding: 11px 54px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 20px;
+  margin: 1em;
+}
