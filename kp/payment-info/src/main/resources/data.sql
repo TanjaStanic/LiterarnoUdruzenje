@@ -17,3 +17,4 @@ insert into client_payment_methods (client_id, payment_methods_id) values (1,3);
 insert into client_payment_methods (client_id, payment_methods_id) values (2,1);
 insert into client_payment_methods (client_id, payment_methods_id) values (2,2);
 insert into client_payment_methods (client_id, payment_methods_id) values (2,3);
+

@@ -1,25 +1,38 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css}"
+          rel="stylesheet" type="text/css"/>
     <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-    <title>Dostupne metode plaćanja</title>
+    <title>Available payment methods</title>
 </head>
-<body>
+<body class="bg-color">
+    <div  class="container py-5">
+        <div class="row mb-4">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-4 " style="color:#007acc;">Choose payment method</h1>
+            </div>
+        </div>
 
-<h2  style="margin-left: 40%">Izaberite način plaćanja</h2>
-<br/><br/>
-<div style="margin-left: 45%">
-    <div th:each="paymentMethod: ${paymentMethods}">
-        <div><a th:href="${paymentMethod.value}"><span th:text="${paymentMethod.key}"></span></a></div>
-
+        <div class="row">
+            <div class="col-lg-7 mx-auto">
+                <div class="bg-white rounded-lg shadow-sm p-5">
+                    <div th:each="paymentMethod: ${paymentMethods}">
+                        <div style="text-align: center">
+                            <a role="button" class="btn btn-outline-primary btn-lg" th:href="${paymentMethod.value}"><span th:text="${paymentMethod.key}"></span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-
 </div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration monitorInterval="60">
+    <Properties>
+        <Property name="log-path">logs/bankms</Property>
+        <Property name="archive">${log-path}/archive</Property>
+    </Properties>
+        
+    <Appenders>		        
+        <Console name="Console" target="SYSTEM_OUT">         
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}{CET}] [%p] %m%n" />
+        </Console>		        
+        <RollingFile name="info"
+                     fileName="${log-path}/info/spring-boot-logger-log4j2-info.log"
+                     filePattern="${log-path}/$${date:yyyy-MM}/spring-boot-logger-log4j2-info-%d{-dd-MMMM-yyyy}-%i.log.gz"
+                     ignoreExceptions="false">
+            <PatternLayout>
+                <pattern>[%d{yyyy-MM-dd HH:mm:ss}{CET}] [%p] %m%n</pattern>
+            </PatternLayout>	            
+            <Policies>
+                <!-- rollover daily and when the file reaches 10 MegaBytes -->				                
+                <SizeBasedTriggeringPolicy size="10 MB" />		           
+                <TimeBasedTriggeringPolicy />
+            </Policies>		        
+        </RollingFile>
+        <RollingFile name="debug"
+                     fileName="${log-path}/debug/spring-boot-logger-log4j2-debug.log"
+                     filePattern="${log-path}/$${date:yyyy-MM}/spring-boot-logger-log4j2-debug-%d{-dd-MMMM-yyyy}-%i.log.gz" ignoreExceptions="false">    
+            <PatternLayout>	                
+                <pattern>[%d{yyyy-MM-dd HH:mm:ss}{CET}] [%p] %m%n</pattern>	            
+            </PatternLayout>           
+            <Policies>
+                <!-- rollover daily and when the file reaches 10 MegaBytes -->				                
+                <SizeBasedTriggeringPolicy size="10 MB" />
+                <TimeBasedTriggeringPolicy />				            
+            </Policies>			        
+        </RollingFile>
+        <RollingFile name="error"
+                     fileName="${log-path}/error/spring-boot-logger-log4j2-error.log"
+                     filePattern="${log-path}/$${date:yyyy-MM}/spring-boot-logger-log4j2-error-%d{-dd-MMMM-yyyy}-%i.log.gz" ignoreExceptions="false">			    
+            <PatternLayout>				                
+                <pattern>[%d{yyyy-MM-dd HH:mm:ss}{CET}] [%p] %m%n</pattern>				            
+            </PatternLayout>			            
+            <Policies>
+                <!-- rollover daily and when the file reaches 10 MegaBytes -->                
+                <SizeBasedTriggeringPolicy size="10 MB" />				                
+                <TimeBasedTriggeringPolicy />				            
+            </Policies>			        
+        </RollingFile>
+        <RollingFile name="fatal"
+                     fileName="${log-path}/error/spring-boot-logger-log4j2-fatal.log"
+                     filePattern="${log-path}/$${date:yyyy-MM}/spring-boot-logger-log4j2-fatal-%d{-dd-MMMM-yyyy}-%i.log.gz" ignoreExceptions="false">			    
+            <PatternLayout>				                
+                <pattern>[%d{yyyy-MM-dd HH:mm:ss}{CET}] [%p] %m%n</pattern>				            
+            </PatternLayout>			            
+            <Policies>
+                <!-- rollover daily and when the file reaches 10 MegaBytes -->				                
+                <SizeBasedTriggeringPolicy size="10 MB" />				                
+                <TimeBasedTriggeringPolicy />				            
+            </Policies>			        
+        </RollingFile>
+    </Appenders>	    
+    <Loggers>
+        <!-- LOG everything at INFO level -->
+        <Root level="debug">            
+            <AppenderRef ref="Console" level="info" />
+            <AppenderRef ref="info" level="info"/>
+            <AppenderRef ref="debug" level="debug"/>
+            <AppenderRef ref="fatal" level="fatal"/>
+            <AppenderRef ref="error" level="error"/>
+        </Root>
+        <!-- LOG "com.example.bankms*" at TRACE level -->		        
+        <Logger name="com.example.bankms" level="trace"></Logger>		    
+    </Loggers>	 
+</Configuration>

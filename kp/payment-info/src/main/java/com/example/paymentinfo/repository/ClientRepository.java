@@ -9,4 +9,5 @@ import com.example.paymentinfo.domain.Client;
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
     Client findByEmail(String email);
+
 }
