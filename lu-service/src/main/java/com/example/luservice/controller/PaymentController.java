@@ -42,7 +42,7 @@ public class PaymentController {
         return new ResponseEntity<>(pReq, HttpStatus.OK);
     }
 
-    @GetMapping("bankSuccess")
+    @GetMapping("auth/bankSuccess")
     public ResponseEntity<?> testBankSuccess() {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
         requestDTO.setMerchantOrderId((long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L);
@@ -76,7 +76,7 @@ public class PaymentController {
 
     }
 
-    @GetMapping("bankFail")
+    @GetMapping("auth/bankFail")
     public ResponseEntity<?> testBankFail() {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
         requestDTO.setMerchantOrderId((long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L);
@@ -107,7 +107,7 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("bankError")
+    @GetMapping("auth/bankError")
     public ResponseEntity<?> testBankError() {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
         requestDTO.setMerchantOrderId((long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L);
@@ -138,7 +138,7 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("paypal")
+    @GetMapping("auth/paypal")
     public ResponseEntity<?> testPaypal() {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
         requestDTO.setMerchantOrderId((long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L);
