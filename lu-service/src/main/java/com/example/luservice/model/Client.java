@@ -52,4 +52,6 @@ public class Client {
     @Column
     private Long userId;
 
+    @OneToMany
+    private List<Book> books;
 }

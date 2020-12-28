@@ -13,6 +13,7 @@ import { AdminGuardService } from './shared/route-guards/admin-guard.service';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { UserGuardService } from './shared/route-guards/user-guard.service';
 import { ConfirmRegistrationComponent } from './components/registration/confirm-registration/confirm-registration.component';
+import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
 
 
 const routes: Routes = [
@@ -24,8 +25,8 @@ const routes: Routes = [
   { path: 'change-password', component: ChangePasswordComponent, pathMatch: 'full' },
   { path: 'activate-account/:token', component: ConfirmRegistrationComponent, pathMatch: 'full' },
   { path: 'admin', component: AdminPanelComponent, pathMatch: 'full', canActivate: [AdminGuardService] },
-  { path: 'dashboard', component: DashboardComponent, pathMatch: 'full', canActivate: [AuthGuardService, UserGuardService] }
-
+  { path: 'dashboard', component: DashboardComponent, pathMatch: 'full' },
+  { path: 'cart', component: ShoppingCartComponent, pathMatch: 'full' }
 ];
 
 @NgModule({

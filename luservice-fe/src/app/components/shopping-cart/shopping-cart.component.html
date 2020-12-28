@@ -1,0 +1,46 @@
+<app-navbar></app-navbar>
+<div fxLayout="column" fxLayoutAlign="start center" class="background">
+    <div style="display: inline-block;">
+        <table style="width: 100%;" class="mat-elevation-z8" mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="book">
+
+                <th mat-header-cell mat-sort-header *matHeaderCellDef> Book </th>
+                <td mat-cell *matCellDef="let cartItem"> {{cartItem.book.name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="quantity">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef> Quantity </th>
+                <td mat-cell *matCellDef="let cartItem"> {{cartItem.quantity}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="price">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef> Price </th>
+                <td mat-cell *matCellDef="let cartItem"> {{cartItem.price | currency: 'RSD'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef>
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let cartItem; let i=index;">
+                    <button mat-icon-button color="warn" (click)="removeFromCart(cartItem)">
+                        <mat-icon aria-label="Delete">delete</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20, 50]" [showFirstLastButtons]="true">
+        </mat-paginator>
+
+        <p>
+            <b> total: {{totalPrice | currency: 'RSD'}}</b>
+            <button mat-raised-button (click)="order()" class="order-button">Order</button>
+            <button mat-raised-button class="primary empty-cart-button" (click)="emptyCart()">Empty cart</button>
+        </p>
+    </div>
+
+</div>

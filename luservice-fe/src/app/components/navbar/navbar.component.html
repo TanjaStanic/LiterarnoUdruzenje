@@ -7,29 +7,36 @@
       <a *ngIf="isAdmin" mat-button [routerLink]="'/admin'">
         Admin panel
       </a>
+      <a mat-button [routerLink]="'/dashboard'">
+        Books
+      </a>
+      <a *ngIf="roles.length == 0" mat-button [routerLink]="'/cart'">Cart <mat-icon>shopping_cart</mat-icon>
+      </a>
     </div>
     <span class="example-spacer"></span>
     <div>
-      <button *ngIf="roles != ''" class="button-color" mat-button [matMenuTriggerFor]="menu">
+      <button *ngIf="roles.length > 0" class="button-color" mat-button [matMenuTriggerFor]="menu">
         <mat-icon>account_circle</mat-icon>
       </button>
 
       <mat-menu #menu="matMenu">
+        <button class="button-color" mat-menu-item [routerLink]="'/cart'">Cart <mat-icon>shopping_cart</mat-icon>
+        </button>
+        <button class="button-color" mat-menu-item [routerLink]="'/books'">My books
+        </button>
         <button class="button-color" mat-menu-item [routerLink]="'/change-password'">
           Change password
         </button>
-
-
       </mat-menu>
 
 
-      <a *ngIf="roles != '' || roles.length != 0" mat-button class="button-color" (click)="logout()">
+      <a *ngIf="roles.length > 0" mat-button class="button-color" (click)="logout()">
         Logout
       </a>
-      <a *ngIf="roles == ''" mat-button class="button-color" [routerLink]="'/login'">
+      <a *ngIf="roles.length == 0" mat-button class="button-color" [routerLink]="'/login'">
         Sign in
       </a>
-      <a *ngIf="roles == ''" mat-button class="button-color" [routerLink]="'/register'">
+      <a *ngIf="roles.length == 0" mat-button class="button-color" [routerLink]="'/register'">
         Register
       </a>
     </div>

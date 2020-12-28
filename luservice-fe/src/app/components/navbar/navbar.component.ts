@@ -3,6 +3,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Router, NavigationStart } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { Role } from 'src/app/shared/enums/role';
+import { CartService } from 'src/app/services/cart.service';
 
 @Component({
   selector: 'app-navbar',
@@ -16,14 +17,14 @@ export class NavbarComponent implements OnInit {
   userRole: string;
   isEditor = false;
   isAdmin = false;
-  roles;
+  roles = [];
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router, private cartService: CartService) {
   }
 
   ngOnInit() {
     this.roles = this.authService.getUserRoles();
-    if (this.roles != '') {
+    if (this.roles.length > 0) {
       this.roles.forEach(element => {
         if (element.name == Role.Editor.toString()) {
           this.isEditor = true;
@@ -42,6 +43,7 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+    this.cartService.empty();
     this.router.navigate(['']);
   }
 

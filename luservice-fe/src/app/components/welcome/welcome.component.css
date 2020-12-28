@@ -6,14 +6,14 @@
 
 .text {
   text-align: center;
-  color: teal;
+  color: #95c11f;
   font-size: 75px;
   font-weight: 700;
   margin: 0;
 }
 
 .button {
-  background-color: teal;
+  background-color: #95c11f;
   color: black;
   border: 0;
   padding: 11px 54px;

@@ -29,6 +29,8 @@ import { ConfirmRegistrationComponent } from "./components/registration/confirm-
 import { AuthGuardService } from './shared/route-guards/auth-guard.service';
 import { UserGuardService } from './shared/route-guards/user-guard.service';
 import { EditorGuardService } from './shared/route-guards/editor-guard.service';
+import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
+import { ShippingInfoComponent } from './components/dashboard/shipping-info/shipping-info.component';
 
 
 @NgModule({
@@ -43,7 +45,9 @@ import { EditorGuardService } from './shared/route-guards/editor-guard.service';
     ResetPasswordComponent,
     AdminPanelComponent,
     DashboardComponent,
-    ConfirmRegistrationComponent
+    ConfirmRegistrationComponent,
+    ShoppingCartComponent,
+    ShippingInfoComponent
   ],
   imports: [
     BrowserModule,
@@ -70,7 +74,7 @@ import { EditorGuardService } from './shared/route-guards/editor-guard.service';
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-
+    ShippingInfoComponent
   ]
 })
 export class AppModule { }

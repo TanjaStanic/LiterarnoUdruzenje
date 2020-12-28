@@ -1,22 +1,22 @@
 package com.example.luservice.dto;
 
-import com.example.luservice.model.Currency;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrderDTO {
-	
-    private Long orderId;
-    private String hashedOrderId;
-    private String item;
-    private double priceAmount;
-    private Currency priceCurrency;
-    private String title;
-    private String description;
+	@NotNull
+    private List<OrderItemDto> orderItems;
+    private double amount;
+    private ShippingDataDto shippingInfo;
 
 }
