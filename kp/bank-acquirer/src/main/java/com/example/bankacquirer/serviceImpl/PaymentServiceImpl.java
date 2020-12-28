@@ -248,6 +248,15 @@ public class PaymentServiceImpl implements PaymentService {
         else {
             System.out.println("Bank-acq and bank Issuer are NOT the same");
             //TO DO
+            ResponseEntity<String> response = null;
+            String r="";
+            try {
+                response = restTemplate.exchange("http://localhost:8446/create-response", HttpMethod.GET, 
+                		new HttpEntity<String> (r), String.class);
+                System.out.println("Test pcc: " + response.getBody());
+            } catch (Exception e) {
+                System.out.println("Could not contact PCC");
+            }
         }
 
         return pcRequest.getErrorUrl();
