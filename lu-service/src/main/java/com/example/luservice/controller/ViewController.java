@@ -30,5 +30,9 @@ public class ViewController {
         return "order";
     }
 
+    @GetMapping("/dashborad")
+    public String getDashborad(Model model){
+        return "dashboard";
+    }
 
 }

@@ -15,4 +15,15 @@ public class SubscriptionRequestDto {
     private long subscriptionPlan;
     @NotNull
     private String sellerEmail;
+    private double amount;
+    @NotNull
+    private String currencyCode;
+    @NotNull
+    private String successUrl;
+    @NotNull
+    private String errorUrl;
+    @NotNull
+    private String failedUrl;
+    @NotNull
+    private String cancelUrl;
 }

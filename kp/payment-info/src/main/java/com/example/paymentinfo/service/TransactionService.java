@@ -12,4 +12,6 @@ public interface TransactionService {
     Transaction initializeTransaction(PaymentRequestDTO pReqDTO);
 
     Transaction findByMerchantOrderId(long merchantOrderId);
+
+    Transaction findById(long id);
 }

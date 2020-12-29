@@ -11,6 +11,8 @@ import com.example.paymentinfo.service.TransactionService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
+
 @Service
 @Log4j2
 public class TransactionServiceImpl implements TransactionService {
@@ -51,5 +53,11 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public Transaction findByMerchantOrderId(long merchantOrderId) {
         return transactionRepository.findByMerchantOrderId(merchantOrderId);
+    }
+
+    @Override
+    public Transaction findById(long id) {
+        return transactionRepository.findById(id).orElseThrow(() -> new RuntimeException(MessageFormat.format("Transaction with id {0} does not exist.", id)));
+
     }
 }

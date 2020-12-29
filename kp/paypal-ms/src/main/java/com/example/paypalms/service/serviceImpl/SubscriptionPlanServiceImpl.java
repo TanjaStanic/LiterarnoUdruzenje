@@ -12,11 +12,11 @@ import java.util.Collection;
 
 @Service
 @Log4j2
-public class SubscriptionPlanImpl implements SubscriptionPlanService {
+public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
 
     private SubscriptionPlanRepository subscriptionPlanRepository;
 
-    public SubscriptionPlanImpl(SubscriptionPlanRepository subscriptionPlanRepository) {
+    public SubscriptionPlanServiceImpl(SubscriptionPlanRepository subscriptionPlanRepository) {
         this.subscriptionPlanRepository = subscriptionPlanRepository;
     }
 

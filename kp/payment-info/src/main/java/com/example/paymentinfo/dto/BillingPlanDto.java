@@ -13,5 +13,5 @@ public class BillingPlanDto {
 
     private String paymentMethod;
     private long subscriptionPlan;
-    private String sellerEmail;
+    private String transactionId;
 }

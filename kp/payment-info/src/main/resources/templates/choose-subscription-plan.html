@@ -28,7 +28,7 @@
                         <div class="form-group">
                             <label style="margin-left:5px" for="billingPlan" class="form-control-label">Billing plan</label>
                             <input type="hidden" th:field="*{paymentMethod}" id="paymentMethod">
-                            <input type="hidden" th:field="*{sellerEmail}" id="sellerEmail">
+                            <input type="hidden" th:field="*{transactionId}" id="transactionId">
                             <select  id="billingPlan" name="billingPlan" class="form-control" th:field="*{subscriptionPlan}">
                                 <option th:each="plan: ${plans}" th:value="${plan.id}">
                                     <p>
