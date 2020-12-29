@@ -23,6 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.MalformedURLException;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -159,14 +160,7 @@ public class PaymentServiceImpl implements PaymentService {
             try {
                 Payment executedPayment = payment.execute(context, paymentExecution);
             } catch (PayPalRESTException exception) {
-                transaction.setStatus(TransactionStatus.CANCELED);
-                transaction = transactionService.save(transaction);
-                log.error("CANCELED | PayPal Payment Execution");
                 log.error(exception.getMessage());
-                transactionDto.setStatus(transaction.getStatus());
-                transactionDto.setMerchantOrderId(transaction.getMerchantOrderId());
-                this.sendTransactionUpdate(transactionDto);
-                return transaction.getErrorUrl();
             }
             transaction.setStatus(TransactionStatus.COMPLETED);
             transaction = transactionService.save(transaction);
@@ -282,10 +276,6 @@ public class PaymentServiceImpl implements PaymentService {
             //save billing plan id
             savedSubscription.setBillingPlanId(createdPlan.getId());
         } catch (PayPalRESTException e) {
-            //set subscription status to CANCELED
-            savedSubscription.setSubscriptionStatus(SubscriptionStatus.CANCELED);
-            subscriptionService.save(savedSubscription);
-            log.error("CANCELED | PayPal Subscription Payment | Amount: " + subscriptionRequest.getAmount() + " " + subscriptionRequest.getCurrencyCode());
             log.error(e.getMessage());
         }
 
@@ -301,15 +291,15 @@ public class PaymentServiceImpl implements PaymentService {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         c.add(Calendar.MINUTE, 1);
-
-        //format defined in ISO8601
+        //ISO8601
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         String formattedDate = sdf.format(c.getTime());
 
         Subscription subscription;
-
+        SubscriptionPlan subscriptionPlan;
         try {
             subscription = subscriptionService.findById(subscriptionId);
+            subscriptionPlan = subscriptionPlanService.findById(subscriptionRequest.getSubscriptionPlan());
         } catch (Exception exception) {
             log.error(exception.getMessage());
             throw exception;
@@ -329,7 +319,7 @@ public class PaymentServiceImpl implements PaymentService {
         //create the agreement object
         Agreement agreement = new Agreement();
         agreement.setName(client.getEmail() + " subscription");
-        agreement.setDescription(client.getEmail() + " subscription");
+        agreement.setDescription(MessageFormat.format("{0} {1} a {2}",subscription.getPaymentAmount(), subscription.getCurrency().getCode(), subscriptionPlan.getFrequency().getName().toLowerCase()));
         agreement.setStartDate(formattedDate);
         agreement.setPlan(plan);
         agreement.setPayer(payer);
@@ -396,10 +386,6 @@ public class PaymentServiceImpl implements PaymentService {
 
         } catch (PayPalRESTException e) {
             log.error(e.getMessage());
-            subscription.setSubscriptionStatus(SubscriptionStatus.CANCELED);
-            subscriptionService.save(subscription);
-            log.info("SUBSCRIPTION ID: " + subscriptionId + "   CANCELED");
-            return subscription.getErrorUrl();
         }
 
         subscription.setSubscriptionStatus(SubscriptionStatus.COMPLETED);

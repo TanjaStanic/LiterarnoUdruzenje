@@ -2,6 +2,7 @@ package com.example.paypalms.service;
 
 import com.example.paypalms.domain.Client;
 
+import java.util.Collection;
 import java.util.Set;
 
 public interface ClientService {
@@ -18,5 +19,5 @@ public interface ClientService {
 
     void deleteById(Long id);
 
-    Set<Client> getAll();
+    Collection<Client> getAll();
 }

@@ -4,8 +4,8 @@ public enum SubscriptionStatus {
     INITIATED,
     BILLING_AGREEMENT_INITIATED,
     BILLING_AGREEMENT_CREATED,
-    CREATED,
     COMPLETED,
     CANCELED,
-    EXPIRED
+    EXPIRED,
+    ACTIVE
 }

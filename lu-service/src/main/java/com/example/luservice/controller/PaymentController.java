@@ -146,7 +146,7 @@ public class PaymentController {
         requestDTO.setSuccessUrl("https://localhost:8447/view/success");
         requestDTO.setFailedUrl("https://localhost:8447/view/failed");
         requestDTO.setErrorUrl("https://localhost:8447/view/error");
-        requestDTO.setAmount(10000);
+        requestDTO.setAmount(100);
         requestDTO.setCurrencyCode("USD");
         requestDTO.setMerchantTimestamp(new Date());
         transactionService.initializeTransaction(requestDTO);
@@ -178,7 +178,7 @@ public class PaymentController {
         requestDTO.setFailedUrl("https://localhost:8447/view/failed");
         requestDTO.setErrorUrl("https://localhost:8447/view/error");
         requestDTO.setCancelUrl("https://localhost:8447/view/dashborad");
-        requestDTO.setAmount(10000);
+        requestDTO.setAmount(10);
         requestDTO.setCurrencyCode("USD");
         requestDTO.setMerchantTimestamp(new Date());
         transactionService.initializeTransaction(requestDTO);

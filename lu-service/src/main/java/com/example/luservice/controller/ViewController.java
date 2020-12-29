@@ -31,7 +31,7 @@ public class ViewController {
     }
 
     @GetMapping("/dashborad")
-    public String getDashborad(Model model){
+    public String getDashboard(Model model){
         return "dashboard";
     }
 

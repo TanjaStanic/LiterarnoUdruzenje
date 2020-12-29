@@ -9,4 +9,6 @@ public interface TransactionService {
     Transaction findById(Long id);
 
     Transaction findByPaymentId(String paymentId);
+
+    void syncTransactions();
 }
