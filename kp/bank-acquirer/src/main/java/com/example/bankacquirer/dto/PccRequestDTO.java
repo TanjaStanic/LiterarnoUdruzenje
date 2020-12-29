@@ -16,6 +16,7 @@ public class PccRequestDTO {
 	private String cvv;
 	private String mm;
 	private String yy;
+	private double amount;
 	private long acquirerOrderId;
 	private Date acquirerTimespamp;
 	
