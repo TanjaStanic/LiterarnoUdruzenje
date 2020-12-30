@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css}"
+          rel="stylesheet" type="text/css"/>
+    <meta charset="UTF-8">
+    <title>Billing plan</title>
+</head>
+<body class="bg-color">
+
+<div  class="container py-5">
+    <div class="row mb-4">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 " style="color:#007acc;">Choose your billing plan</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-7 mx-auto">
+            <div class="bg-white rounded-lg shadow-sm p-5">
+
+                <div>
+                    <form id="billingPlanForm" method="POST" role="form" th:action="@{/subscriptions}"
+                          th:object="${billingPlan}">
+
+                        <div class="form-group">
+                            <label style="margin-left:5px" for="billingPlan" class="form-control-label">Billing plan</label>
+                            <input type="hidden" th:field="*{paymentMethod}" id="paymentMethod">
+                            <input type="hidden" th:field="*{transactionId}" id="transactionId">
+                            <select  id="billingPlan" name="billingPlan" class="form-control" th:field="*{subscriptionPlan}">
+                                <option th:each="plan: ${plans}" th:value="${plan.id}">
+                                    <p>
+                                        <span th:text="${plan.cyclesNumber}">&nbsp;&nbsp;</span> <span th:text="${plan.subscriptionFrequency}">&nbsp;&nbsp;</span> <span th:text="${plan.subscriptionType}"></span>
+                                    </p>
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-outline-primary btn-lg" type="submit" form="billingPlanForm" >Confirm</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>

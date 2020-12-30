@@ -37,3 +37,9 @@ eureka:
 
 execution:
   mode: sandbox
+
+success:
+  url_agreement : "https://localhost:8443/subscriptions/complete?subscriptionId="
+
+cancel:
+  url_agreement : "https://localhost:8443/subscriptions/cancel?subscriptionId="

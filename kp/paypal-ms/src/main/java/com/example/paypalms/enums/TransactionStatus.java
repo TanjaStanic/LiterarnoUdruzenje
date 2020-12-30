@@ -4,5 +4,7 @@ public enum TransactionStatus {
     INITIATED,
     CREATED,
     COMPLETED,
-    CANCELED
+    CANCELED,
+    FAILED,
+    SUCCESSFUL
 }

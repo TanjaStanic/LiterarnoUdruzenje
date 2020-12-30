@@ -10,5 +10,5 @@ import java.util.Collection;
 @Repository
 public interface PaymentMethodRepository extends JpaRepository<PaymentMethod, Long> {
 
-
+    Collection<PaymentMethod> findAllBySubscriptionSupportedIsTrueAndClientsEmail(String email);
 }

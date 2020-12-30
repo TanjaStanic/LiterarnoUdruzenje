@@ -4,6 +4,7 @@ import com.example.bankacquirer.dto.CardDataDTO;
 import com.example.bankacquirer.dto.CompletedPaymentDTO;
 import com.example.bankacquirer.dto.PaymentConcentratorRequestDTO;
 import com.example.bankacquirer.dto.PaymentConcentratorResponseDTO;
+import com.example.bankacquirer.dto.PccRequestDTO;
 import com.example.bankacquirer.repository.AccountRepository;
 import com.example.bankacquirer.repository.CardRepository;
 import com.example.bankacquirer.repository.ClientRepository;
@@ -19,6 +20,7 @@ import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +45,9 @@ public class PaymentServiceImpl implements PaymentService {
     private AccountRepository accountRepository;
     private TransactionRepository transactionRepository;
     private RestTemplate restTemplate;
+    
+    @Value("${bankId}")
+    private String myBankId;
 
     @Autowired
     public PaymentServiceImpl(PcRequestRepository pcRequestRepository, CardRepository cardRepository,
@@ -55,8 +60,6 @@ public class PaymentServiceImpl implements PaymentService {
         this.transactionRepository = transactionRepository;
         this.restTemplate = restTemplate;
     }
-
-    private String myBankId = "123412";
 
 
     @Override
@@ -121,6 +124,9 @@ public class PaymentServiceImpl implements PaymentService {
 
         PaymentConcentratorRequest pcRequest = pcRequestRepository.getOne(pcRequestId);
         Transaction transaction = new Transaction();
+        long generatedId = (long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L;
+
+        transaction.setId(generatedId);
         transaction.setPaymentID(pcRequestId.toString());
         transaction.setAmount(pcRequest.getAmount());
         transaction.setMerchantOrderId(pcRequest.getMerchantOrderId());
@@ -248,6 +254,28 @@ public class PaymentServiceImpl implements PaymentService {
         else {
             System.out.println("Bank-acq and bank Issuer are NOT the same");
             //TO DO
+            PccRequestDTO pccRequest = new PccRequestDTO();
+            pccRequest.setCardHolder(cardDataDTO.getCardHolder());
+            pccRequest.setPanNumber(cardDataDTO.getPanNumber());
+            pccRequest.setCvv(cardDataDTO.getCvv());
+            pccRequest.setMm(cardDataDTO.getMm());
+            pccRequest.setYy(cardDataDTO.getYy());
+            pccRequest.setAmount(pcRequest.getAmount());
+            pccRequest.setAcquirerOrderId(transaction.getId());
+            pccRequest.setAcquirerTimespamp(new Date());
+            
+            
+            
+            
+            ResponseEntity<String> response = null;
+            String r="";
+            try {
+                response = restTemplate.exchange("http://localhost:8446/create-response", HttpMethod.GET, 
+                		new HttpEntity<String> (r), String.class);
+                System.out.println("Test pcc: " + response.getBody());
+            } catch (Exception e) {
+                System.out.println("Could not contact PCC");
+            }
         }
 
         return pcRequest.getErrorUrl();

@@ -17,3 +17,9 @@ insert into client_payment_methods (client_id, payment_methods_id) values (1,3);
 insert into client_payment_methods (client_id, payment_methods_id) values (2,1);
 insert into client_payment_methods (client_id, payment_methods_id) values (2,2);
 insert into client_payment_methods (client_id, payment_methods_id) values (2,3);
+
+insert into currency (`code`, `name`)  values ('RSD', 'Serbian dinar');
+insert into currency (`code`, `name`)  values ('EUR', 'Euro');
+insert into currency (`code`, `name`)  values ('BAM', 'Convertible mark');
+insert into currency (`code`, `name`)  values ('USD', 'United States dollar');
+

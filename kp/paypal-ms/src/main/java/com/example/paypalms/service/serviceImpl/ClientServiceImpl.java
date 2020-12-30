@@ -6,6 +6,7 @@ import com.example.paypalms.service.ClientService;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.Set;
 
 @Service
@@ -20,9 +21,9 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client insert(Client client) {
         Client found = findByEmail(client.getEmail());
-        if (found == null){
+        if (found == null) {
             return clientRepository.save(client);
-        }else {
+        } else {
             return null;
         }
 
@@ -56,7 +57,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Set<Client> getAll() {
-        return (Set<Client>) clientRepository.findAll();
+    public Collection<Client> getAll() {
+        return clientRepository.findAll();
     }
 }

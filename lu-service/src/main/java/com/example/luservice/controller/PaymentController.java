@@ -42,7 +42,7 @@ public class PaymentController {
         return new ResponseEntity<>(pReq, HttpStatus.OK);
     }
 
-    @GetMapping("bankSuccess")
+    @GetMapping("auth/bankSuccess")
     public ResponseEntity<?> testBankSuccess() {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
         requestDTO.setMerchantOrderId((long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L);
@@ -76,7 +76,7 @@ public class PaymentController {
 
     }
 
-    @GetMapping("bankFail")
+    @GetMapping("auth/bankFail")
     public ResponseEntity<?> testBankFail() {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
         requestDTO.setMerchantOrderId((long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L);
@@ -107,7 +107,7 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("bankError")
+    @GetMapping("auth/bankError")
     public ResponseEntity<?> testBankError() {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
         requestDTO.setMerchantOrderId((long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L);
@@ -138,11 +138,73 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("paypal")
+    @GetMapping("auth/paypal")
     public ResponseEntity<?> testPaypal() {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
         requestDTO.setMerchantOrderId((long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L);
         requestDTO.setMerchantEmail("sb-zx3ys4123984@business.example.com");
+        requestDTO.setSuccessUrl("https://localhost:8447/view/success");
+        requestDTO.setFailedUrl("https://localhost:8447/view/failed");
+        requestDTO.setErrorUrl("https://localhost:8447/view/error");
+        requestDTO.setAmount(100);
+        requestDTO.setCurrencyCode("USD");
+        requestDTO.setMerchantTimestamp(new Date());
+        transactionService.initializeTransaction(requestDTO);
+        ResponseEntity<String> response = null;
+        try {
+            response = restTemplate.exchange("https://localhost:8444/api/initiate-payment-request", HttpMethod.POST,
+                    new HttpEntity<PaymentRequestDTO>(requestDTO), String.class);
+        } catch (Exception e) {
+            System.out.println("Could not contact payment center");
+            return (ResponseEntity<?>) ResponseEntity.badRequest().body("Could not contact payment center");
+        }
+        HttpHeaders headersRedirect = new HttpHeaders();
+        headersRedirect.add("Location", response.getBody());
+        headersRedirect.add("Access-Control-Allow-Origin", "*");
+        try {
+        	return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+        }
+        catch (Exception e) {   	
+            return (ResponseEntity<?>) ResponseEntity.badRequest().body("Could not contact" + response.getBody());
+        }
+    }
+
+    @GetMapping("auth/paypal/subscribe")
+    public ResponseEntity<?> testPaypalSubscribe() {
+        PaymentRequestDTO requestDTO = new PaymentRequestDTO();
+        requestDTO.setMerchantOrderId((long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L);
+        requestDTO.setMerchantEmail("sb-zx3ys4123984@business.example.com");
+        requestDTO.setSuccessUrl("https://localhost:8447/view/success");
+        requestDTO.setFailedUrl("https://localhost:8447/view/failed");
+        requestDTO.setErrorUrl("https://localhost:8447/view/error");
+        requestDTO.setCancelUrl("https://localhost:8447/view/dashborad");
+        requestDTO.setAmount(10);
+        requestDTO.setCurrencyCode("USD");
+        requestDTO.setMerchantTimestamp(new Date());
+        transactionService.initializeTransaction(requestDTO);
+        ResponseEntity<String> response = null;
+        try {
+            response = restTemplate.exchange("https://localhost:8444/subscriptions/start", HttpMethod.POST,
+                    new HttpEntity<PaymentRequestDTO>(requestDTO), String.class);
+        } catch (Exception e) {
+            return (ResponseEntity<?>) ResponseEntity.badRequest().body("Could not contact payment center");
+        }
+        HttpHeaders headersRedirect = new HttpHeaders();
+        headersRedirect.add("Location", response.getBody());
+        headersRedirect.add("Access-Control-Allow-Origin", "*");
+        try {
+            return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+        }
+        catch (Exception e) {
+            return (ResponseEntity<?>) ResponseEntity.badRequest().body("Could not contact" + response.getBody());
+        }
+    }
+    
+    @GetMapping("bitcoin")
+    public ResponseEntity<?> testBitcoin() {
+        PaymentRequestDTO requestDTO = new PaymentRequestDTO();
+        requestDTO.setMerchantOrderId((long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L);
+        requestDTO.setMerchantEmail("test@gmail.com");
         requestDTO.setSuccessUrl("https://localhost:8447/view/success");
         requestDTO.setFailedUrl("https://localhost:8447/view/failed");
         requestDTO.setErrorUrl("https://localhost:8447/view/error");
