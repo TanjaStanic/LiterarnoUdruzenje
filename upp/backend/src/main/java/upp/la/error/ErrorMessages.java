@@ -25,4 +25,8 @@ public class ErrorMessages {
     public static String VALIDATION_ERROR() {
         return "Validation failed. Check input";
     }
+
+    public static String FILE_ERROR() {
+        return "File upload/download error.";
+    }
 }
