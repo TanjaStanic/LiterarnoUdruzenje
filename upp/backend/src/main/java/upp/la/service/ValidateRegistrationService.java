@@ -63,7 +63,7 @@ public class ValidateRegistrationService implements JavaDelegate{
 					return false;
 				}
 			}
-			if (f.getFieldId().equals("emailId")) {	
+			if (f.getFieldId().equals("emailId")) {
 				if (!(emailValidation(f.getFieldValue()))) {
 					return false;
 				}
