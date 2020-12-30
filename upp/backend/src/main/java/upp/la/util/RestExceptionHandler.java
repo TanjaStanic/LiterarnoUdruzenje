@@ -81,6 +81,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     return buildResponseEntity(apiError);
   }
 
+  @ExceptionHandler(FileError.class)
+  protected ResponseEntity<Object> handleFileError(AuthorizationError ex) {
+    ApiError apiError = new ApiError(UNPROCESSABLE_ENTITY);
+    apiError.setMessage(ex.getMessage());
+    apiError.setEx(ex);
+    return buildResponseEntity(apiError);
+  }
+
   /*ERROR HANDLING
    * Add new custom exception like ItemNotFound
    * Make methods throw that exception
