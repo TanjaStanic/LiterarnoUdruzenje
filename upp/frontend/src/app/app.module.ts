@@ -20,6 +20,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {ReactiveFormsModule} from '@angular/forms';
 import { ReaderDialogComponent } from './components/reader-dialog/reader-dialog.component';
 import { WriterDialogComponent } from './components/writer-dialog/writer-dialog.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { WriterDialogComponent } from './components/writer-dialog/writer-dialog.
     MatSelectModule,
     MatDialogModule,
     MatRadioModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

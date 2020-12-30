@@ -68,6 +68,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .permitAll()
         .antMatchers("/auth/**")
         .permitAll()
+        .antMatchers("/registration/get")
+        .permitAll()
         //.antMatchers("/registration/**")
         //.permitAll()
         // Our private endpoints

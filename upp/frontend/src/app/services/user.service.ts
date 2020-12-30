@@ -9,7 +9,7 @@ export class UserService {
 
   constructor(private httpClient: HttpClient) { }
 
-  startProcess() {
+  getFields() {
     return this.httpClient.get('http://localhost:8080/registration/get') as Observable<any>;
   }
 

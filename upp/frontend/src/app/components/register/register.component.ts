@@ -21,20 +21,36 @@ export class RegisterComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, public dialog: MatDialog,
               private userService: UserService,
               private genreService: GenreService) {
-    this.genreService.getAllGenres();
+    // this.genreService.getAllGenres();
+    const x = userService.getFields();
+
+    x.subscribe(
+      res => {
+        console.log(res);
+        this.formFields = res.formFields;
+        this.formFields.forEach( (field) => {
+
+          if ( field.type.name === 'enum') {
+            this.enumValues = Object.keys(field.type.values);
+          }
+        });
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
 
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
-      email: new FormControl('', [Validators.required, Validators.email]),
-      username: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required, Validators.minLength(8),
-        Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')]),
-      name: new FormControl('', [Validators.required]),
-      surname: new FormControl('', [Validators.required]),
-      city: new FormControl('', [Validators.required]),
-      country: new FormControl('', [Validators.required]),
-      role: new FormControl('', [Validators.required])
+      emailId: new FormControl('', [Validators.required, Validators.email]),
+      userNameId: new FormControl('', [Validators.required]),
+      passwordId: new FormControl('', [Validators.required]),
+      firstNameId: new FormControl('', [Validators.required]),
+      lastNameId: new FormControl('', [Validators.required]),
+      cityId: new FormControl('', [Validators.required]),
+      countryId: new FormControl('', [Validators.required]),
+      roleId: new FormControl('', [Validators.required])
     });
   }
 
@@ -45,24 +61,19 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     if (this.registerForm.invalid) {
     	window.alert('Validation front failed !');
-      return;
+     return;
     }
-    console.log('validna registracija');
     const d = new Array();
-    d.push({fieldId : 'firstNameId', fieldValue: this.f.name.value});
-    d.push({fieldId : 'lastNameId', fieldValue: this.f.surname.value});
-    d.push({fieldId : 'passwordId', fieldValue: this.f.password.value});
-    d.push({fieldId : 'emailId', fieldValue: this.f.email.value});
-    if (this.f.role.value === 'Citalac') {
-      d.push({fieldId : 'roleId', fieldValue: 'value_1'});
-    } else {
-      d.push({fieldId : 'roleId', fieldValue: 'value_2'});
-    }
-    d.push({fieldId : 'cityId', fieldValue: this.f.city.value});
-    d.push({fieldId : 'countryId', fieldValue: this.f.country.value});
-    d.push({fieldId : 'userNameId', fieldValue: this.f.username.value});
-
-    if (this.f.role.value === 'Citalac') {
+    d.push({fieldId : 'firstNameId', fieldValue: this.f.firstNameId.value});
+    d.push({fieldId : 'lastNameId', fieldValue: this.f.lastNameId.value});
+    d.push({fieldId : 'passwordId', fieldValue: this.f.passwordId.value});
+    d.push({fieldId : 'emailId', fieldValue: this.f.emailId.value});
+    d.push({fieldId : 'roleId', fieldValue: this.f.roleId.value});
+    d.push({fieldId : 'cityId', fieldValue: this.f.cityId.value});
+    d.push({fieldId : 'countryId', fieldValue: this.f.countryId.value});
+    d.push({fieldId : 'userNameId', fieldValue: this.f.userNameId.value});
+    console.log(d);
+    if (this.f.roleId.value === 'value_1') {
       const user = this.userService.registerUser(d);
       user.subscribe(
         res => {
