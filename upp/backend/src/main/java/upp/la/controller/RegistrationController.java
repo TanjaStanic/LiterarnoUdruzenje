@@ -103,6 +103,21 @@ public class RegistrationController {
 
         return new FormFieldsDto(task.getId(), "123", properties);
     }
+    @GetMapping(path = "/getGenresForm", produces = "application/json")
+    public @ResponseBody FormFieldsDto getGenresForms() {
+
+        Task task1 = taskService.createTaskQuery().taskName("Registration reader").list().get(0);
+        Task task  = taskService.createTaskQuery().taskName("Genres for beta reader").list().get(0);
+
+        TaskFormData tfd = formService.getTaskFormData(task1.getId());
+        List<FormField> properties = tfd.getFormFields();
+        // properties.addAll(formService.getTaskFormData(task.getId()).getFormFields());
+        for(FormField fp : properties) {
+            System.out.println(fp.getId() + fp.getType());
+        }
+
+        return new FormFieldsDto(task1.getId(), "123", properties);
+    }
 
     @PostMapping(path = "/betaNo", produces = "application/json")
     public @ResponseBody

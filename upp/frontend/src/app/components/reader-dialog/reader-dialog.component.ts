@@ -24,6 +24,24 @@ export class ReaderDialogComponent implements OnInit {
                private userService: UserService,
                private genreService: GenreService,
                private router: Router) {
+
+    const x = genreService.getFieldsGenres();
+
+    x.subscribe(
+      res => {
+        console.log(res);
+        this.formFields = res.formFields;
+        this.formFields.forEach( (field) => {
+
+          if ( field.type.name === 'enum') {
+            this.enumValues = Object.keys(field.type.values);
+          }
+        });
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
 
   ngOnInit() {

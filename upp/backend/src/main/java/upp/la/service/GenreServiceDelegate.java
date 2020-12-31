@@ -44,7 +44,6 @@ public class GenreServiceDelegate implements TaskListener {
 
         List<FormField> properties = taskFormData.getFormFields();
 
-
         if (properties != null) {
 
             for (FormField field : properties) {
