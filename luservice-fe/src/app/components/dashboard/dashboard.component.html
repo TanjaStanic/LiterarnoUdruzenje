@@ -1,5 +1,15 @@
 <app-navbar></app-navbar>
 
+<div *ngIf="subscriptionActiveOrInitiated != true && authenticated === true" style="text-align: start; margin: 1em;">
+    <button mat-raised-button color="primary" (click)="subscribe()">Subscribe<mat-icon>card-membership</mat-icon>
+    </button>
+</div>
+
+<div style="text-align: justify; margin: 1em;">
+    <button mat-raised-button color="primary" (click)="paypalTest()">Paypal payment test
+    </button>
+</div>
+
 <div fxLayout="row" fxLayoutAlign="space-evenly stretch" fxLayoutWrap>
     <div *ngFor="let book of books">
         <mat-card class="card">

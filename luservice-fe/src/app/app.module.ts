@@ -31,6 +31,11 @@ import { UserGuardService } from './shared/route-guards/user-guard.service';
 import { EditorGuardService } from './shared/route-guards/editor-guard.service';
 import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
 import { ShippingInfoComponent } from './components/dashboard/shipping-info/shipping-info.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { SuccessComponent } from './components/success/success.component';
+import { FailComponent } from './components/fail/fail.component';
+import { ErrorComponent } from './components/error/error.component';
+import { CancelComponent } from './components/cancel/cancel.component';
 
 
 @NgModule({
@@ -47,7 +52,12 @@ import { ShippingInfoComponent } from './components/dashboard/shipping-info/ship
     DashboardComponent,
     ConfirmRegistrationComponent,
     ShoppingCartComponent,
-    ShippingInfoComponent
+    ShippingInfoComponent,
+    ProfileComponent,
+    SuccessComponent,
+    FailComponent,
+    ErrorComponent,
+    CancelComponent
   ],
   imports: [
     BrowserModule,

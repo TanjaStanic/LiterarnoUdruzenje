@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("auth/books")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*", maxAge = 3600)
 public class BooksController {
     @Autowired
     private BookRepository bookRepository;

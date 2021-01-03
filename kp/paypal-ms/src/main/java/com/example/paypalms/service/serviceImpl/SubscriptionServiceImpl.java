@@ -2,6 +2,7 @@ package com.example.paypalms.service.serviceImpl;
 
 import com.example.paypalms.domain.Client;
 import com.example.paypalms.domain.Subscription;
+import com.example.paypalms.dto.UserSubscriptionDto;
 import com.example.paypalms.enums.SubscriptionStatus;
 import com.example.paypalms.repository.SubscriptionRepository;
 import com.example.paypalms.service.ClientService;
@@ -9,10 +10,14 @@ import com.example.paypalms.service.SubscriptionService;
 import com.paypal.api.payments.Agreement;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -21,16 +26,19 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@Log4j2
 public class SubscriptionServiceImpl implements SubscriptionService {
 
     private SubscriptionRepository subscriptionRepository;
     private ClientService clientService;
     @Value("${execution.mode}")
     private String executionMode;
+    private RestTemplate restTemplate;
 
-    public SubscriptionServiceImpl(SubscriptionRepository subscriptionRepository, ClientService clientService) {
+    public SubscriptionServiceImpl(SubscriptionRepository subscriptionRepository, ClientService clientService, RestTemplate restTemplate) {
         this.subscriptionRepository = subscriptionRepository;
         this.clientService = clientService;
+        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -69,10 +77,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     /**
-     * Compare subscriptions statues with PayPal every hour
+     * Sync subscription statues with PayPal every half hour
      */
-    //@Scheduled(initialDelay = 10000, fixedRate = 3600000)
-    //@Scheduled(initialDelay = 10000, fixedRate = 180000)
+    //@Scheduled(initialDelay = 10000, fixedRate = 1800000)
     @Scheduled(initialDelay = 180000, fixedRate = 300000)
     @Async
     @Override
@@ -81,7 +88,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
         clients.stream().forEach(client -> {
             APIContext context = new APIContext(client.getClientId(), client.getClientSecret(), executionMode);
-            List<Subscription> subscriptions = findAllBySellerIdAndSubscriptionStatus(client.getId(), SubscriptionStatus.COMPLETED);
+            List<Subscription> subscriptions = findAllBySellerIdAndSubscriptionStatus(client.getId(), SubscriptionStatus.ACTIVE);
 
             if (!subscriptions.isEmpty()) {
                 for (Subscription subscription : subscriptions) {
@@ -90,15 +97,24 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
                         System.out.println("KP: " + subscription.getSubscriptionStatus() + " | PP: " + agreement.getState());
 
-                        if (agreement.getState().equalsIgnoreCase("ACTIVE")) {
-                            subscription.setSubscriptionStatus(SubscriptionStatus.ACTIVE);
-                            save(subscription);
-                        } else if (agreement.getState().equalsIgnoreCase("CANCELLED")) {
+                        boolean statusChanged = false;
+                        if (agreement.getState().equalsIgnoreCase("CANCELLED")) {
                             subscription.setSubscriptionStatus(SubscriptionStatus.CANCELED);
                             save(subscription);
+                            statusChanged = true;
                         } else if (agreement.getState().equalsIgnoreCase("EXPIRED")) {
                             subscription.setSubscriptionStatus(SubscriptionStatus.EXPIRED);
                             save(subscription);
+                            statusChanged = true;
+                        } else if (agreement.getState().equalsIgnoreCase("SUSPENDED")) {
+                            subscription.setSubscriptionStatus(SubscriptionStatus.SUSPENDED);
+                            save(subscription);
+                            statusChanged = true;
+                        }
+
+
+                        if (statusChanged){
+                            sendSubscriptionUpdate(subscription);
                         }
                     } catch (PayPalRESTException e) {
                         //subscription doesn't exist
@@ -110,5 +126,19 @@ public class SubscriptionServiceImpl implements SubscriptionService {
                 }
             }
         });
+    }
+
+    private void sendSubscriptionUpdate(Subscription subscription){
+        UserSubscriptionDto subscriptionDto = new UserSubscriptionDto( subscription.getSeller().getEmail(), subscription.getMerchantOrderId(),
+                subscription.getSubscriptionStatus(), subscription.getExpirationDate());
+        try {
+            HttpEntity<UserSubscriptionDto> entity = new HttpEntity<>(subscriptionDto);
+            restTemplate.exchange("https://payment-info/subscriptions/update", HttpMethod.POST, entity, String.class);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            log.error("ERROR | Could not contact payment-info.");
+            log.error(exception.getMessage());
+        }
     }
 }

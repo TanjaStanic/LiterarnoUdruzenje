@@ -16,6 +16,7 @@ public class SubscriptionRequestDto {
     @NotNull
     private String sellerEmail;
     private double amount;
+    private long merchantOrderId;
     @NotNull
     private String currencyCode;
     @NotNull

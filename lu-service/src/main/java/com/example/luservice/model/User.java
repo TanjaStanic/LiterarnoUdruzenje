@@ -50,6 +50,9 @@ public class User implements Serializable, UserDetails {
     @Column
     private String token;
 
+    @OneToOne
+    private UserSubscription subscription;
+
     @Override
     public String getUsername() {
         return email;

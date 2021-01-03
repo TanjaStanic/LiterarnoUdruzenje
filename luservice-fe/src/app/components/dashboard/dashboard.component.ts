@@ -24,6 +24,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   form: FormGroup;
   matcher = new MyErrorStateMatcher();
   roles;
+  subscriptionActiveOrInitiated = false;
+  activeSubscription: any;
+  authenticated = false;
 
   constructor(private router: Router, private formBuilder: FormBuilder, private authService: AuthService,
     private snackBarService: SnackBarService, private userService: UserService, private bookService: BookService, private cartService: CartService) {
@@ -34,12 +37,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.authenticated = this.authService.isAuthenticated();
+    console.log(this.authenticated);
+    this.roles = this.authService.getUserRoles();
     this.subscription = this.cartService.items.subscribe();
     this.resetForm();
     this.getBooks();
+
     const userId = localStorage.getItem("id");
-    this.authService.getUserRoles();
-    console.log(this.authService.getUserRoles());
+
+    if (userId != null && userId != undefined) {
+      this.userService.getUserSubscription(userId).subscribe(
+        data => {
+          this.activeSubscription = data;
+          this.subscriptionActiveOrInitiated = true;
+          console.log(this.activeSubscription);
+        },
+        err => {
+
+
+        }
+      );
+    }
 
   }
 
@@ -76,6 +95,37 @@ export class DashboardComponent implements OnInit, OnDestroy {
   resetForm() {
     this.form.reset();
     this.quantity.setValue(1);
+  }
+
+  subscribe() {
+    this.userService.subscribe().subscribe(
+      data => {
+        this.subscriptionActiveOrInitiated = true;
+        window.location.href = data;
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.error);
+        console.log(error.message);
+        console.log(error.status);
+        console.log(error.headers.keys());
+        this.snackBarService.showMessage("Something went wrong, please try again.");
+      }
+    );
+  }
+
+  paypalTest() {
+    this.userService.paypalPaymnetTest().subscribe(
+      data => {
+        window.location.href = data;
+      },
+      (error: HttpErrorResponse) => {
+        console.log(error.error);
+        console.log(error.message);
+        console.log(error.status);
+        console.log(error.headers.keys());
+        this.snackBarService.showMessage("Something went wrong, please try again.");
+      }
+    );
   }
 }
 

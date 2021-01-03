@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @RequestMapping("/api")
 @Log4j2
+@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 public class PaymentRequestController {
 
     private PaymentRequestService paymentService;

@@ -22,4 +22,6 @@ public class TransactionDto {
     private String paymentID;
     private Double amount;
     private String currencyCode;
+
+
 }
