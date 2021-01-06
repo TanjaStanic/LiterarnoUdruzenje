@@ -1,11 +1,9 @@
 package com.example.paypalms.domain;
 
-import com.example.paypalms.dto.RegisterClientDTO;
 import com.example.paypalms.utils.AttributeEncryptor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnTransformer;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -31,23 +29,28 @@ public class Client {
     @Convert(converter = AttributeEncryptor.class)
     private String clientSecret;
 
-    public Client(Long id, String email, String clientId, String clientSecret) {
-        init(email, clientId, clientSecret);
+    @Column
+    private Long pcClientId;
+
+    public Client(Long id, String email, String clientId, String clientSecret, Long pcClientId) {
         Assert.notNull(id, "Attribute id cannot be null.");
         this.id = id;
+        init(email, clientId, clientSecret, pcClientId);
     }
 
-    public Client(String email, String clientId, String clientSecret) {
-       init(email, clientId, clientSecret);
+    public Client(String email, String clientId, String clientSecret, Long pcClientId) {
+        init(email, clientId, clientSecret, pcClientId);
     }
 
-    private void init(String email, String clientId, String clientSecret){
+    private void init(String email, String clientId, String clientSecret, Long pcClientId) {
         Assert.notNull(email, "Attribute email cannot be null.");
         Assert.notNull(email, "Attribute clientId cannot be null.");
         Assert.notNull(email, "Attribute clientSecret cannot be null.");
+        Assert.notNull(email, "Attribute pcClientId cannot be null.");
         this.email = email;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
+        this.pcClientId = pcClientId;
     }
 
 }

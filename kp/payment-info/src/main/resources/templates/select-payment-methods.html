@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link rel="stylesheet"
+          th:href="@{https://localhost:8444/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css}"
+          rel="stylesheet" type="text/css"/>
+    <meta charset="UTF-8"/>
+    <title>Available payment methods</title>
+</head>
+<body class="bg-color">
+<div  class="container py-5">
+    <div class="row mb-4">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 " style="color:#007acc;">Select payment method</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-7 mx-auto">
+            <div class="bg-white rounded-lg shadow-sm p-5">
+                <div th:each="paymentMethod: ${paymentMethods}">
+                    <div style="text-align: center">
+                        <a role="button" class="btn btn-outline-primary btn-lg" th:href="${paymentMethod.value}"><span th:text="${paymentMethod.key}"></span></a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <a role="button" class="btn btn-outline-primary btn-lg" th:href="@{https://localhost:8444/view/register/finish}"><span>Finish</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<script th:src="@{https://localhost:8444/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{https://localhost:8444/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+</body>
+</html>

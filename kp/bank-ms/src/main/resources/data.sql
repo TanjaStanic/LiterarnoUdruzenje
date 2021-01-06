@@ -1,9 +1,9 @@
 -- merchantid, merchantpass
-insert into client(email,merchantid, merchant_password,name)
- 	values ('test@gmail.com',"RBBEP5uy/qre/uG+lKP+3w==","ityKc+2hQVye+i5FV2FQWA==","Pero Peric");
+insert into client(email,merchantid, merchant_password, pc_client_id)
+ 	values ('test@gmail.com',"RBBEP5uy/qre/uG+lKP+3w==","ityKc+2hQVye+i5FV2FQWA==", 1);
 -- merchantid2, merchantpass2
- insert into client (email,merchantid, merchant_password,name)
- 	values ('test2@gmail.com',"8fqDJvRIsTt/+uDfGziCNQ==","7g958ZFGlg+9me/kFN3uEQ==","Marko Markovic");
+ insert into client (email,merchantid, merchant_password, pc_client_id)
+ 	values ('test2@gmail.com',"8fqDJvRIsTt/+uDfGziCNQ==","7g958ZFGlg+9me/kFN3uEQ==", 3);
 
 insert into bank_db.crypto (iv, text) values ("Nirmw54CdIcKBIKj", "RBBEP5uy/qre/uG+lKP+3w==");
 insert into bank_db.crypto (iv, text) values ("LJ2YntLnpcRJU6sX", "ityKc+2hQVye+i5FV2FQWA==");

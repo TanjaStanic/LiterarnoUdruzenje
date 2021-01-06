@@ -22,7 +22,7 @@ import java.text.MessageFormat;
 
 
 @RestController
-@RequestMapping("/subscriptions")
+@RequestMapping("/auth/subscriptions")
 @Log4j2
 @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 public class SubscriptionController {

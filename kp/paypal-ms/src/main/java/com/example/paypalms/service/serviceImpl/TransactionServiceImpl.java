@@ -107,7 +107,7 @@ public class TransactionServiceImpl implements TransactionService {
             TransactionDto transactionDto = new TransactionDto(transaction.getClient().getEmail(), transaction.getStatus(),
                     transaction.getMerchantOrderId(), transaction.getPaymentId(), transaction.getAmount(), transaction.getCurrency().getCode());
             HttpEntity<TransactionDto> entity = new HttpEntity<>(transactionDto);
-            restTemplate.exchange("https://payment-info/transactions", HttpMethod.POST, entity, String.class);
+            restTemplate.exchange("https://payment-info/auth/transactions", HttpMethod.POST, entity, String.class);
 
         } catch (Exception exception) {
             exception.printStackTrace();

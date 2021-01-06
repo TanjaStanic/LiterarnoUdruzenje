@@ -1,4 +1,4 @@
-package com.example.paypalms.dto;
+package com.example.bankms.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,9 +15,11 @@ public class RegisterClientDTO {
     @NotNull
     private String email;
     @NotNull
-    private String clientId;
+    private String merchantID;
     @NotNull
-    private String clientSecret;
+    private String merchantPassword;
     @NotNull
     private String pcClientId;
+    @NotNull
+    private String passwordConfirm;
 }

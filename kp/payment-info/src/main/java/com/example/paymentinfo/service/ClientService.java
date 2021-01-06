@@ -19,4 +19,8 @@ public interface ClientService {
 
     Set<Client> getAll();
 
+    Client findByToken(String token);
+
+    Client findByUsername(String username);
+
 }

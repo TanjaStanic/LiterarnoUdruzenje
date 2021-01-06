@@ -53,4 +53,14 @@ public class ClientServiceImpl implements ClientService {
     public Set<Client> getAll() {
         return (Set<Client>) clientRepository.findAll();
     }
+
+    @Override
+    public Client findByToken(String token) {
+        return clientRepository.findByToken(token);
+    }
+
+    @Override
+    public Client findByUsername(String username) {
+        return clientRepository.findByEmail(username);
+    }
 }

@@ -98,7 +98,7 @@ public class PaymentServiceImpl implements PaymentService {
 
             HttpEntity<TransactionDto> entity = new HttpEntity<>(transaction);
 
-            restTemplate.exchange("https://localhost:8444/transactions", HttpMethod.POST, entity, String.class);
+            restTemplate.exchange("https://localhost:8444/auth/transactions", HttpMethod.POST, entity, String.class);
 
         } catch (Exception exception) {
             exception.printStackTrace();

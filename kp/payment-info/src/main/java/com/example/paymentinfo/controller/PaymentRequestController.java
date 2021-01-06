@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/auth/api")
 @Log4j2
 @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 public class PaymentRequestController {
@@ -71,5 +71,7 @@ public class PaymentRequestController {
         return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
 
     }
+
+
 
 }

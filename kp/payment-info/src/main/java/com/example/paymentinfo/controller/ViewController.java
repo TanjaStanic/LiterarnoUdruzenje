@@ -1,18 +1,13 @@
 package com.example.paymentinfo.controller;
 
 import com.example.paymentinfo.domain.Client;
-import com.example.paymentinfo.domain.Currency;
 import com.example.paymentinfo.domain.PaymentMethod;
-import com.example.paymentinfo.domain.Transaction;
-import com.example.paymentinfo.domain.TransactionStatus;
 import com.example.paymentinfo.dto.BillingPlanDto;
-import com.example.paymentinfo.dto.PaymentRequestDTO;
+import com.example.paymentinfo.dto.ClientRegistrationDto;
 import com.example.paymentinfo.dto.SubscriptionPlanDto;
 import com.example.paymentinfo.service.ClientService;
-import com.example.paymentinfo.service.CurrencyService;
-import com.example.paymentinfo.service.PaymentMethodService;
 
-import com.example.paymentinfo.service.TransactionService;
+import com.example.paymentinfo.service.PaymentMethodService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,7 +20,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-
 @Controller
 @RequestMapping("view")
 @Log4j2
@@ -34,14 +28,12 @@ public class ViewController {
 
     private ClientService clientService;
     private RestTemplate restTemplate;
-    private TransactionService transactionService;
-    private CurrencyService currencyService;
+    private PaymentMethodService paymentMethodService;
 
-    public ViewController(TransactionService transactionService, ClientService clientService, RestTemplate restTemplate, CurrencyService currencyService) {
-        this.transactionService = transactionService;
+    public ViewController(ClientService clientService, RestTemplate restTemplate, PaymentMethodService paymentMethodService) {
         this.clientService = clientService;
         this.restTemplate = restTemplate;
-        this.currencyService = currencyService;
+        this.paymentMethodService = paymentMethodService;
     }
 
     @GetMapping("/payment-methods/{sellerEmail}/{merchantOrderId}")
@@ -52,7 +44,7 @@ public class ViewController {
         paymentMethods = client.getPaymentMethods().stream()
                 .collect(Collectors.toMap(
                         PaymentMethod::getName,
-                        method -> MessageFormat.format("https://localhost:8444/api/{0}/{1}/{2}", method.getApplicationName(), sellerEmail, String.valueOf(merchantOrderId))));
+                        method -> MessageFormat.format("https://localhost:8444/auth/api/{0}/{1}/{2}", method.getApplicationName(), sellerEmail, String.valueOf(merchantOrderId))));
 
         model.addAttribute("paymentMethods", paymentMethods);
         return "paymentMethods";
@@ -93,4 +85,31 @@ public class ViewController {
         return "choose-subscription-plan";
     }
 
+    @GetMapping("/register")
+    public String getRegisterForm(Model model) {
+        model.addAttribute("client", new ClientRegistrationDto());
+        return "registration";
+    }
+
+
+    @GetMapping("/select-payment-methods/{clientId}")
+    public String getSelectPaymentMethodsForm(Model model, @PathVariable long clientId) {
+        Map<String, String> paymentMethods;
+        Client client = clientService.findById(clientId);
+        List<PaymentMethod> allMethods = (List<PaymentMethod>) paymentMethodService.findAll();
+        allMethods.removeAll(client.getPaymentMethods());
+
+        paymentMethods = allMethods.stream()
+                .collect(Collectors.toMap(
+                        PaymentMethod::getName,
+                        method -> MessageFormat.format("https://localhost:8444/payment-methods/register/{0}/{1}", method.getApplicationName(), client.getEmail())));
+
+        model.addAttribute("paymentMethods", paymentMethods);
+        return "select-payment-methods";
+    }
+
+    @GetMapping("/register/finish")
+    public String getFinishRegistrationPage(){
+        return "registration-complete";
+    }
 }

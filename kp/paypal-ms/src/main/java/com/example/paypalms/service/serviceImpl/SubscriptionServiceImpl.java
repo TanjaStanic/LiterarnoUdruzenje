@@ -133,7 +133,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
                 subscription.getSubscriptionStatus(), subscription.getExpirationDate());
         try {
             HttpEntity<UserSubscriptionDto> entity = new HttpEntity<>(subscriptionDto);
-            restTemplate.exchange("https://payment-info/subscriptions/update", HttpMethod.POST, entity, String.class);
+            restTemplate.exchange("https://payment-info/auth/subscriptions/update", HttpMethod.POST, entity, String.class);
 
         } catch (Exception exception) {
             exception.printStackTrace();
