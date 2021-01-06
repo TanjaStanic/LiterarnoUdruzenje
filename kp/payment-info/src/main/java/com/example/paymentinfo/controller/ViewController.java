@@ -102,7 +102,7 @@ public class ViewController {
         paymentMethods = allMethods.stream()
                 .collect(Collectors.toMap(
                         PaymentMethod::getName,
-                        method -> MessageFormat.format("https://localhost:8444/payment-methods/register/{0}/{1}", method.getApplicationName(), client.getEmail())));
+                        method -> MessageFormat.format("https://localhost:8444/payment-methods/register/{0}/{1}", method.getApplicationName(), String.valueOf(clientId))));
 
         model.addAttribute("paymentMethods", paymentMethods);
         return "select-payment-methods";

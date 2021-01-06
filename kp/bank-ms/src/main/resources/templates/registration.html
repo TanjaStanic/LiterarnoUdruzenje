@@ -14,7 +14,7 @@
 
     <div class="row mb-4">
         <div class="col-lg-8 mx-auto text-center">
-            <h1 class="display-4 " style="color:#007acc;">Register</h1>
+            <h1 class="display-4 " style="color:#007acc;">Register for banking</h1>
         </div>
     </div>
 
@@ -29,7 +29,7 @@
                           oninput='passwordConfirm.setCustomValidity(passwordConfirm.value != merchantPassword.value ? "Passwords do not match." : "")'>
 
                         <div class="form-group">
-                            <label for="merchantID">Merchant ID</label>
+                            <label for="merchantID">Fullname</label>
                             <input type="hidden" th:field="*{email}" id="email">
                             <input type="hidden" th:field="*{pcClientId}" id="pcClientId">
                             <input type=text name="merchantID" id="merchantID"  required class="form-control"

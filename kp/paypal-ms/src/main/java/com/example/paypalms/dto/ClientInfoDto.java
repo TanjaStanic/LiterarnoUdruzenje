@@ -1,4 +1,4 @@
-package com.example.bankms.dto;
+package com.example.paypalms.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,10 +11,9 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterClientDTO {
+public class ClientInfoDto {
     @NotNull
     private String email;
     @NotNull
     private String name;
-
 }

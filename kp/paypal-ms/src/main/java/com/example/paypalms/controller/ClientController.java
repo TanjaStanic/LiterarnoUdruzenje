@@ -1,6 +1,7 @@
 package com.example.paypalms.controller;
 
 import com.example.paypalms.domain.Client;
+import com.example.paypalms.dto.ClientInfoDto;
 import com.example.paypalms.dto.RegisterClientDTO;
 import com.example.paypalms.service.ClientService;
 import org.springframework.http.HttpHeaders;
@@ -9,29 +10,42 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import java.text.MessageFormat;
 
 @Controller
+@RequestMapping("/clients")
 public class ClientController {
 
     private ClientService clientService;
+    private RestTemplate restTemplate;
 
-    public ClientController(ClientService clientService) {
+    public ClientController(ClientService clientService, RestTemplate restTemplate) {
         this.clientService = clientService;
+        this.restTemplate = restTemplate;
     }
 
-    @GetMapping("/register-url/{email}/{clientId}")
+    @GetMapping("/register-url/{clientId}")
     public @ResponseBody
-    ResponseEntity<String> getRegistrationUrl(@PathVariable String email, @PathVariable String clientId) {
-        return ResponseEntity.ok(MessageFormat.format("https://localhost:8443/register/{0}/{1}", email, clientId));
+    ResponseEntity<String> getRegistrationUrl(@PathVariable String clientId) {
+        return ResponseEntity.ok(MessageFormat.format("https://localhost:8443/clients/register/{0}", clientId));
     }
 
-    @GetMapping("/register/{email}/{clientId}")
-    public String registerForm(Model model, @PathVariable String email, @PathVariable String clientId) {
+    @GetMapping("/register/{clientId}")
+    public Object registerForm(Model model, @PathVariable String clientId) {
         RegisterClientDTO registerClientDTO = new RegisterClientDTO();
-        registerClientDTO.setEmail(email);
+        ResponseEntity<ClientInfoDto> clientInfo = restTemplate.getForEntity(
+                "https://localhost:8762/api/pc_info/auth/clients/" + clientId,
+                ClientInfoDto.class);
+
+        if (clientInfo.getStatusCode() == HttpStatus.OK) {
+            registerClientDTO.setEmail(clientInfo.getBody().getEmail());
+        } else {
+            return ResponseEntity.badRequest().body(clientInfo.getBody());
+        }
+
         registerClientDTO.setPcClientId(clientId);
         model.addAttribute("registrationDTO", registerClientDTO);
         return "registration";

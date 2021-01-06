@@ -31,9 +31,16 @@ public class Client {
 
     @Column
     private Long pcClientId;
+    @Column
+    private String name;
 
     public Client(String email, String merchantID, String merchantPassword, long pcClientId) {
         init(email, merchantID, merchantPassword, pcClientId);
+    }
+
+    public Client(String email, String merchantID, String merchantPassword, long pcClientId, String name) {
+        init(email, merchantID, merchantPassword, pcClientId);
+        this.name = name;
     }
 
     private void init(String email, String merchantID, String merchantPassword, Long pcClientId){

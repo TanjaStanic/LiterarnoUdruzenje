@@ -2,6 +2,7 @@ package com.example.paymentinfo.controller;
 
 import com.example.paymentinfo.domain.Client;
 import com.example.paymentinfo.domain.PaymentMethod;
+import com.example.paymentinfo.dto.ClientBasicInfoDto;
 import com.example.paymentinfo.repository.PaymentMethodRepository;
 import com.example.paymentinfo.service.ClientService;
 import org.springframework.http.HttpHeaders;
@@ -30,18 +31,26 @@ public class PaymentMethodController {
         this.clientService = clientService;
     }
 
-    @GetMapping("/register/{paymentMethod}/{sellerEmail}")
-    public ResponseEntity<?> redirectRegisterRequest(@PathVariable String paymentMethod, @PathVariable String sellerEmail) {
+    @GetMapping("/register/{paymentMethod}/{clientId}")
+    public ResponseEntity<?> redirectRegisterRequest(@PathVariable String paymentMethod, @PathVariable long clientId) {
         PaymentMethod method = paymentMethodRepository.findByApplicationName(paymentMethod);
-        Client client = clientService.findByEmail(sellerEmail);
-        client.getPaymentMethods().add(method);
-        clientService.update(client);
+        Client client = clientService.findById(clientId);
 
-        ResponseEntity<String> redirectUrl = restTemplate.getForEntity(MessageFormat.format("https://{0}/register-url/{1}/{2}", paymentMethod, sellerEmail, client.getId().toString()), String.class);
-        HttpHeaders headersRedirect = new HttpHeaders();
-        headersRedirect.add("Location", redirectUrl.getBody());
-        headersRedirect.add("Access-Control-Allow-Origin", "*");
-        return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+        ClientBasicInfoDto clientBasicInfoDto = new ClientBasicInfoDto(client.getName(), client.getEmail());
+        ResponseEntity<String> redirectUrl = restTemplate.getForEntity(MessageFormat.format("https://{0}/clients/register-url/{1}", paymentMethod, client.getId().toString()),String.class);
+
+        if (redirectUrl.getStatusCode() == HttpStatus.OK){
+            client.getPaymentMethods().add(method);
+            clientService.update(client);
+            HttpHeaders headersRedirect = new HttpHeaders();
+            headersRedirect.add("Location", redirectUrl.getBody());
+            headersRedirect.add("Access-Control-Allow-Origin", "*");
+            return new ResponseEntity<>(null, headersRedirect, HttpStatus.FOUND);
+        }else {
+            // TODO redirect to error page
+            return ResponseEntity.badRequest().build();
+        }
+
 
     }
 
