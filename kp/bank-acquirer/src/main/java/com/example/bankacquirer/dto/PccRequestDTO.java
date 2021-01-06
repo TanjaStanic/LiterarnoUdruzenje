@@ -18,6 +18,6 @@ public class PccRequestDTO {
 	private String yy;
 	private double amount;
 	private long acquirerOrderId;
-	private Date acquirerTimespamp;
+	private Date acquirerTimestamp;
 	
 }

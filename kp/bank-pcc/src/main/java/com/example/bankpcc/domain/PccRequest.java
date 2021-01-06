@@ -43,7 +43,7 @@ public class PccRequest {
 	private long acquirerOrderId;
 	
 	@Column(nullable = false)
-	private Date acquirerTimespamp;
+	private Date acquirerTimestamp;
 
 	public PccRequest(PccRequestDTO pccRequestDTO) {
 		super();
@@ -54,7 +54,7 @@ public class PccRequest {
 		this.yy = pccRequestDTO.getYy();
 		this.amount = pccRequestDTO.getAmount();
 		this.acquirerOrderId = pccRequestDTO.getAcquirerOrderId();
-		this.acquirerTimespamp = pccRequestDTO.getAcquirerTimespamp();
+		this.acquirerTimestamp = pccRequestDTO.getAcquirerTimestamp();
 	}
 
 }

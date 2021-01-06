@@ -5,13 +5,16 @@ import com.example.bankacquirer.dto.CompletedPaymentDTO;
 import com.example.bankacquirer.dto.PaymentConcentratorRequestDTO;
 import com.example.bankacquirer.dto.PaymentConcentratorResponseDTO;
 import com.example.bankacquirer.dto.PccRequestDTO;
+import com.example.bankacquirer.dto.PccResponseDTO;
 import com.example.bankacquirer.repository.AccountRepository;
 import com.example.bankacquirer.repository.CardRepository;
 import com.example.bankacquirer.repository.ClientRepository;
 import com.example.bankacquirer.repository.PcRequestRepository;
 import com.example.bankacquirer.repository.TransactionRepository;
 import com.example.bankacquirer.service.PaymentService;
-
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import lombok.extern.log4j.Log4j2;
 
 import java.time.ZonedDateTime;
@@ -262,20 +265,52 @@ public class PaymentServiceImpl implements PaymentService {
             pccRequest.setYy(cardDataDTO.getYy());
             pccRequest.setAmount(pcRequest.getAmount());
             pccRequest.setAcquirerOrderId(transaction.getId());
-            pccRequest.setAcquirerTimespamp(new Date());
+            pccRequest.setAcquirerTimestamp(new Date());
             
+            HttpHeaders headers = new HttpHeaders();
+		    headers.setContentType(MediaType.APPLICATION_JSON);
+		    HttpEntity<PccRequestDTO> request = new HttpEntity<PccRequestDTO>(pccRequest, headers);
             
-            
-            
-            ResponseEntity<String> response = null;
-            String r="";
+            PccResponseDTO response = new PccResponseDTO();
+
             try {
-                response = restTemplate.exchange("http://localhost:8446/create-response", HttpMethod.GET, 
-                		new HttpEntity<String> (r), String.class);
-                System.out.println("Test pcc: " + response.getBody());
+                response = restTemplate.postForObject("http://localhost:8446/payment/redirect-request", request, PccResponseDTO.class);
+                System.out.println("Test pcc auth: " + response.getIsAuthentificated());
+                System.out.println("Test pcc aut: " + response.getIsAutorized());
             } catch (Exception e) {
                 System.out.println("Could not contact PCC");
             }
+            
+            //payment successful
+
+        	Account merchantAccount = accountRepository.findOneByOwner(seller);
+        	
+            if (response.getIsAuthentificated() && response.getIsAutorized()) {
+            	
+                merchantAccount.setAvailableFunds(merchantAccount.getAvailableFunds() + pcRequest.getAmount());
+                transaction.setStatus(TransactionStatus.SUCCESSFUL);
+                transactionRepository.save(transaction);
+                clientRepository.save(seller);
+                
+                /*CompletedPaymentDTO cpDTO = new CompletedPaymentDTO();
+                cpDTO.setTransactionStatus(TransactionStatus.SUCCESSFUL);
+                cpDTO.setMerchantOrderID(pcRequest.getMerchantOrderId());
+                //cpDTO.setAcquirerOrderID(saved.getId());
+                cpDTO.setAcquirerTimestamp(ZonedDateTime.now());
+                cpDTO.setPaymentID(pcRequest.getId());
+
+                //otkomentarisati kada se dovrsi metoda u bank ms
+
+                try {
+                    ResponseEntity<String> response = restTemplate.exchange("https://localhost:8441/complete-payment", HttpMethod.POST,
+                            new HttpEntity<CompletedPaymentDTO>(cpDTO), String.class);
+                } catch (Exception e) {
+                    log.error("Could not contact complete-payment in bankMS");
+                    log.error(e.getMessage());
+                }
+            	*/
+            }
+            
         }
 
         return pcRequest.getErrorUrl();

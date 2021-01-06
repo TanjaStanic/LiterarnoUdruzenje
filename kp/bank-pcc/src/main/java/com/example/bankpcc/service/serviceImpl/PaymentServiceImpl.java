@@ -27,7 +27,7 @@ public class PaymentServiceImpl implements PaymentService{
 	public boolean checkRequest(PccRequestDTO pccRequestDTO) {
 		if (pccRequestDTO.getCardHolder()==null || pccRequestDTO.getPanNumber()==null ||
 				pccRequestDTO.getCvv()==null  || pccRequestDTO.getMm()==null ||
-				pccRequestDTO.getYy()==null || pccRequestDTO.getAcquirerTimespamp()==null ||
+				pccRequestDTO.getYy()==null || pccRequestDTO.getAcquirerTimestamp()==null ||
 				pccRequestDTO.getAcquirerOrderId()==0)  {
 			
 			//put log here
