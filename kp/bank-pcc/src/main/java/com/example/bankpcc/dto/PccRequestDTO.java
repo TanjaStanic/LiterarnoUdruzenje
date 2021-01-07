@@ -19,4 +19,5 @@ public class PccRequestDTO {
 	private double amount;
 	private long acquirerOrderId;
 	private Date acquirerTimestamp;
+	private String currencyCode;
 }

@@ -17,6 +17,7 @@ import com.example.bankacquirer.dto.PccResponseDTO;
 import com.example.bankacquirer.repository.AccountRepository;
 import com.example.bankacquirer.repository.CardRepository;
 import com.example.bankacquirer.repository.ClientRepository;
+import com.example.bankacquirer.repository.CurrencyRepository;
 import com.example.bankacquirer.repository.TransactionRepository;
 import com.example.bankacquirer.service.PccService;
 
@@ -37,6 +38,9 @@ public class PccServiceImpl implements PccService{
 	
 	@Autowired
 	private TransactionRepository transactionRepository;
+	
+	@Autowired
+	private CurrencyRepository currencyRepository;
 
 
 	@Override
@@ -49,6 +53,7 @@ public class PccServiceImpl implements PccService{
         transaction.setAcquirerTimestamp(pccRequestDto.getAcquirerTimestamp());
         transaction.setAmount(pccRequestDto.getAmount());
         transaction.setStatus(TransactionStatus.CREATED);
+        transaction.setCurrency(currencyRepository.findOneByCode(pccRequestDto.getCurrencyCode()));
         transaction = transactionRepository.save(transaction);
 
         

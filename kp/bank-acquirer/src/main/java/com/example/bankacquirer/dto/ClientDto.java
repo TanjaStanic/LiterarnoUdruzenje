@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
+//import javax.validation.constraints.NotNull;
 
 
 @Getter
@@ -14,12 +14,12 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClientDto {
-    @NotNull
+   // @NotNull
     private String merchantID;
-    @NotNull
+  //  @NotNull
     private String merchantPassword;
-    @NotNull
+  //  @NotNull
     private String email;
-    @NotNull
+ //   @NotNull
     private String name;
 }

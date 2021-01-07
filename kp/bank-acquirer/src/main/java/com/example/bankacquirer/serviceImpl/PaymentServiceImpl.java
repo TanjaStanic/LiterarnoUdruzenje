@@ -9,12 +9,11 @@ import com.example.bankacquirer.dto.PccResponseDTO;
 import com.example.bankacquirer.repository.AccountRepository;
 import com.example.bankacquirer.repository.CardRepository;
 import com.example.bankacquirer.repository.ClientRepository;
+import com.example.bankacquirer.repository.CurrencyRepository;
 import com.example.bankacquirer.repository.PcRequestRepository;
 import com.example.bankacquirer.repository.TransactionRepository;
 import com.example.bankacquirer.service.PaymentService;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import lombok.extern.log4j.Log4j2;
 
 import java.time.ZonedDateTime;
@@ -25,7 +24,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -47,6 +45,7 @@ public class PaymentServiceImpl implements PaymentService {
     private ClientRepository clientRepository;
     private AccountRepository accountRepository;
     private TransactionRepository transactionRepository;
+    private CurrencyRepository currencyRepository;
     private RestTemplate restTemplate;
     
     @Value("${bankId}")
@@ -55,13 +54,15 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     public PaymentServiceImpl(PcRequestRepository pcRequestRepository, CardRepository cardRepository,
                               ClientRepository clientRepository, AccountRepository accountRepository,
-                              TransactionRepository transactionRepository, RestTemplate restTemplate) {
+                              TransactionRepository transactionRepository,CurrencyRepository currencyRepository, RestTemplate restTemplate) {
         this.pcRequestRepository = pcRequestRepository;
         this.cardRepository = cardRepository;
         this.clientRepository = clientRepository;
         this.accountRepository = accountRepository;
         this.transactionRepository = transactionRepository;
+        this.currencyRepository = currencyRepository;
         this.restTemplate = restTemplate;
+
     }
 
 
@@ -100,19 +101,12 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentConcentratorRequest pcReq = new PaymentConcentratorRequest(pcRequestDTO.getAmount(),
                 pcRequestDTO.getMerchantId(), pcRequestDTO.getMerchantPassword(), pcRequestDTO.getMerchantOrderId(),
                 pcRequestDTO.getMerchantTimestamp(), pcRequestDTO.getSuccessUrl(),
-                pcRequestDTO.getFailedUrl(), pcRequestDTO.getErrorUrl());
+                pcRequestDTO.getFailedUrl(), pcRequestDTO.getErrorUrl(), pcRequestDTO.getCurrencyCode());
 
         //generate 10 numbers id
         long generatedId = 0;
-        boolean unique = false;
         generatedId = (long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L;
         System.out.println(generatedId);
-/*		while (!unique) {
-			generatedId = (long)Math.floor(Math.random()*9_000_000_000L)+1_000_000_000L;
-			if (pcRequestRepository.findById(generatedId)==null) {
-				unique=true;
-			}
-		}*/
 
         pcReq.setId(generatedId);
         pcReq = pcRequestRepository.save(pcReq);
@@ -133,12 +127,12 @@ public class PaymentServiceImpl implements PaymentService {
         transaction.setPaymentID(pcRequestId.toString());
         transaction.setAmount(pcRequest.getAmount());
         transaction.setMerchantOrderId(pcRequest.getMerchantOrderId());
+        transaction.setStatus(TransactionStatus.CREATED);
+        transaction.setCurrency(currencyRepository.findOneByCode(pcRequest.getCurrencyCode()));
+        transaction.setAcquirerOrderId(transaction.getId());
         transaction.setAcquirerTimestamp(new Date());
-
-        Client seller = clientRepository.findOneByMerchantID(pcRequest.getMerchantId());
-        if (seller != null) {
-            transaction.setClient(seller);
-        }
+        
+        transactionRepository.save(transaction);
 
         //check if bank acquirer and bank issuer are the same
         //first 6 digits must be the same
@@ -165,7 +159,7 @@ public class PaymentServiceImpl implements PaymentService {
                 log.error("ERROR | Transaction canceled | There is no such card in the bank.");
                 transaction.setStatus(TransactionStatus.ERROR);
                 transactionRepository.save(transaction);
-                sendResponse(pcRequest, TransactionStatus.ERROR);
+                sendResponse(pcRequest, TransactionStatus.ERROR,transaction.getId());
                 return pcRequest.getErrorUrl();
             }
 
@@ -183,19 +177,21 @@ public class PaymentServiceImpl implements PaymentService {
                     System.out.println("Other data elements on card are not the same.");
                     transaction.setStatus(TransactionStatus.ERROR);
                     transactionRepository.save(transaction);
-                    sendResponse(pcRequest, TransactionStatus.ERROR);
+                    sendResponse(pcRequest, TransactionStatus.ERROR,transaction.getId());
                     log.error("ERROR | Transaction canceled | Card data doesn't match");
                     return pcRequest.getErrorUrl();
                 }
             }
 
+            transaction.setClient(client);
+            
             // check avalailable funds
             if (pcRequest.getAmount() > account.getAvailableFunds()) {
 
                 System.out.println("No available funds!");
                 transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
                 transactionRepository.save(transaction);
-                sendResponse(pcRequest, TransactionStatus.UNSUCCESSFUL);
+                sendResponse(pcRequest, TransactionStatus.UNSUCCESSFUL,transaction.getId());
                 log.info("CANCELED | Transaction canceled | No available funds: ");
                 return pcRequest.getFailedUrl();
             }
@@ -207,7 +203,7 @@ public class PaymentServiceImpl implements PaymentService {
                 System.out.println("Merchant Data is not good!");
                 transaction.setStatus(TransactionStatus.ERROR);
                 transactionRepository.save(transaction);
-                sendResponse(pcRequest, TransactionStatus.ERROR);
+                sendResponse(pcRequest, TransactionStatus.ERROR,transaction.getId());
                 log.error("ERROR | Transaction error | Merchant doesn't match");
                 return pcRequest.getErrorUrl();
             }
@@ -225,23 +221,20 @@ public class PaymentServiceImpl implements PaymentService {
             clientRepository.save(client);
             clientRepository.save(merchant);
 
-            transaction.setClient(client);
             transaction.setStatus(TransactionStatus.SUCCESSFUL);
-            Transaction saved = transactionRepository.save(transaction);
+            transaction = transactionRepository.save(transaction);
 
             log.info("COMPLETED | Bank Payment | Transaction successful");
 
             CompletedPaymentDTO cpDTO = new CompletedPaymentDTO();
             cpDTO.setTransactionStatus(TransactionStatus.SUCCESSFUL);
             cpDTO.setMerchantOrderID(pcRequest.getMerchantOrderId());
-            //cpDTO.setAcquirerOrderID(saved.getId());
             cpDTO.setAcquirerTimestamp(ZonedDateTime.now());
             cpDTO.setPaymentID(pcRequest.getId());
 
-            //otkomentarisati kada se dovrsi metoda u bank ms
-
+            //Send data to BANK MS
             try {
-                ResponseEntity<String> response = restTemplate.exchange("https://localhost:8441/complete-payment", HttpMethod.POST,
+                ResponseEntity<String> responseToMS = restTemplate.exchange("https://localhost:8441/complete-payment", HttpMethod.POST,
                         new HttpEntity<CompletedPaymentDTO>(cpDTO), String.class);
             } catch (Exception e) {
                 log.error("Could not contact complete-payment in bankMS");
@@ -266,61 +259,90 @@ public class PaymentServiceImpl implements PaymentService {
             pccRequest.setAmount(pcRequest.getAmount());
             pccRequest.setAcquirerOrderId(transaction.getId());
             pccRequest.setAcquirerTimestamp(new Date());
-            
-            HttpHeaders headers = new HttpHeaders();
-		    headers.setContentType(MediaType.APPLICATION_JSON);
-		    HttpEntity<PccRequestDTO> request = new HttpEntity<PccRequestDTO>(pccRequest, headers);
-            
+            pccRequest.setCurrencyCode(pcRequest.getCurrencyCode());
+                       
             PccResponseDTO response = new PccResponseDTO();
 
             try {
-                response = restTemplate.postForObject("http://localhost:8446/payment/redirect-request", request, PccResponseDTO.class);
+                response = restTemplate.postForObject("http://localhost:8446/payment/redirect-request", pccRequest, PccResponseDTO.class);
                 System.out.println("Test pcc auth: " + response.getIsAuthentificated());
                 System.out.println("Test pcc aut: " + response.getIsAutorized());
             } catch (Exception e) {
                 System.out.println("Could not contact PCC");
+                
+            }
+        	if (response.getIsAuthentificated()==null) {
+        		System.out.println("Not authentificated!");
+                transaction.setStatus(TransactionStatus.ERROR);
+                transactionRepository.save(transaction);
+                sendResponse(pcRequest, TransactionStatus.ERROR,transaction.getId());
+                log.error("ERROR | Transaction error | Merchant doesn't match");
+                return pcRequest.getErrorUrl();
+        	}
+        	
+            //NOT AUTHENTIFICATED
+            if (!response.getIsAuthentificated()) {
+            	System.out.println("Not authentificated!");
+                transaction.setStatus(TransactionStatus.ERROR);
+                transactionRepository.save(transaction);
+                sendResponse(pcRequest, TransactionStatus.ERROR,transaction.getId());
+                log.error("ERROR | Transaction error | Merchant doesn't match");
+                return pcRequest.getErrorUrl();
+            	
+            }
+            
+            transaction.setAcquirerOrderId(response.getAcquirerOrederId());
+            transaction.setAcquirerTimestamp(response.getAcquirerTimestamp());
+            //NOT AUTORIZED - NOT AVAILABLE FUNDS
+            
+            if (response.getIsAuthentificated() && !response.getIsAutorized()) {
+            	 System.out.println("No available funds!");
+                 transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
+                 transactionRepository.save(transaction);
+                 sendResponse(pcRequest, TransactionStatus.UNSUCCESSFUL,transaction.getId());
+                 log.info("CANCELED | Transaction canceled | No available funds: ");
+                 return pcRequest.getFailedUrl();
             }
             
             //payment successful
-
+            Client seller = clientRepository.findOneByMerchantID(pcRequest.getMerchantId());
         	Account merchantAccount = accountRepository.findOneByOwner(seller);
-        	
+        
             if (response.getIsAuthentificated() && response.getIsAutorized()) {
             	
                 merchantAccount.setAvailableFunds(merchantAccount.getAvailableFunds() + pcRequest.getAmount());
                 transaction.setStatus(TransactionStatus.SUCCESSFUL);
+               
                 transactionRepository.save(transaction);
                 clientRepository.save(seller);
                 
-                /*CompletedPaymentDTO cpDTO = new CompletedPaymentDTO();
+                CompletedPaymentDTO cpDTO = new CompletedPaymentDTO();
                 cpDTO.setTransactionStatus(TransactionStatus.SUCCESSFUL);
                 cpDTO.setMerchantOrderID(pcRequest.getMerchantOrderId());
-                //cpDTO.setAcquirerOrderID(saved.getId());
                 cpDTO.setAcquirerTimestamp(ZonedDateTime.now());
                 cpDTO.setPaymentID(pcRequest.getId());
-
-                //otkomentarisati kada se dovrsi metoda u bank ms
+                cpDTO.setIssuerOrderID(response.getIssuerOrderId());
+                cpDTO.setIssuerTimestamp(response.getIssuerTimestamp());
 
                 try {
-                    ResponseEntity<String> response = restTemplate.exchange("https://localhost:8441/complete-payment", HttpMethod.POST,
+                    ResponseEntity<String> responseToMS = restTemplate.exchange("https://localhost:8441/complete-payment", HttpMethod.POST,
                             new HttpEntity<CompletedPaymentDTO>(cpDTO), String.class);
                 } catch (Exception e) {
                     log.error("Could not contact complete-payment in bankMS");
                     log.error(e.getMessage());
                 }
-            	*/
+                return pcRequest.getSuccessUrl();
             }
-            
+            return pcRequest.getErrorUrl();
         }
-
-        return pcRequest.getErrorUrl();
     }
 
-    public void sendResponse(PaymentConcentratorRequest pcRequest, TransactionStatus transactionStatus) {
+    public void sendResponse(PaymentConcentratorRequest pcRequest, TransactionStatus transactionStatus, Long transactionID) {
         CompletedPaymentDTO cpDTO = new CompletedPaymentDTO();
         cpDTO.setTransactionStatus(transactionStatus);
         cpDTO.setMerchantOrderID(pcRequest.getMerchantOrderId());
         cpDTO.setPaymentID(pcRequest.getId());
+        cpDTO.setAcquirerOrderID(transactionID);
 
         try {
             ResponseEntity<String> response = restTemplate.exchange("https://localhost:8441/complete-payment", HttpMethod.POST,
