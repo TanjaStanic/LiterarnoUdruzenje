@@ -4,8 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+
 import javax.persistence.Id;
 
 import lombok.Getter;
@@ -43,9 +42,12 @@ public class PaymentConcentratorRequest {
     private String failedUrl;
 	
     private String errorUrl;
+    
+    @Column
+    private String currencyCode;
 
 	public PaymentConcentratorRequest(double amount, String merchantId, String merchantPassword, long merchantOrderId,
-			Date merchantTimestamp, String successUrl, String failedUrl, String errorUrl) {
+			Date merchantTimestamp, String successUrl, String failedUrl, String errorUrl,String currencyCode) {
 		super();
 		this.amount = amount;
 		this.merchantId = merchantId;
@@ -55,6 +57,7 @@ public class PaymentConcentratorRequest {
 		this.successUrl = successUrl;
 		this.failedUrl = failedUrl;
 		this.errorUrl = errorUrl;
+		this.currencyCode = currencyCode;
 	}
     
     

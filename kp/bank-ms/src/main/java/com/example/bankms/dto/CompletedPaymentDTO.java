@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -28,6 +29,6 @@ public class CompletedPaymentDTO {
 
     private Long issuerOrderID;
 
-    private ZonedDateTime issuerTimestamp;
+    private Date issuerTimestamp;
 
 }

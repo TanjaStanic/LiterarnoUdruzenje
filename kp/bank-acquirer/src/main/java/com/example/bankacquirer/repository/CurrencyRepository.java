@@ -8,4 +8,5 @@ import com.example.bankacquirer.domain.Currency;
 @Repository
 public interface CurrencyRepository extends JpaRepository<Currency, Long>{
 
+	Currency findOneByCode(String code);
 }

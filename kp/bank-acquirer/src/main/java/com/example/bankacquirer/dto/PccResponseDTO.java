@@ -16,6 +16,6 @@ public class PccResponseDTO {
 	private long acquirerOrederId;
 	private Date acquirerTimestamp;
 	private long issuerOrderId;
-	private Date issuerTimespamp;
+	private Date issuerTimestamp;
 	
 }
