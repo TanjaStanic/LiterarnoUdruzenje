@@ -17,205 +17,177 @@ import org.springframework.web.bind.annotation.*;
 import upp.la.dto.FormFieldDto;
 import upp.la.dto.FormFieldsDto;
 import upp.la.error.ErrorMessages;
-import upp.la.exceptions.DuplicateEntity;
-import upp.la.exceptions.EntityNotFound;
-import upp.la.model.Genre;
+import upp.la.model.exceptions.EntityNotFound;
+import upp.la.model.exceptions.ValidationError;
 import upp.la.service.GenreService;
-import upp.la.exceptions.ValidationError;
 import upp.la.service.ValidateRegistrationService;
 import upp.la.service.internal.RegistrationServiceInt;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.constraints.NotNull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/registration")
 public class RegistrationController {
-    @Autowired
-    private RuntimeService runtimeService;
-    @Autowired
-    TaskService taskService;
-    @Autowired
-    FormService formService;
-    @Autowired 
-    ValidateRegistrationService validationService;
-    @Autowired
-    GenreService genreService;
-    @Autowired
-    ApplicationEventPublisher eventPublisher;
-    @Autowired
-    RegistrationServiceInt registrationServiceInt;
+  @Autowired private RuntimeService runtimeService;
+  @Autowired TaskService taskService;
+  @Autowired FormService formService;
+  @Autowired ValidateRegistrationService validationService;
+  @Autowired GenreService genreService;
+  @Autowired ApplicationEventPublisher eventPublisher;
+  @Autowired RegistrationServiceInt registrationServiceInt;
 
-    //ONLY FOR AUTH TEST
-    @GetMapping(value = "/test-auth")
-    @RolesAllowed({"READER", "WRITER"}) //Name of the allowed role
-    public @ResponseBody ResponseEntity<?> testAuth() {
-        return new ResponseEntity<>(HttpStatus.OK);
+  // ONLY FOR AUTH TEST
+  @GetMapping(value = "/test-auth")
+  @RolesAllowed({"READER", "WRITER"}) // Name of the allowed role
+  public @ResponseBody ResponseEntity<?> testAuth() {
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @PostMapping(path = "/post", produces = "application/json")
+  public @ResponseBody ResponseEntity<?> post(@RequestBody List<FormFieldDto> formFields)
+      throws ValidationError {
+
+    boolean validationOk = true;
+    validationOk = validationService.checkRegistrationForm(formFields);
+
+    if (!validationOk) {
+      throw new ValidationError(ErrorMessages.VALIDATION_ERROR());
+    }
+    System.out.println("val:" + validationOk);
+
+    HashMap<String, Object> map = this.mapListToDto(formFields);
+
+    List<Task> tasks = taskService.createTaskQuery().taskName("Registration").list();
+    Task task = tasks.get(0);
+
+    String processInstanceId = task.getProcessInstanceId();
+
+    // Create variable "registration"
+    runtimeService.setVariable(processInstanceId, "registration", formFields);
+
+    formService.submitTaskForm(task.getId(), map);
+
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @GetMapping(path = "/get", produces = "application/json")
+  public @ResponseBody FormFieldsDto get() {
+
+    ProcessInstance pi = runtimeService.startProcessInstanceByKey("registration_process");
+
+    List<Task> tasks = taskService.createTaskQuery().taskName("Registration").list();
+    Task task = tasks.get(0);
+
+    TaskFormData tfd = formService.getTaskFormData(task.getId());
+    List<FormField> properties = tfd.getFormFields();
+    for (FormField fp : properties) {
+      System.out.println(fp.getId() + fp.getType());
     }
 
-    @PostMapping(path = "/post", produces = "application/json")
-    public @ResponseBody
-    ResponseEntity<?> post(
-        @RequestBody List<FormFieldDto> formFields) throws ValidationError {
+    return new FormFieldsDto(task.getId(), "123", properties);
+  }
 
-        boolean validationOk = true;
-        validationOk = validationService.checkRegistrationForm(formFields);
+  @GetMapping(path = "/getGenresForm", produces = "application/json")
+  public @ResponseBody FormFieldsDto getGenresForms() {
 
-        if(!validationOk) {
-            throw new ValidationError(ErrorMessages.VALIDATION_ERROR());
-        }
-        System.out.println("val:" + validationOk);
-
-        HashMap<String, Object> map = this.mapListToDto(formFields);
-
-        List<Task> tasks = taskService.createTaskQuery()
-                .taskName("Registration")
-                .list();
-        Task task = tasks.get(0);
-
-        String processInstanceId = task.getProcessInstanceId();
-
-        //Create variable "registration"
-        runtimeService.setVariable(processInstanceId,
-                                   "registration",
-                                   formFields);
-
-        formService.submitTaskForm(task.getId(), map);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+    Task task1 = taskService.createTaskQuery().taskName("Registration reader").list().get(0);
+    Task task = taskService.createTaskQuery().taskName("Genres for beta reader").singleResult();
+    System.out.println(task.getName());
+    TaskFormData tfd = formService.getTaskFormData(task1.getId());
+    List<FormField> properties = tfd.getFormFields();
+    properties.addAll(formService.getTaskFormData(task.getId()).getFormFields());
+    for (FormField fp : properties) {
+      System.out.println(fp.getId() + fp.getType());
     }
 
-    @GetMapping(path = "/get", produces = "application/json")
-    public @ResponseBody FormFieldsDto get() {
+    return new FormFieldsDto(task1.getId(), "123", properties);
+  }
 
-        ProcessInstance pi = runtimeService.startProcessInstanceByKey("registration_process");
+  @PostMapping(path = "/betaNo", produces = "application/json")
+  public @ResponseBody ResponseEntity<?> BetaNo(@RequestBody List<FormFieldDto> formFields) {
 
-        List<Task> tasks = taskService.createTaskQuery()
-                .taskName("Registration")
-                .list();
-        Task task = tasks.get(0);
+    HashMap<String, Object> map = this.mapListToDto(formFields);
+    System.out.println(map.toString());
+    List<Task> tasks = taskService.createTaskQuery().taskName("Registration reader").list();
+    Task task = tasks.get(0);
+    System.out.println(task.getName());
+    // Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+    String processInstanceId = task.getProcessInstanceId();
 
-        TaskFormData tfd = formService.getTaskFormData(task.getId());
-        List<FormField> properties = tfd.getFormFields();
-        for(FormField fp : properties) {
-            System.out.println(fp.getId() + fp.getType());
-        }
+    // Create variable "registration"
+    runtimeService.setVariable(processInstanceId, "betaNo_registration", formFields);
+    formService.submitTaskForm(task.getId(), map);
 
-        return new FormFieldsDto(task.getId(), "123", properties);
-    }
-    @GetMapping(path = "/getGenresForm", produces = "application/json")
-    public @ResponseBody FormFieldsDto getGenresForms() {
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 
-        Task task1 = taskService.createTaskQuery().taskName("Registration reader").list().get(0);
-        Task task  = taskService.createTaskQuery().taskName("Genres for beta reader").singleResult();
-        System.out.println(task.getName());
-        TaskFormData tfd = formService.getTaskFormData(task1.getId());
-        List<FormField> properties = tfd.getFormFields();
-        properties.addAll(formService.getTaskFormData(task.getId()).getFormFields());
-        for(FormField fp : properties) {
-            System.out.println(fp.getId() + fp.getType());
-        }
+  @PostMapping(path = "/betaYes", produces = "application/json")
+  public @ResponseBody ResponseEntity<?> BetaYes(@RequestBody List<FormFieldDto> formFields) {
+    List<FormFieldDto> dto_betaYes = new ArrayList<FormFieldDto>();
+    dto_betaYes.add(formFields.get(0));
+    List<FormFieldDto> dto_genres = new ArrayList<FormFieldDto>();
 
-        return new FormFieldsDto(task1.getId(), "123", properties);
-    }
+    String genres = formFields.get(1).getFieldValue();
+    String[] parts = genres.split(",");
 
-    @PostMapping(path = "/betaNo", produces = "application/json")
-    public @ResponseBody
-    ResponseEntity<?> BetaNo(
-        @RequestBody List<FormFieldDto> formFields) {
-
-        HashMap<String, Object> map = this.mapListToDto(formFields);
-        System.out.println(map.toString());
-        List<Task> tasks = taskService.createTaskQuery()
-                                      .taskName("Registration reader")
-                                      .list();
-        Task task = tasks.get(0);
-        System.out.println(task.getName());
-        // Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        String processInstanceId = task.getProcessInstanceId();
-
-        //Create variable "registration"
-        runtimeService.setVariable(processInstanceId,
-                                   "betaNo_registration",
-                                   formFields);
-        formService.submitTaskForm(task.getId(), map);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+    for (String s : parts) {
+      FormFieldDto f = new FormFieldDto();
+      f.setFieldId(formFields.get(1).getFieldId());
+      f.setFieldValue(s);
+      dto_genres.add(f);
     }
 
-    @PostMapping(path = "/betaYes", produces = "application/json")
-    public @ResponseBody
-    ResponseEntity<?> BetaYes(
-        @RequestBody List<FormFieldDto> formFields) {
-        List<FormFieldDto> dto_betaYes = new ArrayList<FormFieldDto>();
-        dto_betaYes.add(formFields.get(0));
-        List<FormFieldDto> dto_genres = new ArrayList<FormFieldDto>();
+    HashMap<String, Object> map_betaYes = this.mapListToDto(dto_betaYes);
+    HashMap<String, Object> map_genres = this.mapListToDto(dto_genres);
 
-        String genres = formFields.get(1).getFieldValue();
-        String[] parts = genres.split(",");
+    List<Task> tasks = taskService.createTaskQuery().taskName("Registration reader").list();
+    Task task = tasks.get(0);
+    System.out.println(task.getName());
 
-        for(String s : parts) {
-            FormFieldDto f = new FormFieldDto();
-            f.setFieldId(formFields.get(1).getFieldId());
-            f.setFieldValue(s);
-           dto_genres.add(f);
-        }
+    // Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+    String processInstanceId = task.getProcessInstanceId();
 
-        HashMap<String, Object> map_betaYes = this.mapListToDto(dto_betaYes);
-        HashMap<String, Object> map_genres = this.mapListToDto(dto_genres);
+    runtimeService.setVariable(processInstanceId, "betaYes_registration", dto_betaYes);
+    formService.submitTaskForm(task.getId(), map_betaYes);
 
-        List<Task> tasks = taskService.createTaskQuery().taskName("Registration reader").list();
-        Task task = tasks.get(0);
-        System.out.println(task.getName());
+    tasks = taskService.createTaskQuery().taskName("Genres for beta reader").list();
+    task = tasks.get(0);
+    System.out.println(task.getName());
+    // Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+    processInstanceId = task.getProcessInstanceId();
 
-        // Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        String processInstanceId = task.getProcessInstanceId();
+    runtimeService.setVariable(processInstanceId, "betaYes_registration_genres", dto_genres);
+    formService.submitTaskForm(task.getId(), map_genres);
 
-        runtimeService.setVariable(processInstanceId,
-                                   "betaYes_registration",
-                                   dto_betaYes);
-        formService.submitTaskForm(task.getId(), map_betaYes);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 
+  @Validated
+  @GetMapping(value = "/verify-account")
+  public @ResponseBody ResponseEntity<?> verifyAccount(
+      @RequestParam @NotNull String confirmationToken, @RequestParam String processId)
+      throws EntityNotFound {
 
-        tasks = taskService.createTaskQuery().taskName("Genres for beta reader").list();
-        task = tasks.get(0);
-        System.out.println(task.getName());
-        // Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        processInstanceId = task.getProcessInstanceId();
+    runtimeService.setVariable(processId, "validation_token", confirmationToken);
+    MessageCorrelationResult result =
+        runtimeService
+            .createMessageCorrelation("recieve_verification_email")
+            .processInstanceId(processId)
+            .correlateWithResult();
 
-        runtimeService.setVariable(processInstanceId,
-                "betaYes_registration_genres",
-                dto_genres);
-        formService.submitTaskForm(task.getId(), map_genres);
+    return new ResponseEntity<>(HttpStatus.ACCEPTED);
+  }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+  private HashMap<String, Object> mapListToDto(List<FormFieldDto> list) {
+    HashMap<String, Object> map = new HashMap<String, Object>();
+    for (FormFieldDto temp : list) {
+      map.put(temp.getFieldId(), temp.getFieldValue());
     }
-    
-    @Validated
-    @GetMapping(value = "/verify-account")
-    public @ResponseBody ResponseEntity<?> verifyAccount(
-        @RequestParam @NotNull String confirmationToken, 
-        @RequestParam String processId) throws EntityNotFound {
-      
-    	runtimeService.setVariable(processId, "validation_token", confirmationToken);
-    	MessageCorrelationResult result = runtimeService.createMessageCorrelation("recieve_verification_email")
-                .processInstanceId(processId).correlateWithResult();
 
-      return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
-    
-    
-    private HashMap<String, Object> mapListToDto(List<FormFieldDto> list) {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        for (FormFieldDto temp : list) {
-            map.put(temp.getFieldId(), temp.getFieldValue());
-        }
-
-        return map;
-    }
+    return map;
+  }
 }

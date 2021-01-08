@@ -6,10 +6,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import upp.la.error.ErrorMessages;
-import upp.la.exceptions.EntityNotFound;
-import upp.la.model.ConfirmationToken;
 import upp.la.model.EmailTemplate;
 import upp.la.model.User;
+import upp.la.model.auth.ConfirmationToken;
+import upp.la.model.exceptions.EntityNotFound;
 import upp.la.repository.ConfirmationTokenRepository;
 import upp.la.repository.UserRepository;
 import upp.la.util.Requests;
@@ -36,12 +36,10 @@ public class RegistrationServiceInt {
     confirmationTokenRepository.save(confirmationToken);
 
     EmailTemplate email =
-        new EmailTemplate(
-            user.getEmail(),
-            EmailTemplate.VERIFY_SUBJECT(),
-            EmailTemplate.VERIFY_MESSAGE(
-                env.getProperty("app.registration-url")
-                    + confirmationToken.getConfirmationToken()));
+        EmailTemplate.VerificationEmail(
+            env.getProperty("app.registration-url") + confirmationToken.getConfirmationToken());
+
+    email.setAddress(user.getEmail());
 
     Requests.sendEmail(email);
 

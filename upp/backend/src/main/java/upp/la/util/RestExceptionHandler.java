@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import upp.la.error.ApiError;
-import upp.la.exceptions.*;
+import upp.la.model.exceptions.*;
 
 import static org.springframework.http.HttpStatus.*;
 

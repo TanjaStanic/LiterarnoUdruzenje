@@ -1,4 +1,4 @@
-package upp.la.config;
+package upp.la.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +15,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import upp.la.config.security.AuthUserDetailsService;
+import upp.la.config.security.JwtTokenFilter;
 import upp.la.repository.UserRepository;
 
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired UserRepository userRepository;
 
-  @Autowired JwtTokenFilter jwtTokenFilter;
+  @Autowired
+  JwtTokenFilter jwtTokenFilter;
 
   @Lazy @Autowired private AuthUserDetailsService authUserDetailsService;
 

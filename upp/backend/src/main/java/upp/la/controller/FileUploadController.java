@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import upp.la.error.ErrorMessages;
-import upp.la.exceptions.FileError;
+import upp.la.model.exceptions.FileError;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
