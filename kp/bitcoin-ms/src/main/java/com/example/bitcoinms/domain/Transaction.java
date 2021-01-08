@@ -17,8 +17,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Data
-@Table(name = "TRANSACTION")
 public class Transaction {
 
 	    @Id

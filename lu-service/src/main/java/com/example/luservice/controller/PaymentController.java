@@ -199,7 +199,7 @@ public class PaymentController {
         return ResponseEntity.ok(response.getBody());
     }
 
-    @GetMapping("bitcoin")
+    @GetMapping("auth/bitcoin")
     public ResponseEntity<?> testBitcoin() {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
         requestDTO.setMerchantOrderId((long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L);
@@ -213,7 +213,8 @@ public class PaymentController {
         transactionService.initializeTransaction(requestDTO);
         ResponseEntity<String> response = null;
         try {
-            response = restTemplate.exchange("https://localhost:8444/api/initiate-payment-request", HttpMethod.POST,
+        	System.out.println(requestDTO.getMerchantOrderId());
+            response = restTemplate.exchange("https://localhost:8444/auth/api/initiate-payment-request", HttpMethod.POST,
                     new HttpEntity<PaymentRequestDTO>(requestDTO), String.class);
         } catch (Exception e) {
             System.out.println("Could not contact payment center");

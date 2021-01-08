@@ -25,8 +25,12 @@ public class PaymentServiceImpl implements PaymentService {
 	
 	private final ClientService clientService;
 	private final TransactionService transactionService;
+	
+	@Autowired
     private CurrencyService currencyService;
-    private RestTemplate restTemplate;
+    
+	@Autowired
+	private RestTemplate restTemplate;
 	
 	public PaymentServiceImpl(ClientService clientService, TransactionService transactionService,
             CurrencyService currencyService, RestTemplate restTemplate) {
