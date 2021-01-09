@@ -107,11 +107,11 @@ public class RegistrationController {
     public @ResponseBody FormFieldsDto getGenresForms() {
 
         Task task1 = taskService.createTaskQuery().taskName("Registration reader").list().get(0);
-        Task task  = taskService.createTaskQuery().taskName("Genres for beta reader").list().get(0);
-
+        Task task  = taskService.createTaskQuery().taskName("Genres for beta reader").singleResult();
+        System.out.println(task.getName());
         TaskFormData tfd = formService.getTaskFormData(task1.getId());
         List<FormField> properties = tfd.getFormFields();
-        // properties.addAll(formService.getTaskFormData(task.getId()).getFormFields());
+        properties.addAll(formService.getTaskFormData(task.getId()).getFormFields());
         for(FormField fp : properties) {
             System.out.println(fp.getId() + fp.getType());
         }

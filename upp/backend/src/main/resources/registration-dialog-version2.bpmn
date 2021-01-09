@@ -58,7 +58,9 @@
             <camunda:value id="value_yes" name="Da" />
             <camunda:value id="value_no" name="Ne" />
           </camunda:formField>
+          <camunda:formField id="genresListId" type="enum" />
         </camunda:formData>
+        <camunda:taskListener class="upp.la.service.GenreServiceDelegate" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0rv7o7f</bpmn:incoming>
       <bpmn:outgoing>Flow_1xamt27</bpmn:outgoing>
