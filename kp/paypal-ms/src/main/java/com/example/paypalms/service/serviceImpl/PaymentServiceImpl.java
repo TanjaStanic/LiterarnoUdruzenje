@@ -436,7 +436,7 @@ public class PaymentServiceImpl implements PaymentService {
     public void sendTransactionUpdate(TransactionDto transaction) {
         try {
             HttpEntity<TransactionDto> entity = new HttpEntity<>(transaction);
-            restTemplate.exchange("https://localhost:8444/transactions", HttpMethod.POST, entity, String.class);
+            restTemplate.exchange("https://localhost:8444/auth/transactions", HttpMethod.POST, entity, String.class);
 
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -450,7 +450,7 @@ public class PaymentServiceImpl implements PaymentService {
                 subscription.getSubscriptionStatus(), subscription.getExpirationDate());
         try {
             HttpEntity<UserSubscriptionDto> entity = new HttpEntity<>(subscriptionDto);
-            restTemplate.exchange("https://payment-info/subscriptions/update", HttpMethod.POST, entity, String.class);
+            restTemplate.exchange("https://localhost:8444/auth/subscriptions/update", HttpMethod.POST, entity, String.class);
 
         } catch (Exception exception) {
             exception.printStackTrace();
