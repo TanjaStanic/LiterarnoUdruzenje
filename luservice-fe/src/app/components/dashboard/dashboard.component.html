@@ -20,7 +20,7 @@
                     <p>Genre(s) <b>{{book.genres}}</b></p>
                     <p>Description <b>{{book.description}}</b></p>
                     <ng-container *ngIf="book.price != null ">
-                        <p>Price<b> {{book.price | currency: 'RSD'}}</b></p>
+                        <p>Price<b> {{book.price | currency: 'USD'}}</b></p>
                     </ng-container>
                     <hr>
                     <p>

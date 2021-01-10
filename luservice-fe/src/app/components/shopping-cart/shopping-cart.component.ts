@@ -74,13 +74,18 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
 
         shippingInfo = result;
         this.cartService.order(shippingInfo).subscribe(
-          res => {
+          data => {
+            console.log(data);
             this.emptyCart();
             this.snackbarService.showMessage('Order saved.')
+            window.location.href = data;
           },
           (error: HttpErrorResponse) => {
-
-            this.snackbarService.showMessage(error.error);
+            console.log(error.error);
+            console.log(error.message);
+            console.log(error.status);
+            console.log(error.headers.keys());
+            this.snackbarService.showMessage("Something went erong, please try again!");
           }
         );
 
@@ -90,9 +95,13 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
         res => {
           this.emptyCart();
           this.snackbarService.showMessage('Order saved.')
+          window.location.href = res;
         },
         (error: HttpErrorResponse) => {
-
+          console.log(error.error);
+          console.log(error.message);
+          console.log(error.status);
+          console.log(error.headers.keys());
           this.snackbarService.showMessage(error.error);
         }
       );
