@@ -55,17 +55,18 @@ public class Transaction {
 	    }
 
 	    
-	    public Transaction(Long orderId, Long merchantOrderId, Client seller, TransactionStatus status,
-                Double amount, Currency price_currency, String success_url, String cancel_url, String callback_url) {
-	    	this.order_id = orderId;
+	    public Transaction(Long merchantOrderId, Client seller, TransactionStatus status,
+                Double amount, Currency price_currency, Currency recive_currency, String success_url, String cancel_url, String callback_url, String token) {
 	    	this.merchantOrderId = merchantOrderId;
 	    	this.seller = seller;
 	    	this.status = status;
 	    	this.amount = amount;
 	    	this.price_currency = price_currency;
+	    	this.receive_currency = recive_currency;
 	    	this.success_url = success_url;
 	    	this.cancel_url = cancel_url;
 	    	this.callback_url = callback_url;
+	    	this.token = token;
 	    }
 	    
 	    private void init(Client seller, Long merchantOrderId, TransactionStatus status, Double amount) {

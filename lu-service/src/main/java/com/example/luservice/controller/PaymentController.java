@@ -203,12 +203,12 @@ public class PaymentController {
     public ResponseEntity<?> testBitcoin() {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
         requestDTO.setMerchantOrderId((long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L);
-        requestDTO.setMerchantEmail("test@gmail.com");
+        requestDTO.setMerchantEmail("celiksara97@gmail.com");
         requestDTO.setSuccessUrl("https://localhost:8447/view/success");
         requestDTO.setFailedUrl("https://localhost:8447/view/failed");
         requestDTO.setErrorUrl("https://localhost:8447/view/error");
         requestDTO.setAmount(10000);
-        requestDTO.setCurrencyCode("USD");
+        requestDTO.setCurrencyCode("EUR");
         requestDTO.setMerchantTimestamp(new Date());
         transactionService.initializeTransaction(requestDTO);
         ResponseEntity<String> response = null;

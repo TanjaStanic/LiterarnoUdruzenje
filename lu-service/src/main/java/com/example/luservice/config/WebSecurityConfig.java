@@ -103,6 +103,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/auth/resetPassword"
         );
     }
+    
+    
 
 
 }

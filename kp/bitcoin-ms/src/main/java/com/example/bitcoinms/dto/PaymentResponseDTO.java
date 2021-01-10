@@ -3,8 +3,13 @@ package com.example.bitcoinms.dto;
 import com.example.bitcoinms.domain.Currency;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class PaymentResponseDTO {
 	
 	private String id;

@@ -46,7 +46,7 @@ public class Client {
     private Long pcClientId;
 
     @Column
-    @Convert(converter = AttributeEncryptor.class)
+    //@Convert(converter = AttributeEncryptor.class)
     private String token;
 
     public Client(Long id, String merchantID, String merchantPassword, String email, String name) {
