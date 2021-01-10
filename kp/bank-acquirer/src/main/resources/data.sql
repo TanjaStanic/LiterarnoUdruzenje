@@ -4,16 +4,16 @@ insert into bank (account_number, address, email, name, phone_number, unique_ban
 	values ('1234133444','ul Nikole Tesle','bank2@email.com','Bank 2', '06612365','123413');
 
 insert into client(active,email,merchantid, merchant_password,name,account_id) 
-	values (true,'test@gmail.com',"merchantid","merchantpass","Pero Peric",1);
+	values (true,'test@gmail.com',"$2y$12$Ftdad92nK5wj2uiaWYvYmOmz7.Rvwjciydcj26QNRXBqg5rVsVNg2","$2y$12$EfgBDuoa7Qerifq5yQPWkurTUVP5LfRB7Ao89bIGUSSjgAy/UBcq6","Pero Peric",1);
 	
 insert into client (active,email,merchantid, merchant_password,name,account_id) 
-	values (true,'test2@gmail.com',"merchantid2","merchantpass2","Marko Markovic",2);
+	values (true,'test2@gmail.com',"$2y$12$5ljwcJAufsnDM0Hp7iw4AeEEUwQI5nG6FZFVNF34l.Oh0ApQj3ipi","$2y$12$a3n8.KBGLfblRQ74iZrwkelB6gDxgLfbLZ.1UD6TnjWtaObeFEaBu","Marko Markovic",2);
 	
 insert into client (active,email,merchantid, merchant_password,name,account_id) 
-	values (true,'test3@gmail.com',"merchantid2","merchantpass2","Jovo Jovic",3);
+	values (true,'test3@gmail.com',"$2y$12$5ljwcJAufsnDM0Hp7iw4AeEEUwQI5nG6FZFVNF34l.Oh0ApQj3ipi","$2y$12$a3n8.KBGLfblRQ74iZrwkelB6gDxgLfbLZ.1UD6TnjWtaObeFEaBu","Jovo Jovic",3);
 
 insert into client (active,email,merchantid, merchant_password,name,account_id)
-	values (true,'sb-zx3ys4123984@business.example.com',"vWjFeK3gZm8bAynOIL9wUx3tTZIzPr","4A0wJ33AYM9Foy2UQjKdJPlJuVgQ6mU1KyP4J4Th33A5khqL1Pj9SMLLEIo3YKYzbNoriUJSWyWgvoPM1WDatrS0wSiRAhVB6zr8","Sima Simic",4);
+	values (true,'sb-zx3ys4123984@business.example.com',"$2y$12$CpCFqBt5Vw6RuHOb6EXjau3OItT66C7OBqqddq.mEUJBd6XNLBPHy","$2y$12$Oan5wg0rINUqxq34YBwYXOn0NqbJjnmPn5Q90KVSPcVLnzp8/Yr.6","Sima Simic",4);
 
 insert into account(account_number,available_funds,owner_id,bank_id,currency_id) 
 	values ('$2y$12$gxKH8vqDUFbWiTORXCg9yu5/hyQIcwNZ0TSvIiSzX0/GxJtac8bse',1000,1,1,1);
@@ -38,6 +38,10 @@ insert into currency (code,name)  values ('USD', 'United States dollar');
 
 insert into payment_concentrator_request(id,amount, merchant_id, merchant_password,merchant_order_id, merchant_timestamp, success_url, failed_url, error_url,currency_code) 
 	values (1234567891, 200, 'merchantid','merchantpass',1987654321, '2016-11-16 06:43:19.77', 'https://www.google.ba/search?q=success', 'https://www.google.com/search?q=failed', 'https://www.google.com/search?q=error','USD');
+
+insert into payment_concentrator_request(id,amount, merchant_id, merchant_password,merchant_order_id, merchant_timestamp, success_url, failed_url, error_url,currency_code) 
+	values (1234567892, 200, 'vWjFeK3gZm8bAynOIL9wUx3tTZIzPr','4A0wJ33AYM9Foy2UQjKdJPlJuVgQ6mU1KyP4J4Th33A5khqL1Pj9SMLLEIo3YKYzbNoriUJSWyWgvoPM1WDatrS0wSiRAhVB6zr8',1987654321, '2016-11-16 06:43:19.77', 'https://www.google.ba/search?q=success', 'https://www.google.com/search?q=failed', 'https://www.google.com/search?q=error','USD');
+
 	
 #1234-1334-1234-1235
 #334

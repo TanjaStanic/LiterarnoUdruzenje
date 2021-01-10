@@ -47,12 +47,25 @@ public class ClientServiceImpl implements ClientService {
         //Create account
         Account newAccount = accountService.createNewAccount(client, myBankId);
         
-        //Create card
+        //Create card and save both
         cardService.createNewCard(newAccount, myBankId);
         
         return client;
     }
 
+	@Override
+	public Client saveClient(Client client) {
+		client.setMerchantID(hashData(client.getMerchantID()));
+		client.setMerchantPassword(hashData(client.getMerchantPassword()));
+		client = clientRepository.save(client);
+		return client;
+	}
 
+	public static String hashData(String data) {
+		String hash = org.springframework.security.crypto.bcrypt.BCrypt.gensalt();
+		String hashedData = org.springframework.security.crypto.bcrypt.BCrypt.hashpw(data, hash);
+		
+		return hashedData;
+	}
 
 }

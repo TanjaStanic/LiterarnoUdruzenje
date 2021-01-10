@@ -197,15 +197,35 @@ public class PaymentServiceImpl implements PaymentService {
             }
 
             //check data about merchant
-            Client merchant = clientRepository.findOneByMerchantID(pcRequest.getMerchantId());
-            if (merchant == null || !merchant.getMerchantPassword().equals(pcRequest.getMerchantPassword())) {
-
-                System.out.println("Merchant Data is not good!");
+            Client merchant = new Client();
+            List<Client> allClients = clientRepository.findAll();
+            boolean clientFound  = false;
+            for (Client c : allClients) {
+            	if (org.springframework.security.crypto.bcrypt.BCrypt.checkpw(pcRequest.getMerchantId(), c.getMerchantID())) {
+            		System.out.println("Bank has merchent : " + c.getMerchantID());
+            		merchant = c;
+            		clientFound = true;
+            	}
+            }
+            //merchant doesn't exists
+            if (!clientFound) {
+            	System.out.println("Merchant doesnt exists in db!");
                 transaction.setStatus(TransactionStatus.ERROR);
                 transactionRepository.save(transaction);
                 sendResponse(pcRequest, TransactionStatus.ERROR,transaction.getId());
-                log.error("ERROR | Transaction error | Merchant doesn't match");
+                log.error("ERROR | Transaction error | Merchant doesn't exists in db");
                 return pcRequest.getErrorUrl();
+            }
+            else {
+            	if (!(org.springframework.security.crypto.bcrypt.BCrypt.checkpw(pcRequest.getMerchantPassword(), merchant.getMerchantPassword()))) {
+            		System.out.println("Merchant password doesn't match!");
+                    transaction.setStatus(TransactionStatus.ERROR);
+                    transactionRepository.save(transaction);
+                    sendResponse(pcRequest, TransactionStatus.ERROR,transaction.getId());
+                    log.error("ERROR | Transaction error | Merchant password doesn't match!");
+                    return pcRequest.getErrorUrl();
+            	}
+            	
             }
 
             System.out.println("all good");

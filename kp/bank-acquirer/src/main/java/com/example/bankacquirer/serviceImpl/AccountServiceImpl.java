@@ -21,10 +21,7 @@ public class AccountServiceImpl implements AccountService{
 	
 	@Autowired
 	private CurrencyRepository currencyRepository;
-	
-	@Autowired
-	private AccountRepository accountRepository;
-	
+		
 	@Override
 	public Account createNewAccount(Client client,String myBankId) {
 		Bank bank = bankRepository.findOneByUniqueBankNumber(myBankId);
@@ -36,7 +33,6 @@ public class AccountServiceImpl implements AccountService{
 	    newAccount.setBank(bank);
 	    newAccount.setCurrency(currency);
 	    newAccount.setOwner(client);
-	    newAccount = accountRepository.save(newAccount);
 	    
 	    return newAccount;
 	}     
