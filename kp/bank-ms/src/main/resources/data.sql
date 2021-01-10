@@ -15,3 +15,6 @@ insert into currency (`code`, `name`)  values ('RSD', 'Serbian dinar');
 insert into currency (`code`, `name`)  values ('EUR', 'Euro');
 insert into currency (`code`, `name`)  values ('BAM', 'Convertible mark');
 insert into currency (`code`, `name`)  values ('USD', 'United States dollar');
+
+insert into bank (unique_bank_num, url, name) values ("123412","https://localhost:8445/clients","My Bank");
+insert into bank (unique_bank_num, url, name) values ("123413","https://localhost:8448/clients","Bank 2");

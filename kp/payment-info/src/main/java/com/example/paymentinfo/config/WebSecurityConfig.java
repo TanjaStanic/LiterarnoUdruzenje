@@ -79,6 +79,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, customUserDetailsService), BasicAuthenticationFilter.class);
         http.csrf().disable();
         http.cors();
+/*        http.formLogin()
+                .loginPage("view/login")
+                .permitAll()
+                .and()
+                .logout()
+                .permitAll();*/
     }
 
     @Override

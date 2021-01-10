@@ -11,10 +11,9 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterClientDTO {
+public class ClientInfoDto {
     @NotNull
-    private Long clientId;
+    private String email;
     @NotNull
-    private Long bankId;
-
+    private String name;
 }

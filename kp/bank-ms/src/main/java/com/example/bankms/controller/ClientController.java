@@ -1,8 +1,11 @@
 package com.example.bankms.controller;
 
+import com.example.bankms.domain.Bank;
 import com.example.bankms.domain.Client;
 import com.example.bankms.dto.ClientCredentials;
+import com.example.bankms.dto.ClientInfoDto;
 import com.example.bankms.dto.RegisterClientDTO;
+import com.example.bankms.repository.BankRepository;
 import com.example.bankms.service.ClientService;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +18,9 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import java.text.MessageFormat;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/clients")
@@ -22,10 +28,12 @@ public class ClientController {
 
     private final ClientService clientService;
     private RestTemplate restTemplate;
+    private final BankRepository bankRepository;
 
-    public ClientController(ClientService clientService, RestTemplate restTemplate) {
+    public ClientController(ClientService clientService, RestTemplate restTemplate, BankRepository bankRepository) {
         this.clientService = clientService;
         this.restTemplate = restTemplate;
+        this.bankRepository = bankRepository;
     }
 
     @GetMapping("/register-url/{clientId}")
@@ -35,11 +43,11 @@ public class ClientController {
     }
 
     @GetMapping("/register/{clientId}")
-    public ResponseEntity<?> register(Model model, @PathVariable String clientId) {
+    public Object registerForm(Model model, @PathVariable String clientId) {
         Client client = new Client();
-        ResponseEntity<RegisterClientDTO> clientInfo = restTemplate.getForEntity(
+        ResponseEntity<ClientInfoDto> clientInfo = restTemplate.getForEntity(
                 "https://localhost:8762/api/pc_info/auth/clients/" + clientId,
-                RegisterClientDTO.class);
+                ClientInfoDto.class);
 
         if (clientInfo.getStatusCode() == HttpStatus.OK){
             client.setEmail(clientInfo.getBody().getEmail());
@@ -51,9 +59,29 @@ public class ClientController {
         client.setPcClientId(Long.parseLong(clientId));
         client = clientService.insert(client);
 
-        HttpEntity<RegisterClientDTO> entity = new HttpEntity<>(clientInfo.getBody());
+        Map<Long, String> banks = bankRepository.findAll().stream()
+                .collect(Collectors.toMap(
+                        Bank::getId,
+                        Bank::getName));
+
+        model.addAttribute("banks", banks);
+
+        RegisterClientDTO registerClientDTO = new RegisterClientDTO();
+        registerClientDTO.setClientId(client.getId());
+        model.addAttribute("registrationDTO", registerClientDTO);
+        return "registration";
+
+    }
+
+    @PostMapping("/register")
+    public Object register(@Valid @ModelAttribute("registrationDTO") RegisterClientDTO registerClientDTO, Model model) {
+
+        Client client = clientService.findById(registerClientDTO.getClientId());
+        Bank bank = bankRepository.findById(registerClientDTO.getBankId()).get();
+
+        HttpEntity<ClientInfoDto> entity = new HttpEntity<>(new ClientInfoDto(client.getEmail(), client.getName()));
         ResponseEntity<ClientCredentials> response = restTemplate.postForEntity(
-                "https://localhost:8445/clients", entity, ClientCredentials.class);
+                bank.getUrl(), entity, ClientCredentials.class);
 
         ClientCredentials clientCredentials = response.getBody();
         client.setMerchantID(clientCredentials.getMerchantID());
@@ -62,7 +90,7 @@ public class ClientController {
 
         String redirectUrl;
         if (response.getStatusCode() == HttpStatus.OK) {
-            redirectUrl = MessageFormat.format("https://localhost:8762/api/pc_info/view/select-payment-methods/{0}", clientId);
+            redirectUrl = MessageFormat.format("https://localhost:8762/api/pc_info/view/select-payment-methods/{0}", client.getPcClientId());
             HttpHeaders headersRedirect = new HttpHeaders();
             headersRedirect.add("Location", redirectUrl);
             headersRedirect.add("Access-Control-Allow-Origin", "*");
@@ -70,7 +98,6 @@ public class ClientController {
         } else {
             return ResponseEntity.badRequest().body(response.getBody());
         }
-
 
     }
 

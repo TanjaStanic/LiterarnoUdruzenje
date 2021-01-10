@@ -112,4 +112,9 @@ public class ViewController {
     public String getFinishRegistrationPage(){
         return "registration-complete";
     }
+
+    @GetMapping("/login")
+    public String getLoginPage(){
+        return "login";
+    }
 }
