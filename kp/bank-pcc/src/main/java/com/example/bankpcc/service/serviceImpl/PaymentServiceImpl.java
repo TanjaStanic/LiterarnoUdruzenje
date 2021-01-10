@@ -13,7 +13,10 @@ import com.example.bankpcc.repository.BankRepository;
 import com.example.bankpcc.repository.PccRequestRepository;
 import com.example.bankpcc.service.PaymentService;
 
+import lombok.extern.log4j.Log4j2;
+
 @Service
+@Log4j2
 public class PaymentServiceImpl implements PaymentService{
 	
 	private PccRequestRepository pccRequestRepository;
@@ -43,7 +46,8 @@ public class PaymentServiceImpl implements PaymentService{
         	System.out.println("Pronasao banku " + bank.getUrl());
         }
         catch (Exception e) {
-        	System.out.println("Count find bank!");        
+        	log.error("Could not find bank");
+            log.error(e.getMessage());;        
 		}
 		PccResponseDTO response = new PccResponseDTO();
 
@@ -52,10 +56,13 @@ public class PaymentServiceImpl implements PaymentService{
             System.out.println("Test pcc auth: " + response.getIsAuthentificated());
             System.out.println("Test pcc aut: " + response.getIsAutorized());
         } catch (Exception e) {
-            System.out.println("Could not contact bank issuer");
+            log.error("Could not contact bank issuer");
+            log.error(e.getMessage());; 
         }
+               
 		return response;
 	}
+
 
 	@Override
 	public boolean checkRequest(PccRequestDTO pccRequestDTO) {
@@ -64,13 +71,11 @@ public class PaymentServiceImpl implements PaymentService{
 				pccRequestDTO.getYy()==null || pccRequestDTO.getAcquirerTimestamp()==null ||
 				pccRequestDTO.getAcquirerOrderId()==0)  {
 			
-			//put log here
-            System.out.println("Some of requests parameters are missing");
+			log.info("ERROR | PCC Request | Some of parameters are missing");
 			return false;
 		}
 		if (pccRequestDTO.getAmount()<=0) {
-			//put log here
-            System.out.println("Amount can not be negative or zero");
+			log.info("ERROR | PCC Request | Amount can not be null");
             return false;
 		}
 		return true;
@@ -80,7 +85,6 @@ public class PaymentServiceImpl implements PaymentService{
 	public PccRequest saveRequest(PccRequestDTO pccRequestDTO) {
 		PccRequest pccRequest = new PccRequest(pccRequestDTO);
 		pccRequest = pccRequestRepository.save(pccRequest);
-		//log here	
 		return pccRequest;
 	}
 

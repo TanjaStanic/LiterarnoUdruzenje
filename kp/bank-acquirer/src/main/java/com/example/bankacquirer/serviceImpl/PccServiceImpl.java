@@ -21,7 +21,10 @@ import com.example.bankacquirer.repository.CurrencyRepository;
 import com.example.bankacquirer.repository.TransactionRepository;
 import com.example.bankacquirer.service.PccService;
 
+import lombok.extern.log4j.Log4j2;
+
 @Service
+@Log4j2
 public class PccServiceImpl implements PccService{
 
 	@Value("${bankId}")
@@ -55,7 +58,7 @@ public class PccServiceImpl implements PccService{
         transaction.setStatus(TransactionStatus.CREATED);
         transaction.setCurrency(currencyRepository.findOneByCode(pccRequestDto.getCurrencyCode()));
         transaction = transactionRepository.save(transaction);
-
+        log.error("INFO | Transaction created");
         
 		PccResponseDTO pccResponseDto = new PccResponseDTO();
 		pccResponseDto.setAcquirerOrederId(pccRequestDto.getAcquirerOrderId());
@@ -79,7 +82,8 @@ public class PccServiceImpl implements PccService{
     		pccResponseDto.setIsAutorized(false);
     		
     		transaction.setStatus(TransactionStatus.ERROR);
-    		transactionRepository.save(transaction);
+    		transactionRepository.save(transaction);   		
+    		log.error("ERROR | Transaction canceled | There is no such card in the bank.");
     		
     		return pccResponseDto;
         }
@@ -100,7 +104,8 @@ public class PccServiceImpl implements PccService{
          		
                 transaction.setStatus(TransactionStatus.ERROR);
         		transactionRepository.save(transaction);
-                
+        		log.info("ERROR | Transaction canceled | Card data doesn't match");
+        		
          		return pccResponseDto;
              }
          }
@@ -111,9 +116,10 @@ public class PccServiceImpl implements PccService{
         	 pccResponseDto.setIsAuthentificated(true);
         	 pccResponseDto.setIsAutorized(false);
         	
-        	 transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
+        	transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
      		transactionRepository.save(transaction);
         	 
+     		log.info("CANCELED | Transaction canceled | No available funds: ");
         	 return pccResponseDto;
          }
          
@@ -127,6 +133,7 @@ public class PccServiceImpl implements PccService{
         
         transaction.setStatus(TransactionStatus.SUCCESSFUL);
         transactionRepository.save(transaction);
+        log.info("COMPLETED | Bank Payment | Transaction successful");
         
         pccResponseDto.setIsAuthentificated(true);
         pccResponseDto.setIsAutorized(true);
