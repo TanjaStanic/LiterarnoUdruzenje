@@ -81,13 +81,20 @@ public class PaymentServiceImpl implements PaymentService {
             return false;
         }
 
-        Client merchant = clientRepository.findOneByMerchantID(pcRequestDTO.getMerchantId());
+       // Client merchant = clientRepository.findOneByMerchantID(pcRequestDTO.getMerchantId());
+        Client merchant = null;
+        List<Client> allClients = clientRepository.findAll();
+        for (Client c : allClients) {
+        	if (org.springframework.security.crypto.bcrypt.BCrypt.checkpw(pcRequestDTO.getMerchantId(), c.getMerchantID())) {
+        		merchant = c;
+        	}
+        }
         if (merchant == null || merchant.getAccount() == null) {
             log.info("ERROR | Payment Concentrator Requests | Merchant acc i doesnt exists in this bank or doesn't have account in this bank");
             System.out.println("Merchant acc i doesnt exists in this bank or doesn't have account in this bank!");
             return false;
         }
-        if (!merchant.getMerchantPassword().equals(pcRequestDTO.getMerchantPassword())) {
+    	if (!(org.springframework.security.crypto.bcrypt.BCrypt.checkpw(pcRequestDTO.getMerchantPassword(), merchant.getMerchantPassword()))) {
             log.info("ERROR | Payment Concentrator Requests | Merchant password is not ok!");
             System.out.println("Merchant password is not ok!");
             return false;
@@ -325,9 +332,16 @@ public class PaymentServiceImpl implements PaymentService {
             }
             
             //payment successful
-            Client seller = clientRepository.findOneByMerchantID(pcRequest.getMerchantId());
+            //Client seller = clientRepository.findOneByMerchantID(pcRequest.getMerchantId());
+        	Client seller = new Client();
+            List<Client> allClients = clientRepository.findAll();
+            for (Client c : allClients) {
+            	if (org.springframework.security.crypto.bcrypt.BCrypt.checkpw(pcRequest.getMerchantId(), c.getMerchantID())) {
+            		seller = c;
+            	}
+            }
         	Account merchantAccount = accountRepository.findOneByOwner(seller);
-        
+
             if (response.getIsAuthentificated() && response.getIsAutorized()) {
             	
                 merchantAccount.setAvailableFunds(merchantAccount.getAvailableFunds() + pcRequest.getAmount());
