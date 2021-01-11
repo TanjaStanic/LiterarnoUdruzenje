@@ -1,5 +1,6 @@
 package com.example.bitcoinms.serviceImpl;
 
+import java.text.MessageFormat;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
@@ -43,5 +44,11 @@ public class TransactionServiceImpl implements TransactionService {
         return findAllBySellerIdAndStatus(sellerId, status);
     }
 
-	
+    @Override
+    public Transaction findById(long id) {
+        Transaction found = transactionRepository.findById(id).orElseThrow(() -> new RuntimeException(MessageFormat.format("Transaction with id {0} does not exist.", id)));
+        return found;
+    }
+
+
 }

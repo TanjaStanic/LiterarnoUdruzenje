@@ -47,7 +47,8 @@ public class PaymentRequestController {
         request.setAmount(requestDTO.getAmount());
         request.setCurrencyCode(requestDTO.getCurrencyCode());
         request.setMerchantTimestamp(requestDTO.getMerchantTimestamp());
-
+        request.setCancelUrl(requestDTO.getCancelUrl());
+        request.setCallbackUrl(request.getCallbackUrl());
 
         request = paymentRequestRepository.save(request);
         log.info("CREATED | Payment Requests | Payment Id: " + request.getId());

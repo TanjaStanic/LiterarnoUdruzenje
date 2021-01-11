@@ -207,6 +207,7 @@ public class PaymentController {
         requestDTO.setSuccessUrl("https://localhost:8447/view/success");
         requestDTO.setFailedUrl("https://localhost:8447/view/failed");
         requestDTO.setErrorUrl("https://localhost:8447/view/error");
+        requestDTO.setCancelUrl("http://localhost:8447/view/dashboard");
         requestDTO.setAmount(100000);
         requestDTO.setCurrencyCode("USD");
         requestDTO.setMerchantTimestamp(new Date());

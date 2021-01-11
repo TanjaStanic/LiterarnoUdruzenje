@@ -67,7 +67,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 "/auth/**",
                 "/auth/api/**",
                 "/view/**",
-				"/clients/**"
+				"/clients/**,",
+				"/cancel",
+				"/success",
+				"/callback"
         );
         web.ignoring().antMatchers(
                 HttpMethod.PUT,

@@ -18,7 +18,6 @@ public class PaymentRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column
     private long merchantOrderId;
     @Column
@@ -35,4 +34,6 @@ public class PaymentRequest {
     private String errorUrl;
     @Column
     private String currencyCode;
+    private String callbackUrl;
+    private String cancelUrl;
 }

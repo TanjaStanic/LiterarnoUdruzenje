@@ -1,6 +1,12 @@
 package com.example.bitcoinms.enums;
 
 public enum TransactionStatus {
-	 NEW, CONFIRMING, PAID, PENDING, EXPIRED
+    NEW,
+    CONFIRMING,
+    PAID,
+    PENDING,
+    EXPIRED,
+    CANCELED,
+    INVALID
 
 }

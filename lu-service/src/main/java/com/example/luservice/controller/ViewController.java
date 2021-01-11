@@ -30,7 +30,7 @@ public class ViewController {
         return "order";
     }
 
-    @GetMapping("/dashborad")
+    @GetMapping("/dashboard")
     public String getDashboard(Model model){
         return "dashboard";
     }

@@ -1,13 +1,13 @@
 package com.example.bitcoinms.service;
 
-import org.springframework.stereotype.Service;
 
 import com.example.bitcoinms.dto.PaymentRequestDTO;
 
-@Service
 public interface PaymentService {
-	
-	String initiatePayment(PaymentRequestDTO request);
 
+    String initiatePayment(PaymentRequestDTO request);
 
+    String cancelPayment(Long id);
+
+    String paymentSuccess(Long id);
 }
