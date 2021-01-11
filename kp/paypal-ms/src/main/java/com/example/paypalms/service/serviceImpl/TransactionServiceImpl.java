@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -66,7 +67,8 @@ public class TransactionServiceImpl implements TransactionService {
         List<Client> clients = (ArrayList) clientService.getAll();
         clients.stream().forEach(client -> {
             APIContext context = new APIContext(client.getClientId(), client.getClientSecret(), executionMode);
-            List<Transaction> transactions = (List<Transaction>) transactionRepository.findAllByClientIdAndStatus(client.getId(), TransactionStatus.COMPLETED);
+            List<Transaction> transactions = (List<Transaction>) transactionRepository.findAllByClientIdAndStatusIn(client.getId(),
+                    Arrays.asList(TransactionStatus.COMPLETED, TransactionStatus.CREATED));
             if (!transactions.isEmpty()) {
 
                 for (Transaction transaction : transactions) {
@@ -80,11 +82,10 @@ public class TransactionServiceImpl implements TransactionService {
                             save(transaction);
                             statusChanged = true;
                         } else if (payment.getState().equalsIgnoreCase("FAILED")) {
-                            transaction.setStatus(TransactionStatus.FAILED);
+                            transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
                             save(transaction);
                             statusChanged = true;
                         }
-
                         if (statusChanged){
                             sendTransactionUpdate(transaction);
                         }

@@ -158,12 +158,12 @@ public class PaymentServiceImpl implements PaymentService {
 
             APIContext context = new APIContext(client.getClientId(), client.getClientSecret(), executionMode);
             // For negative testing
-            //context.addHTTPHeader("PayPal-Mock-Response", "{\"mock_application_codes\": \"INSUFFICIENT_FUNDS\"}");
+            context.addHTTPHeader("PayPal-Mock-Response", "{\"mock_application_codes\": \"INSUFFICIENT_FUNDS\"}");
             try {
                 Payment executedPayment = payment.execute(context, paymentExecution);
             } catch (PayPalRESTException exception) {
                 log.error(exception.getMessage());
-                transaction.setStatus(TransactionStatus.CANCELED);
+                transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
                 transaction = transactionService.save(transaction);
                 transactionDto.setStatus(transaction.getStatus());
                 transactionDto.setMerchantOrderId(transaction.getMerchantOrderId());
