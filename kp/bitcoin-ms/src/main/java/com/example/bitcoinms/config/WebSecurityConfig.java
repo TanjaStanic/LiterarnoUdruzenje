@@ -51,7 +51,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 	public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(
                 HttpMethod.POST,
-                "/auth/**"
+                "/auth/**",
+				"/",
+				"/clients/**"
         );
         web.ignoring().antMatchers(
                 HttpMethod.GET,
@@ -64,7 +66,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 "/**/*.js",
                 "/auth/**",
                 "/auth/api/**",
-                "/view/**"
+                "/view/**",
+				"/clients/**"
         );
         web.ignoring().antMatchers(
                 HttpMethod.PUT,

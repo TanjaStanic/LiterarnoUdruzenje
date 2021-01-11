@@ -29,6 +29,8 @@ public class PaymentRequestDTO {
 	    private String callbackUrl;
 	    private String cancelUrl;	    
 	    private String successUrl;
+		private String errorUrl;
+		private String failedUrl;
 	    private String token;
 	    
 	    

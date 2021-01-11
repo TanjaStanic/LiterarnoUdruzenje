@@ -30,6 +30,7 @@ public class PaymentController {
             // i taj link treba da se salje literarnom udruzenju
             return ResponseEntity.ok().body(response);
         }catch (Exception exception){
+            exception.printStackTrace();
             return ResponseEntity.badRequest().body("Transaction failed.");
         }
     }
