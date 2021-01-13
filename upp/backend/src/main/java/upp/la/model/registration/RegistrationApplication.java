@@ -23,6 +23,7 @@ public class RegistrationApplication {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  //Writer trying to apply
   @OneToOne(targetEntity = User.class, fetch = FetchType.LAZY)
   @JoinColumn(nullable = false, name = "user_id")
   private User writer;
@@ -33,9 +34,11 @@ public class RegistrationApplication {
   @Enumerated(EnumType.STRING)
   private ApplicationResponse finalResponse;
 
+  //Documents the writer has uploaded
   @OneToMany(mappedBy = "registrationApplication", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Document> documents = new ArrayList<>();
 
+  //Responses containing lecturer comments
   @OneToMany(mappedBy = "registrationApplication", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<RegistrationApplicationResponse> responses = new ArrayList<>();
 

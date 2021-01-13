@@ -25,6 +25,7 @@ public class Book {
   @Column(unique = true)
   private String isbn;
 
+  //List of books writers
   @ManyToMany(mappedBy = "books")
   private List<User> writers = new ArrayList<>();
 
@@ -40,7 +41,12 @@ public class Book {
 
   @Column private String synopsis;
 
+  //Document object containing the path to the file
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "document_id", referencedColumnName = "id")
   private Document document;
+
+  public Book(Document document) {
+    this.document = document;
+  }
 }

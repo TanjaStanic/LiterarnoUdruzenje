@@ -19,11 +19,13 @@ public class Document {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  //Document can be related to a book
   @OneToOne(mappedBy = "document")
   private Book book;
 
   @Column private String fileUrl;
 
+  //Document can be related to a registration application
   @ManyToOne(fetch = FetchType.LAZY)
   private RegistrationApplication registrationApplication;
 

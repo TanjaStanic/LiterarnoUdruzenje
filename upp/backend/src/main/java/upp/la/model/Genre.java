@@ -15,13 +15,13 @@ import java.util.Collection;
 @AllArgsConstructor
 public class Genre {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column
-    private String name;
+  @Column private String name;
 
+  //Books belonging to a genre
   @ManyToMany(
       cascade = {CascadeType.ALL},
       fetch = FetchType.EAGER)
@@ -31,19 +31,19 @@ public class Genre {
       inverseJoinColumns = {@JoinColumn(name = "book_id", referencedColumnName = "id")})
   private Collection<Book> books;
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 }

@@ -19,9 +19,11 @@ public class RegistrationApplicationResponse {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  //The application the response is related to
   @ManyToOne(fetch = FetchType.LAZY)
   private RegistrationApplication registrationApplication;
 
+  //Lecturer making the response
   @OneToOne(targetEntity = User.class, fetch = FetchType.LAZY)
   @JoinColumn(nullable = false, name = "user_id")
   private User lecturer;
