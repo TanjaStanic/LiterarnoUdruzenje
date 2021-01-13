@@ -30,3 +30,69 @@ INSERT INTO upp_db.genre(name)
 
 INSERT INTO upp_db.genre(name)
     VALUES ('Ljubavni');
+
+INSERT INTO upp_db.user_genres(user_id, genre_id)
+    VALUES (3, 1);
+
+INSERT INTO upp_db.user_genres(user_id, genre_id)
+    VALUES (3, 2);
+
+INSERT INTO upp_db.user_genres(user_id, genre_id)
+    VALUES (3, 3);
+
+INSERT INTO upp_db.user_genres(user_id, genre_id)
+    VALUES (4, 4);
+
+INSERT INTO upp_db.user_genres(user_id, genre_id)
+    VALUES (4, 5);
+
+INSERT INTO upp_db.document(file_url)
+    VALUES('http://localhost:8080/files/download/file1.pdf');
+
+INSERT INTO upp_db.document(file_url)
+    VALUES('http://localhost:8080/files/download/file2.pdf');
+
+INSERT INTO upp_db.document(file_url)
+    VALUES('http://localhost:8080/files/download/file3.pdf');
+
+INSERT INTO upp_db.book(isbn, key_terms, pages, place_published, publisher, synopsis, title, year_published, document_id)
+    VALUES('isbn_unique_1', 'key_terms_1', 10, 'place_published_1', 'publisher_name_1', 'synopsis_1', 'Title 1', '1990', 1);
+
+INSERT INTO upp_db.book(isbn, key_terms, pages, place_published, publisher, synopsis, title, year_published, document_id)
+    VALUES('isbn_unique_2', 'key_terms_2', 11, 'place_published_2', 'publisher_name_2', 'synopsis_2', 'Title 2', '1991', 2);
+
+INSERT INTO upp_db.book(isbn, key_terms, pages, place_published, publisher, synopsis, title, year_published, document_id)
+    VALUES('isbn_unique_3', 'key_terms_3', 12, 'place_published_3', 'publisher_name_3', 'synopsis_3', 'Title 3', '1992', 3);
+
+INSERT INTO upp_db.genre_books(genre_id, book_id)
+    VALUES(1, 1);
+
+INSERT INTO upp_db.genre_books(genre_id, book_id)
+    VALUES(2, 2);
+
+INSERT INTO upp_db.genre_books(genre_id, book_id)
+    VALUES(3, 3);
+
+INSERT INTO upp_db.genre_books(genre_id, book_id)
+    VALUES(4, 1);
+
+INSERT INTO upp_db.genre_books(genre_id, book_id)
+    VALUES(5, 2);
+
+INSERT INTO upp_db.document(file_url)
+    VALUES('http://localhost:8080/files/download/file1.pdf');
+
+INSERT INTO upp_db.document(file_url)
+    VALUES('http://localhost:8080/files/download/file2.pdf');
+
+INSERT INTO upp_db.document(file_url)
+    VALUES('http://localhost:8080/files/download/file3.pdf');
+
+INSERT INTO upp_db.writers_books(user_id, book_id)
+    VALUES(2, 1);
+
+INSERT INTO upp_db.writers_books(user_id, book_id)
+    VALUES(2, 2);
+
+INSERT INTO upp_db.writers_books(user_id, book_id)
+    VALUES(2, 3);

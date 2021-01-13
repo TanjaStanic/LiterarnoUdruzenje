@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import upp.la.config.security.JwtTokenUtils;
+import upp.la.error.ErrorMessages;
 import upp.la.model.exceptions.AuthorizationError;
 import upp.la.model.exceptions.EntityNotFound;
 import upp.la.model.auth.JwtAuthenticationRequest;
@@ -54,7 +55,7 @@ public class AuthController {
       return new ResponseEntity<>(
           jwtTokenUtils.generateToken(user.getUsername()), HttpStatus.ACCEPTED);
     } catch (Exception ex) {
-      throw new AuthorizationError("Bad credentials.");
+      throw new AuthorizationError(ErrorMessages.AUTH_ERROR());
     }
   }
 
