@@ -88,4 +88,15 @@ public class AuthController {
 
     return new ResponseEntity<>("OKAY", HttpStatus.CREATED);
   }
+
+  @GetMapping(value = "/getUserByName")
+  public ResponseEntity<User> getByName(@RequestParam(value = "username", required = true) String username) {
+    User user = userRepository.findUserByUsername(username);
+    if(user != null) {
+      System.out.println(user.getRole());
+      return new ResponseEntity<>(user, HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+  }
 }
