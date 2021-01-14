@@ -20,6 +20,12 @@ import {AppRoutingModule} from './app-routing.module';
 import {ReactiveFormsModule} from '@angular/forms';
 import { ReaderDialogComponent } from './components/reader-dialog/reader-dialog.component';
 import { WriterDialogComponent } from './components/writer-dialog/writer-dialog.component';
+import { FormsModule } from '@angular/forms';
+import { HomepageReaderComponent } from './components/homepage-reader/homepage-reader.component';
+import { HomepageWriterComponent } from './components/homepage-writer/homepage-writer.component';
+import { HomepageAdminComponent } from './components/homepage-admin/homepage-admin.component';
+import { HomepageEditorComponent } from './components/homepage-editor/homepage-editor.component';
+import { HomepageLecturerComponent } from './components/homepage-lecturer/homepage-lecturer.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +33,12 @@ import { WriterDialogComponent } from './components/writer-dialog/writer-dialog.
     LoginComponent,
     RegisterComponent,
     ReaderDialogComponent,
-    WriterDialogComponent
+    WriterDialogComponent,
+    HomepageReaderComponent,
+    HomepageWriterComponent,
+    HomepageAdminComponent,
+    HomepageEditorComponent,
+    HomepageLecturerComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +56,8 @@ import { WriterDialogComponent } from './components/writer-dialog/writer-dialog.
     MatSelectModule,
     MatDialogModule,
     MatRadioModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent],
