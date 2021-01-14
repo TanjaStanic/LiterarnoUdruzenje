@@ -20,7 +20,7 @@ public class Account {
 	private Bank bank;
 	
     @Column
-    private String accountNumber;  // prva tri broja govore koja je banka u pitanju
+    private String accountNumber;
 
     @Column(nullable = false)
 	private double availableFunds;

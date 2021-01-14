@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link rel="stylesheet"
+          th:href="@{https://localhost:8444/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css}"
+          rel="stylesheet" type="text/css"/>
+    <meta charset="UTF-8"/>
+    <title>Available payment methods</title>
+</head>
+<body class="bg-color">
+<div  class="container py-5">
+    <div class="row mb-4">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 " style="color:#007acc;">Thank you for using our services</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-7 mx-auto">
+            <div class="bg-white rounded-lg shadow-sm p-5">
+                <div>
+                    <div style="text-align: center">
+                        <p>You have successfully registered to use our payment services.</p>
+                        <p> We have sent you a verification email with verification instructions,<br/>
+                            please verify your email address in order to use our services. </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<script th:src="@{https://localhost:8444/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{https://localhost:8444/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+</body>
+</html>

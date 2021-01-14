@@ -1,1 +1,9 @@
-<p>writer-dialog works!</p>
+<div>
+  <h3>Izaberite dokumente koje cete okaciti</h3>
+</div>
+<input type="file" #fileInput id="uploadFile" (change)="uploadFileEvt($event)" name="uploadFile" multiple="multiple"
+       accept="image/*" />
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" class="pull-right">Register</button>
+</div>
+

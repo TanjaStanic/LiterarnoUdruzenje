@@ -14,4 +14,16 @@ export class UserService {
     return this.httpClient.get(`${environment.baseUrl}auth/users`);
   }
 
+  subscribe(): Observable<any> {
+    return this.httpClient.get(`${environment.baseUrl}paypal/subscribe`, { responseType: 'text' });
+  }
+
+  getUserSubscription(id) {
+    return this.httpClient.get(`${environment.baseUrl}auth/subscriptions/${id}`);
+  }
+
+  paypalPaymnetTest(): Observable<any> {
+    return this.httpClient.get(`${environment.baseUrl}paypal`, { responseType: 'text' });
+  }
+
 }

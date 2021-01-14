@@ -42,6 +42,3 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
 
-ribbon:
-  eureka:
-    enabled: true

@@ -51,6 +51,10 @@ public class AttributeEncryptor implements AttributeConverter<String, String> {
 
     @Override
     public String convertToDatabaseColumn(String attribute) {
+
+        if (attribute == null || attribute.equals("")) {
+            return "";
+        }
         String generatedString = RandomStringUtils.randomAlphanumeric(16);
         byte[] IvParameterVector = generatedString.getBytes();
 
@@ -65,10 +69,6 @@ public class AttributeEncryptor implements AttributeConverter<String, String> {
         } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException
                 | UnrecoverableKeyException e) {
             log.error("Error while reading key");
-        }
-
-        if (attribute == null || attribute.equals("")) {
-            return "";
         }
 
         try {
@@ -86,6 +86,10 @@ public class AttributeEncryptor implements AttributeConverter<String, String> {
     @Override
     public String convertToEntityAttribute(String dbData) {
 
+        if (dbData.equals("")) {
+            return "";
+        }
+
         byte[] IvParameterVector = (cryptoService.findByText(dbData).getIv()).getBytes();
 
         KeyStore keystore;
@@ -100,10 +104,6 @@ public class AttributeEncryptor implements AttributeConverter<String, String> {
                 | UnrecoverableKeyException e) {
             log.error("Error while reading key");
             log.error(e.getMessage());
-        }
-
-        if (dbData.equals("")) {
-            return "";
         }
 
         try {

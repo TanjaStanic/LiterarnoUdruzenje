@@ -5,43 +5,15 @@
         <mat-card>
           <h3>Registracija</h3>
           <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-            <div>
-              <mat-label for="email">Email</mat-label>
-              <input type="email" id="email" formControlName="email" class="form-control">
-            </div>
-            <div>
-              <mat-label for="username">Korisnicko ime</mat-label>
-              <input type="text" id="username" formControlName="username" class="form-control">
-            </div>
-            <div>
-              <mat-label for="password">Sifra</mat-label>
-              <input type="password" id="password" formControlName="password" class="form-control">
-            </div>
-            <div>
-              <mat-label for="name">Ime</mat-label>
-              <input type="text" id="name" formControlName="name" class="form-control">
-            </div>
-            <div>
-              <mat-label for="surname">Prezime</mat-label>
-              <input type="text" id="surname" formControlName="surname" class="form-control">
-            </div>
-            <div>
-              <mat-label for="city">Grad</mat-label>
-              <input type="text" id="city" formControlName="city" class="form-control">
-            </div>
-            <div>
-              <mat-label for="country">Drzava</mat-label>
-              <input type="text" id="country" formControlName="country" class="form-control">
-              <p></p>
-            </div>
-            <div>
-              <mat-form-field appearance="fill">
-                <mat-label>Uloga</mat-label>
-                <mat-select id="role" formControlName="role" class="role">
-                  <mat-option value="Pisac">Pisac</mat-option>
-                  <mat-option value="Citalac">Citalac</mat-option>
-                </mat-select>
-              </mat-form-field>
+            <div *ngFor="let field of formFields">
+              <label for={{field.id}}>{{field.label}}</label>
+              <input type="password" name={{field.id}} formControlName={{field.id}} class = "form-control" ngModel  *ngIf="field.id == 'passwordId'">
+              <input type="text" name={{field.id}} formControlName={{field.id}} class = "form-control" ngModel  *ngIf="field.type.name=='string' && field.id !== 'passwordId'">
+              <select name="field.id" formControlName={{field.id}} class = "form-control" *ngIf="field.type.name=='enum'">
+                <option *ngFor="let val of enumValues" value={{val}}>
+                  {{field.type.values[val]}}
+                </option>
+              </select>
             </div>
             <div class="form-group">
               <a routerLink="/login">Already have an account? Login here.</a>

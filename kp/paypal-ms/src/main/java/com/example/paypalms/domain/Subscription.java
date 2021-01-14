@@ -58,6 +58,9 @@ public class Subscription {
     @ManyToOne
     private Client seller;
 
+    @Column
+    private long merchantOrderId;
+
     public Subscription(SubscriptionRequestDto subscriptionRequest, Client client, Currency currency){
         this.seller = client;
         this.paymentAmount = subscriptionRequest.getAmount();
@@ -66,6 +69,7 @@ public class Subscription {
         this.failedUrl = subscriptionRequest.getFailedUrl();
         this.errorUrl = subscriptionRequest.getErrorUrl();
         this.cancelUrl = subscriptionRequest.getCancelUrl();
+        this.merchantOrderId = subscriptionRequest.getMerchantOrderId();
         this.subscriptionStatus = SubscriptionStatus.INITIATED;
     }
 }

@@ -6,6 +6,7 @@ import com.example.paypalms.domain.Transaction;
 import com.example.paypalms.dto.PaymentRequestDTO;
 import com.example.paypalms.dto.SubscriptionRequestDto;
 import com.example.paypalms.dto.TransactionDto;
+import com.example.paypalms.dto.UserSubscriptionDto;
 import com.example.paypalms.enums.SubscriptionStatus;
 import com.example.paypalms.enums.TransactionStatus;
 import com.example.paypalms.service.*;
@@ -15,6 +16,7 @@ import com.paypal.base.rest.PayPalRESTException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -97,7 +99,6 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment = new Payment("sale", payer);
         payment.setTransactions(transactions);
         payment.setRedirectUrls(redirectUrls);
-
         APIContext context = new APIContext(client.getClientId(), client.getClientSecret(), executionMode);
 
         String redirectUrl = "";
@@ -146,7 +147,6 @@ public class PaymentServiceImpl implements PaymentService {
 
             PaymentExecution paymentExecution = new PaymentExecution();
             paymentExecution.setPayerId(payerId);
-
             Client client = transaction.getClient();
             TransactionDto transactionDto = new TransactionDto();
             transactionDto.setSellerEmail(client.getEmail());
@@ -157,10 +157,18 @@ public class PaymentServiceImpl implements PaymentService {
             transactionDto.setMerchantOrderId(transaction.getMerchantOrderId());
 
             APIContext context = new APIContext(client.getClientId(), client.getClientSecret(), executionMode);
+            // For negative testing
+            context.addHTTPHeader("PayPal-Mock-Response", "{\"mock_application_codes\": \"INSUFFICIENT_FUNDS\"}");
             try {
                 Payment executedPayment = payment.execute(context, paymentExecution);
             } catch (PayPalRESTException exception) {
                 log.error(exception.getMessage());
+                transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
+                transaction = transactionService.save(transaction);
+                transactionDto.setStatus(transaction.getStatus());
+                transactionDto.setMerchantOrderId(transaction.getMerchantOrderId());
+                this.sendTransactionUpdate(transactionDto);
+                return transaction.getFailedUrl();
             }
             transaction.setStatus(TransactionStatus.COMPLETED);
             transaction = transactionService.save(transaction);
@@ -223,7 +231,6 @@ public class PaymentServiceImpl implements PaymentService {
 
         Double price = subscriptionPlan.getFrequency().getName().equals("YEAR") ? 12 * subscriptionRequest.getAmount() : subscriptionRequest.getAmount();
         price = new BigDecimal(price).setScale(2, RoundingMode.HALF_UP).doubleValue();
-
         System.out.println(price);
 
         com.paypal.api.payments.Currency currency = new com.paypal.api.payments.Currency();
@@ -291,6 +298,7 @@ public class PaymentServiceImpl implements PaymentService {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         c.add(Calendar.MINUTE, 1);
+
         //ISO8601
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         String formattedDate = sdf.format(c.getTime());
@@ -305,10 +313,29 @@ public class PaymentServiceImpl implements PaymentService {
             throw exception;
         }
 
+        if (subscriptionPlan.getType().getName().equals("INFINITE")){
+            subscription.setExpirationDate(null);
+        }else {
+            if (subscriptionPlan.getFrequency().getName().equalsIgnoreCase("YEAR")){
+                c.add(Calendar.YEAR, subscriptionPlan.getCyclesNumber());
+            }else if (subscriptionPlan.getFrequency().getName().equalsIgnoreCase("MONTH")){
+                c.add(Calendar.MONTH, subscriptionPlan.getCyclesNumber());
+            }else if(subscriptionPlan.getFrequency().getName().equalsIgnoreCase("WEEK")){
+                c.add(Calendar.WEEK_OF_MONTH, subscriptionPlan.getCyclesNumber());
+            }else if(subscriptionPlan.getFrequency().getName().equalsIgnoreCase("DAY")){
+                c.add(Calendar.DAY_OF_MONTH, subscriptionPlan.getCyclesNumber());
+            }
+            subscription.setExpirationDate(c.getTime());
+        }
+
         Client client = clientService.findByEmail(subscriptionRequest.getSellerEmail());
         if (client == null) {
             log.error("CANCELED | PayPal Subscription Payment | Amount: " + subscriptionRequest.getAmount() + " " + subscriptionRequest.getCurrencyCode());
-            return null;
+            log.error(MessageFormat.format("Seller with email {0} not found", subscriptionRequest.getSellerEmail()));
+            subscription.setSubscriptionStatus(SubscriptionStatus.CANCELED);
+            subscription = subscriptionService.save(subscription);
+            this.sendSubscriptionUpdate(subscription);
+            throw new RuntimeException("Seller not found");
         }
         //set billing plan id
         Plan plan = new Plan();
@@ -323,6 +350,7 @@ public class PaymentServiceImpl implements PaymentService {
         agreement.setStartDate(formattedDate);
         agreement.setPlan(plan);
         agreement.setPayer(payer);
+
 
         //save subscription with status BILLING_AGREEMENT_INITIATED
         subscription.setSubscriptionStatus(SubscriptionStatus.BILLING_AGREEMENT_INITIATED);
@@ -351,6 +379,9 @@ public class PaymentServiceImpl implements PaymentService {
             }
         } catch (PayPalRESTException | MalformedURLException | UnsupportedEncodingException e) {
             log.error(e.getMessage());
+            savedSubscription.setSubscriptionStatus(SubscriptionStatus.CANCELED);
+            subscription = subscriptionService.save(subscription);
+            this.sendSubscriptionUpdate(subscription);
             throw e;
         }
 
@@ -378,35 +409,53 @@ public class PaymentServiceImpl implements PaymentService {
         Client client = subscription.getSeller();
 
         APIContext context = new APIContext(client.getClientId(), client.getClientSecret(), executionMode);
+        //context.addHTTPHeader("PayPal-Mock-Response", "{\"mock_application_codes\": \"PAYER_CANNOT_PAY\"}");
 
         try {
             //execute the agreement and sign up the user for the subscription
             Agreement createdAgreement = agreement.execute(context, agreement.getToken());
             subscription.setBillingAgreementId(createdAgreement.getId());
 
+
         } catch (PayPalRESTException e) {
             log.error(e.getMessage());
+            subscription.setSubscriptionStatus(SubscriptionStatus.CANCELED);
+            subscriptionService.save(subscription);
+            sendSubscriptionUpdate(subscription);
+            return subscription.getFailedUrl();
         }
 
-        subscription.setSubscriptionStatus(SubscriptionStatus.COMPLETED);
+        subscription.setSubscriptionStatus(SubscriptionStatus.ACTIVE);
         subscriptionService.save(subscription);
-        log.info("SUBSCRIPTION ID: " + subscriptionId + "   COMPLETED");
+        log.info("SUBSCRIPTION ID: " + subscriptionId + "   ACTIVE");
+        sendSubscriptionUpdate(subscription);
         return subscription.getSuccessUrl();
     }
 
 
     public void sendTransactionUpdate(TransactionDto transaction) {
         try {
-
             HttpEntity<TransactionDto> entity = new HttpEntity<>(transaction);
-
-            restTemplate.exchange("https://payment-info/transactions", HttpMethod.POST, entity, String.class);
+            restTemplate.exchange("https://localhost:8444/auth/transactions", HttpMethod.POST, entity, String.class);
 
         } catch (Exception exception) {
             exception.printStackTrace();
             log.error("ERROR | Could not contact payment-info.");
             log.error(exception.getMessage());
         }
+    }
 
+    private void sendSubscriptionUpdate(Subscription subscription){
+        UserSubscriptionDto subscriptionDto = new UserSubscriptionDto( subscription.getSeller().getEmail(), subscription.getMerchantOrderId(),
+                subscription.getSubscriptionStatus(), subscription.getExpirationDate());
+        try {
+            HttpEntity<UserSubscriptionDto> entity = new HttpEntity<>(subscriptionDto);
+            restTemplate.exchange("https://localhost:8444/auth/subscriptions/update", HttpMethod.POST, entity, String.class);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            log.error("ERROR | Could not contact payment-info.");
+            log.error(exception.getMessage());
+        }
     }
 }

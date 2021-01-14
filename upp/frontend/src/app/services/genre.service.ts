@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Genre} from '../model/genre';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,10 @@ export class GenreService {
 
   public getGenres(): Array<Genre> {
     return this.genres;
+  }
+
+  getFieldsGenres() {
+    return this.httpClient.get('http://localhost:8080/registration/getGenresForm') as Observable<any>;
   }
 
 }

@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/subscriptions")
 @Log4j2
+@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 public class SubscriptionController {
 
     private SubscriptionPlanService subscriptionPlanService;

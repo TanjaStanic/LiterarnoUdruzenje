@@ -58,6 +58,7 @@
             <camunda:value id="value_yes" name="Da" />
             <camunda:value id="value_no" name="Ne" />
           </camunda:formField>
+          <camunda:formField id="genresListId" type="enum" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0rv7o7f</bpmn:incoming>

@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.example.bankpcc.dto.PccRequestDTO;
@@ -19,6 +21,7 @@ import lombok.Setter;
 public class PccRequest {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	@Column(nullable = false)
@@ -43,7 +46,7 @@ public class PccRequest {
 	private long acquirerOrderId;
 	
 	@Column(nullable = false)
-	private Date acquirerTimespamp;
+	private Date acquirerTimestamp;
 
 	public PccRequest(PccRequestDTO pccRequestDTO) {
 		super();
@@ -54,7 +57,7 @@ public class PccRequest {
 		this.yy = pccRequestDTO.getYy();
 		this.amount = pccRequestDTO.getAmount();
 		this.acquirerOrderId = pccRequestDTO.getAcquirerOrderId();
-		this.acquirerTimespamp = pccRequestDTO.getAcquirerTimespamp();
+		this.acquirerTimestamp = pccRequestDTO.getAcquirerTimestamp();
 	}
 
 }

@@ -3,7 +3,7 @@ package upp.la.controller;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
+
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,16 +68,14 @@ public class RegistrationController {
             throw new ValidationError(ErrorMessages.VALIDATION_ERROR());
         }
         System.out.println("val:" + validationOk);
-        ProcessInstance pi =
-            runtimeService.startProcessInstanceByKey("registration_process");
 
         HashMap<String, Object> map = this.mapListToDto(formFields);
 
-        Task task = taskService.createTaskQuery()
-                               .processInstanceId(pi.getId())
-                               .list()
-                               .get(0);
-        // Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        List<Task> tasks = taskService.createTaskQuery()
+                .taskName("Registration")
+                .list();
+        Task task = tasks.get(0);
+
         String processInstanceId = task.getProcessInstanceId();
 
         //Create variable "registration"
@@ -88,6 +86,40 @@ public class RegistrationController {
         formService.submitTaskForm(task.getId(), map);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/get", produces = "application/json")
+    public @ResponseBody FormFieldsDto get() {
+
+        ProcessInstance pi = runtimeService.startProcessInstanceByKey("registration_process");
+
+        List<Task> tasks = taskService.createTaskQuery()
+                .taskName("Registration")
+                .list();
+        Task task = tasks.get(0);
+
+        TaskFormData tfd = formService.getTaskFormData(task.getId());
+        List<FormField> properties = tfd.getFormFields();
+        for(FormField fp : properties) {
+            System.out.println(fp.getId() + fp.getType());
+        }
+
+        return new FormFieldsDto(task.getId(), "123", properties);
+    }
+    @GetMapping(path = "/getGenresForm", produces = "application/json")
+    public @ResponseBody FormFieldsDto getGenresForms() {
+
+        Task task1 = taskService.createTaskQuery().taskName("Registration reader").list().get(0);
+        Task task  = taskService.createTaskQuery().taskName("Genres for beta reader").singleResult();
+        System.out.println(task.getName());
+        TaskFormData tfd = formService.getTaskFormData(task1.getId());
+        List<FormField> properties = tfd.getFormFields();
+        properties.addAll(formService.getTaskFormData(task.getId()).getFormFields());
+        for(FormField fp : properties) {
+            System.out.println(fp.getId() + fp.getType());
+        }
+
+        return new FormFieldsDto(task1.getId(), "123", properties);
     }
 
     @PostMapping(path = "/betaNo", produces = "application/json")

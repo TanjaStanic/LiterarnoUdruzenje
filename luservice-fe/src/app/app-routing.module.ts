@@ -14,6 +14,11 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { UserGuardService } from './shared/route-guards/user-guard.service';
 import { ConfirmRegistrationComponent } from './components/registration/confirm-registration/confirm-registration.component';
 import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { SuccessComponent } from './components/success/success.component';
+import { ErrorComponent } from './components/error/error.component';
+import { FailComponent } from './components/fail/fail.component';
+import { CancelComponent } from './components/cancel/cancel.component';
 
 
 const routes: Routes = [
@@ -26,7 +31,13 @@ const routes: Routes = [
   { path: 'activate-account/:token', component: ConfirmRegistrationComponent, pathMatch: 'full' },
   { path: 'admin', component: AdminPanelComponent, pathMatch: 'full', canActivate: [AdminGuardService] },
   { path: 'dashboard', component: DashboardComponent, pathMatch: 'full' },
-  { path: 'cart', component: ShoppingCartComponent, pathMatch: 'full' }
+  { path: 'cart', component: ShoppingCartComponent, pathMatch: 'full' },
+  { path: 'profile', component: ProfileComponent, pathMatch: 'full', canActivate: [AuthGuardService] },
+  { path: 'success', component: SuccessComponent, pathMatch: 'full' },
+  { path: 'error', component: ErrorComponent, pathMatch: 'full' },
+  { path: 'fail', component: FailComponent, pathMatch: 'full' },
+  { path: 'cancel', component: CancelComponent, pathMatch: 'full' }
+
 ];
 
 @NgModule({

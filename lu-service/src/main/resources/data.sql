@@ -16,8 +16,8 @@ insert into users (email, name, password, city, country, enabled, role_id) value
 insert into users (email, name, password, city, country, enabled, role_id) values ("jezurka.jezic@example.com", "Jezurka Jezic", "$2a$10$g4CW8HjzjezXXW8z5jowD.ITgaES5wF/mijmoWJ//bpntP1oczjC6", "Novi Sad", "Serbia", true, 2);
 --insert into users (email, name, password, enabled, role_id) values ();
 
-insert into books (name, description, authors, genres, price) values("Pride and Prejudice", "Lorem ipsum", "Jane Austen", "Romance", "999");
-insert into books (name, description, authors, genres, price) values("Faust", "Lorem ipsum", "Johann Wolfgang von Goethe", "Tragedy", "899");
-insert into books (name, description, authors, genres, price) values("Hamlet", "Lorem ipsum", "William Shakespeare", "Drama, Tragedy", "799");
-insert into books (name, description, authors, genres, price) values("The Hobbit", "Lorem ipsum", "J.R.R. Tolkien", "Epic", "1999");
-insert into books (name, description, authors, genres, price) values("Grimms’ Fairy Tales", "Lorem ipsum", "Jacob Grimm, Wilhelm Grimm", "Fairy tale, Folklore", "999");
+insert into books (name, description, authors, genres, price) values("Pride and Prejudice", "Lorem ipsum", "Jane Austen", "Romance", "500");
+insert into books (name, description, authors, genres, price) values("Faust", "Lorem ipsum", "Johann Wolfgang von Goethe", "Tragedy", "500");
+insert into books (name, description, authors, genres, price) values("Hamlet", "Lorem ipsum", "William Shakespeare", "Drama, Tragedy", "500");
+insert into books (name, description, authors, genres, price) values("The Hobbit", "Lorem ipsum", "J.R.R. Tolkien", "Epic", "1500");
+insert into books (name, description, authors, genres, price) values("Grimms’ Fairy Tales", "Lorem ipsum", "Jacob Grimm, Wilhelm Grimm", "Fairy tale, Folklore", "500");

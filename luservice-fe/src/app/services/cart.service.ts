@@ -66,6 +66,6 @@ export class CartService {
       order.amount += cartItem.price;
     }
     console.log(order);
-    return this.httpClient.post(`${environment.baseUrl}auth/orders`, order);
+    return this.httpClient.post(`${environment.baseUrl}auth/orders`, order, { responseType: 'text' });
   }
 }

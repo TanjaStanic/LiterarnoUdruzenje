@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet"
+          th:href="@{https://localhost:8441/webjars/bootstrap/css/bootstrap.min.css}"/>
+
+    <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css}"
+          rel="stylesheet" type="text/css"/>
+</head>
+<body class="bg-color">
+<div class="container py-5">
+
+    <div class="row mb-4">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 " style="color:#007acc;">Register for banking</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-7 mx-auto">
+            <div class="bg-white rounded-lg shadow-sm p-5">
+
+                <div>
+                    <form id="forma" class="needs-validation" th:action="@{/clients/register}"
+                          method="POST" role="form"
+                          th:object="${registrationDTO}">
+
+                        <div class="form-group">
+                            <label for="bankId">Select bank</label>
+                            <input type="hidden" th:field="*{clientId}" id="clientId">
+                            <select class="form-control" id="bankId"  th:field="*{bankId}">
+                                <option th:each="bank: ${banks}" th:value="${bank.key}" th:text="${bank.value}"></option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success btn-lg">Submit</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    // disabling form submissions if there are invalid fields
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+<script th:src="@{https://localhost:8441/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{https://localhost:8441/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var flag = [[${error}]]; //Your Thymleaf variable
+    window.onload = function() {
+        if(!flag)
+            return; // Exit/Return if the variable is false
+        function showError() {
+            alert(flag);
+        }
+        showError(); // Call your favourite method if the variable is true
+    };
+
+    /*]]>*/
+</script>
+</body>
+</html>

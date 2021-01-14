@@ -1,6 +1,7 @@
 package com.example.bankacquirer.dto;
 
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 import com.example.bankacquirer.domain.TransactionStatus;
 import com.sun.istack.NotNull;
@@ -28,5 +29,5 @@ public class CompletedPaymentDTO {
    
     private Long issuerOrderID;
 
-    private ZonedDateTime issuerTimestamp;
+    private Date issuerTimestamp;
 }

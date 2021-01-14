@@ -8,6 +8,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -42,7 +43,7 @@ public class Transaction {
     private Long issuerOrderID;
 
     @Column(nullable = true)
-    private ZonedDateTime issuerTimestamp;
+    private Date issuerTimestamp;
 
     @Column
     private Double amount;

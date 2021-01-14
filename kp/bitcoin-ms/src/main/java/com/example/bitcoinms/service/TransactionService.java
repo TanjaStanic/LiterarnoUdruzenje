@@ -20,4 +20,6 @@ public interface TransactionService {
 
     Set<Transaction> findAllBySellerIdAndStatus(long sellerId, TransactionStatus status);
 
+    Transaction findById(long id);
+
 }

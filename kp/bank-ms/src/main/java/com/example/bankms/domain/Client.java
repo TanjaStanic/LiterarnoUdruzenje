@@ -30,26 +30,28 @@ public class Client {
     private String email;
 
     @Column
+    private Long pcClientId;
+    @Column
     private String name;
 
-    public Client(Long id, String merchantID, String merchantPassword, String email, String name) {
-        Assert.notNull(id, "Attribute id cannot be null.");
-        this.id = id;
-        init(email, name, merchantID, merchantPassword);
-
+    public Client(String email, String merchantID, String merchantPassword, long pcClientId) {
+        init(email, merchantID, merchantPassword, pcClientId);
     }
-    public Client( String merchantID, String merchantPassword, String email, String name) {
-        init(email, name, merchantID, merchantPassword);
 
+    public Client(String email, String merchantID, String merchantPassword, long pcClientId, String name) {
+        init(email, merchantID, merchantPassword, pcClientId);
+        this.name = name;
     }
-    private void init(String email, String name, String merchantID, String merchantPassword){
+
+    private void init(String email, String merchantID, String merchantPassword, Long pcClientId){
         Assert.notNull(email, "Attribute email cannot be null.");
-        Assert.notNull(name, "Attribute name cannot be null.");
         Assert.notNull(merchantID, "Attribute merchantID cannot be null.");
         Assert.notNull(merchantPassword, "Attribute merchantPassword cannot be null.");
+        Assert.notNull(pcClientId, "Attribute pcClientId cannot be null.");
         this.merchantID = merchantID;
         this.merchantPassword = merchantPassword;
         this.email = email;
-        this.name = name;
+        this.pcClientId = pcClientId;
+
     }
 }

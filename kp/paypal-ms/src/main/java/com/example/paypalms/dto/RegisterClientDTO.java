@@ -15,7 +15,9 @@ public class RegisterClientDTO {
     @NotNull
     private String email;
     @NotNull
-    private String clientId;    //sifrovati
+    private String clientId;
     @NotNull
     private String clientSecret;
+    @NotNull
+    private String pcClientId;
 }

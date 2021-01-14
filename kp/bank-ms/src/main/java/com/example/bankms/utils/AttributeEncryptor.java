@@ -45,6 +45,11 @@ public class AttributeEncryptor implements AttributeConverter<String, String> {
 
     @Override
     public String convertToDatabaseColumn(String attribute) {
+
+        if (attribute == null || attribute.equals("")) {
+            return "";
+        }
+
         String generatedString = RandomStringUtils.randomAlphanumeric(16);
         byte[] IvParameterVector = generatedString.getBytes();
 
@@ -61,9 +66,7 @@ public class AttributeEncryptor implements AttributeConverter<String, String> {
             log.error("Error while reading key");
         }
 
-        if (attribute == null || attribute.equals("")) {
-            return "";
-        }
+
 
         try {
             cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(IvParameterVector));
@@ -79,6 +82,10 @@ public class AttributeEncryptor implements AttributeConverter<String, String> {
 
     @Override
     public String convertToEntityAttribute(String dbData) {
+
+        if (dbData.equals("")) {
+            return "";
+        }
 
         byte[] IvParameterVector = (cryptoService.findByText(dbData).getIv()).getBytes();
 
@@ -96,9 +103,6 @@ public class AttributeEncryptor implements AttributeConverter<String, String> {
             log.error(e.getMessage());
         }
 
-        if (dbData.equals("")) {
-            return "";
-        }
 
         try {
             cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(IvParameterVector));

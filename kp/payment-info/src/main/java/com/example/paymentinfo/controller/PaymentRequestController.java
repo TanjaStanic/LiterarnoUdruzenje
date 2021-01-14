@@ -17,8 +17,9 @@ import org.springframework.web.client.RestTemplate;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/auth/api")
 @Log4j2
+@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 public class PaymentRequestController {
 
     private PaymentRequestService paymentService;
@@ -46,7 +47,8 @@ public class PaymentRequestController {
         request.setAmount(requestDTO.getAmount());
         request.setCurrencyCode(requestDTO.getCurrencyCode());
         request.setMerchantTimestamp(requestDTO.getMerchantTimestamp());
-
+        request.setCancelUrl(requestDTO.getCancelUrl());
+        request.setCallbackUrl(request.getCallbackUrl());
 
         request = paymentRequestRepository.save(request);
         log.info("CREATED | Payment Requests | Payment Id: " + request.getId());
@@ -60,15 +62,20 @@ public class PaymentRequestController {
     public ResponseEntity<?> redirectPaymentRequest(@PathVariable String paymentMethod, @PathVariable String sellerEmail, @PathVariable long merchantOrderId) {
 
         PaymentRequest paymentRequest = paymentRequestRepository.findByMerchantOrderId(merchantOrderId);
-
+        System.out.println(paymentRequest.getMerchantEmail().toString());
+        System.out.println(paymentMethod.toString());
         HttpEntity<PaymentRequest> entity = new HttpEntity<>(paymentRequest);
+        System.out.println(entity);
         ResponseEntity<String> redirectUrl = restTemplate.postForEntity("https://" + paymentMethod + "/", entity, String.class);
-
+        System.out.println(paymentMethod.toString());
+        System.out.println(entity.toString());
         HttpHeaders headersRedirect = new HttpHeaders();
         headersRedirect.add("Location", redirectUrl.getBody());
         headersRedirect.add("Access-Control-Allow-Origin", "*");
         return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
 
     }
+
+
 
 }

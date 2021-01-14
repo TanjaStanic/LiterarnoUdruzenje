@@ -26,4 +26,5 @@ public class SubscriptionRequestDto {
     private String failedUrl;
     @NotNull
     private String cancelUrl;
+    private long merchantOrderId;
 }
