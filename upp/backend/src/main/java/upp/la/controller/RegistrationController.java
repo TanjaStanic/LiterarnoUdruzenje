@@ -3,19 +3,20 @@ package upp.la.controller;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.form.FormField;
-import org.camunda.bpm.engine.form.TaskFormData;
+
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import upp.la.dto.FormFieldDto;
 import upp.la.dto.FormFieldsDto;
 import upp.la.error.ErrorMessages;
 import upp.la.exceptions.DuplicateEntity;
+import upp.la.exceptions.EntityNotFound;
 import upp.la.model.Genre;
 import upp.la.service.GenreService;
 import upp.la.exceptions.ValidationError;
@@ -23,6 +24,8 @@ import upp.la.service.ValidateRegistrationService;
 import upp.la.service.internal.RegistrationServiceInt;
 
 import javax.annotation.security.RolesAllowed;
+import javax.validation.constraints.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -190,8 +193,21 @@ public class RegistrationController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    
+    @Validated
+    @GetMapping(value = "/verify-account")
+    public @ResponseBody ResponseEntity<?> verifyAccount(
+        @RequestParam @NotNull String confirmationToken, 
+        @RequestParam String processId) throws EntityNotFound {
+      
+    	runtimeService.setVariable(processId, "validation_token", confirmationToken);
+    	MessageCorrelationResult result = runtimeService.createMessageCorrelation("recieve_verification_email")
+                .processInstanceId(processId).correlateWithResult();
 
-
+      return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+    
+    
     private HashMap<String, Object> mapListToDto(List<FormFieldDto> list) {
         HashMap<String, Object> map = new HashMap<String, Object>();
         for (FormFieldDto temp : list) {
