@@ -34,6 +34,14 @@ public class EmailTemplate {
     return "You have: " + days.toString() + " to provide more material.";
   }
 
+  public static String REGISTRATION_APPLICATION_REVIEW_SUBJECT() {
+    return "Registration application review";
+  }
+
+  public static String REGISTRATION_APPLICATION_REVIEW_MESSAGE() {
+    return "You have been assigned to review registration application material.";
+  }
+
   private String address;
 
   private String subject;
@@ -61,5 +69,11 @@ public class EmailTemplate {
         EmailTemplate.REGISTRATION_APPLICATION_SUBJECT(),
         EmailTemplate.REGISTRATION_APPLICATION_MESSAGE(ApplicationResponse.LACKING_MATERIAL)
             + EmailTemplate.REGISTRATION_APPLICATION_DEADLINE_MESSAGE(deadlineDays));
+  }
+
+  public static EmailTemplate RegistrationApplicationReviewInviteEmail() {
+    return new EmailTemplate(
+        EmailTemplate.REGISTRATION_APPLICATION_REVIEW_SUBJECT(),
+        EmailTemplate.REGISTRATION_APPLICATION_REVIEW_MESSAGE());
   }
 }

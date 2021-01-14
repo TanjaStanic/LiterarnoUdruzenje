@@ -33,15 +33,25 @@ public class User {
 
   @Column private Boolean activated;
 
-  // Genres readers and beta-readers are interested in
+  // Genres readers are interested in
   @ManyToMany(
       cascade = {CascadeType.ALL},
       fetch = FetchType.LAZY)
   @JoinTable(
-      name = "user_genres",
+      name = "reader_genres",
       joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
       inverseJoinColumns = {@JoinColumn(name = "genre_id", referencedColumnName = "id")})
   private Collection<Genre> genres;
+
+  // Genres beta-readers are interested in
+  @ManyToMany(
+      cascade = {CascadeType.ALL},
+      fetch = FetchType.LAZY)
+  @JoinTable(
+      name = "beta_genres",
+      joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+      inverseJoinColumns = {@JoinColumn(name = "genre_id", referencedColumnName = "id")})
+  private Collection<Genre> betaGenres;
 
   // Books writers have contributed to/authored
   @ManyToMany(

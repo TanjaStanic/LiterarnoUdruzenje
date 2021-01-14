@@ -28,7 +28,7 @@ public class RegistrationApplication {
   @JoinColumn(nullable = false, name = "user_id")
   private User writer;
 
-  @Temporal(TemporalType.TIMESTAMP)
+  @Temporal(TemporalType.DATE)
   private Date createdDate;
 
   @Enumerated(EnumType.STRING)

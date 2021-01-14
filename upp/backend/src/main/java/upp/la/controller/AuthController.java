@@ -85,6 +85,7 @@ public class AuthController {
             true,
             null,
             null,
+            null,
             Role.READER);
     registrationServiceInt.registerNew(test1);
 
