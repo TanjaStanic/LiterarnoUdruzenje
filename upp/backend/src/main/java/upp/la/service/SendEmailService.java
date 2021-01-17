@@ -4,6 +4,8 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
+import upp.la.util.Requests;
 import upp.la.dto.FormFieldDto;
 import upp.la.model.auth.ConfirmationToken;
 import upp.la.model.EmailTemplate;
@@ -13,7 +15,7 @@ import upp.la.util.Requests;
 
 import java.util.List;
 
-
+@Component
 public class SendEmailService implements JavaDelegate{
 
 	
@@ -35,8 +37,9 @@ public class SendEmailService implements JavaDelegate{
 				email = f.getFieldValue();
 			}
 		}
-		
-		User user = userRepository.findByEmail(email);
+
+		System.out.println("Email je " + email);
+		User user = userRepository.findUserByEmail(email);
 		ConfirmationToken confirmationToken = new ConfirmationToken(user);
 		
 		String processId = execution.getProcessInstanceId();

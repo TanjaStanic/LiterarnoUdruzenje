@@ -75,6 +75,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .permitAll()
         .antMatchers("/files/**")
         .permitAll()
+            .antMatchers("/camunda-welcome/**")
+            .permitAll()
         // Our private endpoints
         .anyRequest()
         .authenticated();

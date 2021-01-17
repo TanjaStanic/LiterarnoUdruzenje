@@ -22,8 +22,9 @@
           <camunda:formField id="cityId" label="Grad" type="string" />
           <camunda:formField id="countryId" label="Drzava" type="string" />
           <camunda:formField id="userNameId" label="Korisnicko ime" type="string" />
-		  <camunda:formField id="firstGenresListId" label="Zanrovi" type="enum" />          
+          <camunda:formField id="firstGenresListId" label="Zanrovi" type="enum" />
         </camunda:formData>
+        <camunda:taskListener class="upp.la.service.GenreServiceDelegate" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_150hi7z</bpmn:incoming>
       <bpmn:incoming>Flow_100z7kp</bpmn:incoming>
@@ -36,17 +37,16 @@
       <bpmn:outgoing>Flow_09xgw0u</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:exclusiveGateway id="Gateway_1tu009n">
-      <bpmn:incoming>Flow_1ucdax5</bpmn:incoming>
       <bpmn:incoming>Flow_1doa7g9</bpmn:incoming>
+      <bpmn:incoming>Flow_09xgw0u</bpmn:incoming>
       <bpmn:outgoing>Flow_18a9np1</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_18a9np1" sourceRef="Gateway_1tu009n" targetRef="Activity_0rayvf0" />
     <bpmn:sequenceFlow id="Flow_0rv7o7f" sourceRef="Gateway_0ji6a4z" targetRef="registration_reader">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${roleId=="value_1"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_09xgw0u" sourceRef="Gateway_0ji6a4z" targetRef="Activity_13oe2jp" />
+    <bpmn:sequenceFlow id="Flow_09xgw0u" sourceRef="Gateway_0ji6a4z" targetRef="Gateway_1tu009n" />
     <bpmn:sequenceFlow id="Flow_1xamt27" sourceRef="registration_reader" targetRef="Gateway_1hd514l" />
-    <bpmn:sequenceFlow id="Flow_1ucdax5" sourceRef="Activity_13oe2jp" targetRef="Gateway_1tu009n" />
     <bpmn:userTask id="registration_reader" name="Registration reader" camunda:assignee="${user}">
       <bpmn:extensionElements>
         <camunda:formData>
@@ -80,13 +80,10 @@
         <camunda:formData>
           <camunda:formField id="genresListId" type="enum" />
         </camunda:formData>
+        <camunda:taskListener class="upp.la.service.GenreServiceDelegate" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_02b81kb</bpmn:incoming>
       <bpmn:outgoing>Flow_01tzdr1</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:userTask id="Activity_13oe2jp" name="Registration writer" camunda:assignee="${user}">
-      <bpmn:incoming>Flow_09xgw0u</bpmn:incoming>
-      <bpmn:outgoing>Flow_1ucdax5</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:serviceTask id="Activity_06meg72" name="Validation" camunda:class="upp.la.service.ValidateRegistrationService">
       <bpmn:incoming>Flow_0rtutbq</bpmn:incoming>
@@ -213,19 +210,13 @@
           <dc:Bounds x="924" y="160" width="64" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ucdax5_di" bpmnElement="Flow_1ucdax5">
-        <di:waypoint x="880" y="400" />
-        <di:waypoint x="1180" y="400" />
-        <di:waypoint x="1180" y="342" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1xamt27_di" bpmnElement="Flow_1xamt27">
         <di:waypoint x="880" y="230" />
         <di:waypoint x="915" y="230" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_09xgw0u_di" bpmnElement="Flow_09xgw0u">
-        <di:waypoint x="730" y="342" />
-        <di:waypoint x="730" y="400" />
-        <di:waypoint x="780" y="400" />
+        <di:waypoint x="755" y="317" />
+        <di:waypoint x="1155" y="317" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0rv7o7f_di" bpmnElement="Flow_0rv7o7f">
         <di:waypoint x="730" y="292" />
@@ -273,9 +264,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0gvm8d3_di" bpmnElement="BetaReaderGenres">
         <dc:Bounds x="1000" y="80" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1u8ouud_di" bpmnElement="Activity_13oe2jp">
-        <dc:Bounds x="780" y="360" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_06meg72_di" bpmnElement="Activity_06meg72">
         <dc:Bounds x="470" y="190" width="100" height="80" />

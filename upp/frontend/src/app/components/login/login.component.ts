@@ -5,6 +5,7 @@ import {User} from '../../model/user';
 import {Role} from '../../model/role';
 import {Router} from '@angular/router';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -42,39 +43,79 @@ export class LoginComponent implements OnInit {
     const c = await this.userService.getUser(this.f.username.value);
     console.log(c);
     this.user = new User();
-    this.user.username = c.username;
-    this.user.password = c.password;
+    this.user.username = c.username
+    this.user.password = this.f.password.value;
     this.userRole = c.role;
-    console.log(this.user);
     this.attemptLogin();
   }
 
   attemptLogin() {
+        if (this.userRole === 'ADMIN' && this.f.username.value === this.user.username) {
+          this.userService.login(this.user).subscribe(
+            data => {
+              this.router.navigate(['/adminHome']);
+              this.user.role = Role.ADMIN;
+              this.userService.setToken(this.user);
+            },
+            error => {
+              console.log(error);
+            });
+        } else if (this.userRole === 'READER' && this.f.username.value === this.user.username) {
+          this.userService.login(this.user).subscribe(
+            data => {
+              this.router.navigate(['/readerHome']);
+              this.user.role = Role.READER;
+              this.userService.setToken(this.user);
+            },
+            error => {
+              console.log(error);
+            });
 
-    if (this.userRole === 'ADMIN' && this.f.username.value === this.user.username && this.f.password.value === this.user.password) {
-      this.router.navigate(['/adminHome']);
-      this.user.role = Role.ADMIN;
-      this.userService.setToken(this.user);
-    } else if (this.userRole === 'READER' && this.f.username.value === this.user.username && this.f.password.value === this.user.password) {
-      this.router.navigate(['/readerHome']);
-      this.user.role = Role.READER;
-      this.userService.setToken(this.user);
-    } else if (this.userRole === 'WRITER' && this.f.username.value === this.user.username && this.f.password.value === this.user.password) {
-      this.router.navigate(['/writerHome']);
-      this.user.role = Role.WRITER;
-      this.userService.setToken(this.user);
-    } else if (this.userRole === 'BETA_READER' && this.f.username.value === this.user.username && this.f.password.value === this.user.password) {
-      this.router.navigate(['/readerHome']);
-      this.user.role = Role.BETA_READER;
-      this.userService.setToken(this.user);
-    } else if (this.userRole === 'LECTURER' && this.f.username.value === this.user.username && this.f.password.value === this.user.password) {
-      this.router.navigate(['/lecturerHome']);
-      this.user.role = Role.LECTURER;
-      this.userService.setToken(this.user);
-    } else if (this.userRole === 'EDITOR' && this.f.username.value === this.user.username && this.f.password.value === this.user.password) {
-      this.router.navigate(['/editorHome'])
-      this.user.role = Role.EDITOR;
-      this.userService.setToken(this.user);
-    }
+        } else if (this.userRole === 'WRITER' && this.f.username.value === this.user.username) {
+          this.userService.login(this.user).subscribe(
+            data => {
+              this.router.navigate(['/writerHome']);
+              this.user.role = Role.WRITER;
+              this.userService.setToken(this.user);
+            },
+            error => {
+              console.log(error);
+            });
+
+        } else if (this.userRole === 'BETA_READER' && this.f.username.value === this.user.username) {
+          this.userService.login(this.user).subscribe(
+            data => {
+              this.router.navigate(['/readerHome']);
+              this.user.role = Role.BETA_READER;
+              this.userService.setToken(this.user);
+            },
+            error => {
+              console.log(error);
+            });
+
+        } else if (this.userRole === 'LECTURER' && this.f.username.value === this.user.username) {
+          this.userService.login(this.user).subscribe(
+            data => {
+              this.router.navigate(['/lecturerHome']);
+              this.user.role = Role.LECTURER;
+              this.userService.setToken(this.user);
+            },
+            error => {
+              console.log(error);
+            });
+
+        } else if (this.userRole === 'EDITOR' && this.f.username.value === this.user.username) {
+          this.userService.login(this.user).subscribe(
+            data => {
+              this.router.navigate(['/editorHome'])
+              this.user.role = Role.EDITOR;
+              this.userService.setToken(this.user);
+            },
+            error => {
+              console.log(error);
+            });
+
+        }
   }
+
 }

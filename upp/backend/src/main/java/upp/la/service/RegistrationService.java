@@ -81,11 +81,11 @@ public class RegistrationService implements JavaDelegate {
             if (formField.getFieldId().equals("roleId")) {
             	
             	if (formField.getFieldValue().equals("value_1")) {
-            		//userModel.setRole(Role.READER);
+            		userModel.setRole(Role.READER);
 
             	}
             	else if (formField.getFieldValue().equals("value_2")) {
-            		//userModel.setRole(Role.WRITER);
+            		userModel.setRole(Role.WRITER);
             	}
             	
             }
