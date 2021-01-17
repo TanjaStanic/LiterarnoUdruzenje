@@ -5,6 +5,7 @@ import {MatDialog} from '@angular/material';
 import {WriterDialogComponent} from '../writer-dialog/writer-dialog.component';
 import {UserService} from '../../services/user.service';
 import {GenreService} from '../../services/genre.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -21,7 +22,8 @@ export class RegisterComponent implements OnInit {
   private genreValues = [];
   constructor(private formBuilder: FormBuilder, public dialog: MatDialog,
               private userService: UserService,
-              private genreService: GenreService) {
+              private genreService: GenreService,
+              private router: Router) {
     // this.genreService.getAllGenres();
     const x = userService.getFields();
 
@@ -95,7 +97,20 @@ export class RegisterComponent implements OnInit {
       );
 
     } else {
-      this.dialog.open(WriterDialogComponent, {width: '50%', height: '50%'});
+      const user = this.userService.registerUser(d);
+      user.subscribe(
+        res => {
+
+          console.log('Successfully register writer');
+          this.router.navigate(['/login']);
+        },
+        err => {
+
+          console.log('Error occured');
+          window.alert('Validation backend failed !');
+          window.location.href = 'http://localhost:4200/register';
+        });
+      // this.dialog.open(WriterDialogComponent, {width: '50%', height: '50%'});
     }
   }
 }

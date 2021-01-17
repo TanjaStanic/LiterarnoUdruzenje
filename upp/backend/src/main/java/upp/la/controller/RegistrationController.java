@@ -83,7 +83,7 @@ public class RegistrationController {
         List<FormFieldDto> dto_genres = new ArrayList<FormFieldDto>();
         for(String s : parts) {
             FormFieldDto f = new FormFieldDto();
-            f.setFieldId(formFields.get(1).getFieldId());
+            f.setFieldId(formFields.get(8).getFieldId());
             f.setFieldValue(s);
             dto_genres.add(f);
         }
@@ -96,7 +96,6 @@ public class RegistrationController {
                                    formFields);
 
         formService.submitTaskForm(task.getId(), map);
-        System.out.println(formFields.toString());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
