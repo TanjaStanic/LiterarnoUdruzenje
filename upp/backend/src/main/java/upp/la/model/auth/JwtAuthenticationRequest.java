@@ -1,4 +1,4 @@
-package upp.la.model;
+package upp.la.model.auth;
 
 import lombok.Getter;
 import lombok.Setter;

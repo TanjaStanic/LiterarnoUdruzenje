@@ -1,4 +1,4 @@
-package upp.la.config;
+package upp.la.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -23,7 +23,8 @@ import static org.springframework.util.StringUtils.isEmpty;
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
 
-  @Autowired JwtTokenUtils jwtTokenUtils;
+  @Autowired
+  JwtTokenUtils jwtTokenUtils;
   @Autowired UserRepository userRepository;
   @Autowired UserDetailsService userDetailsService;
 

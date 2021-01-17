@@ -11,10 +11,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import upp.la.config.JwtTokenUtils;
-import upp.la.exceptions.AuthorizationError;
-import upp.la.exceptions.EntityNotFound;
-import upp.la.model.JwtAuthenticationRequest;
+import upp.la.config.security.JwtTokenUtils;
+import upp.la.error.ErrorMessages;
+import upp.la.model.exceptions.AuthorizationError;
+import upp.la.model.exceptions.EntityNotFound;
+import upp.la.model.auth.JwtAuthenticationRequest;
 import upp.la.model.Role;
 import upp.la.model.User;
 import upp.la.repository.UserRepository;
@@ -54,7 +55,7 @@ public class AuthController {
       return new ResponseEntity<>(
           jwtTokenUtils.generateToken(user.getUsername()), HttpStatus.ACCEPTED);
     } catch (Exception ex) {
-      throw new AuthorizationError("Bad credentials.");
+      throw new AuthorizationError(ErrorMessages.AUTH_ERROR());
     }
   }
 
@@ -82,6 +83,8 @@ public class AuthController {
             "asd",
             "asdf",
             true,
+            null,
+            null,
             null,
             Role.READER);
     registrationServiceInt.registerNew(test1);
