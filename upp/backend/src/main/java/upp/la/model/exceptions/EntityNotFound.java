@@ -1,4 +1,4 @@
-package upp.la.exceptions;
+package upp.la.model.exceptions;
 
 public class EntityNotFound extends Exception {
   public EntityNotFound(String s) {

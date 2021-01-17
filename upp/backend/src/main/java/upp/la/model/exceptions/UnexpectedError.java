@@ -1,4 +1,4 @@
-package upp.la.exceptions;
+package upp.la.model.exceptions;
 
 public class UnexpectedError extends Exception {
   public UnexpectedError(String s) {

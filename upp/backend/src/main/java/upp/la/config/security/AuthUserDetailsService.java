@@ -1,4 +1,4 @@
-package upp.la.config;
+package upp.la.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

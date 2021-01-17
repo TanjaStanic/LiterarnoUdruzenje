@@ -1,20 +1,19 @@
 package upp.la.service;
 
-import java.util.List;
-
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-
 import org.springframework.stereotype.Component;
 import upp.la.util.Requests;
-
 import upp.la.dto.FormFieldDto;
-import upp.la.model.ConfirmationToken;
+import upp.la.model.auth.ConfirmationToken;
 import upp.la.model.EmailTemplate;
 import upp.la.model.User;
 import upp.la.repository.UserRepository;
+import upp.la.util.Requests;
+
+import java.util.List;
 
 @Component
 public class SendEmailService implements JavaDelegate{
@@ -50,8 +49,8 @@ public class SendEmailService implements JavaDelegate{
 		EmailTemplate emailTempl =
 		        new EmailTemplate(
 		        		email,
-		            EmailTemplate.VERIFY_SUBJECT(),
-		            EmailTemplate.VERIFY_MESSAGE(message));
+		            EmailTemplate.VERIFICATION_SUBJECT(),
+		            EmailTemplate.VERIFICATION_MESSAGE(message));
 
 		 Requests.sendEmail(emailTempl);
 	}

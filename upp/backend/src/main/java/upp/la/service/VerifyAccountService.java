@@ -5,8 +5,8 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import upp.la.error.ErrorMessages;
-import upp.la.exceptions.EntityNotFound;
-import upp.la.model.ConfirmationToken;
+import upp.la.model.exceptions.EntityNotFound;
+import upp.la.model.auth.ConfirmationToken;
 import upp.la.model.User;
 import upp.la.repository.ConfirmationTokenRepository;
 import upp.la.repository.UserRepository;

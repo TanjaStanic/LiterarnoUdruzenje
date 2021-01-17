@@ -1,4 +1,4 @@
-package upp.la.config;
+package upp.la.config.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import upp.la.config.security.AuthUserDetailsService;
 import upp.la.model.User;
 import upp.la.repository.UserRepository;
 

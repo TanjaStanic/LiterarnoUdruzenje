@@ -29,4 +29,8 @@ public class ErrorMessages {
     public static String FILE_ERROR() {
         return "File upload/download error.";
     }
+
+    public static String AUTH_ERROR() {
+        return "Bad credentials.";
+    }
 }
