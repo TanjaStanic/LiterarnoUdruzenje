@@ -109,10 +109,6 @@ public class RegistrationController {
         TaskFormData tfd = formService.getTaskFormData(task1.getId());
         List<FormField> properties = tfd.getFormFields();
         properties.add(formService.getTaskFormData(task.getId()).getFormFields().get(8));
-        for(FormField fp : properties) {
-            System.out.println(fp.getId() + fp.getType());
-        }
-
         return new FormFieldsDto(task1.getId(), "123", properties);
   }
 
