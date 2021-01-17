@@ -34,6 +34,10 @@ export class UserService {
     return this.httpClient.post('http://localhost:8080/registration/betaNo/', no) as Observable<any>;
   }
 
+  login(user) {
+    return this.httpClient.post('http://localhost:8080/auth/login', user, {responseType: 'text'});
+  }
+
   public async getUser(username: string): Promise<User> {
     let params = new HttpParams();
     params = params.append('username', username);

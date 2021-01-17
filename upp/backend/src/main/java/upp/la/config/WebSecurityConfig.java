@@ -72,6 +72,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .permitAll()
         .antMatchers("/files/**")
         .permitAll()
+            .antMatchers("/engine-rest/**")
+            .permitAll()
         // Our private endpoints
         .anyRequest()
         .authenticated();

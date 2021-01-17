@@ -22,8 +22,9 @@
           <camunda:formField id="cityId" label="Grad" type="string" />
           <camunda:formField id="countryId" label="Drzava" type="string" />
           <camunda:formField id="userNameId" label="Korisnicko ime" type="string" />
-		  <camunda:formField id="firstGenresListId" label="Zanrovi" type="enum" />          
+          <camunda:formField id="firstGenresListId" label="Zanrovi" type="enum" />
         </camunda:formData>
+        <camunda:taskListener class="upp.la.service.GenreServiceDelegate" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_150hi7z</bpmn:incoming>
       <bpmn:incoming>Flow_100z7kp</bpmn:incoming>
@@ -80,6 +81,7 @@
         <camunda:formData>
           <camunda:formField id="genresListId" type="enum" />
         </camunda:formData>
+        <camunda:taskListener class="upp.la.service.GenreServiceDelegate" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_02b81kb</bpmn:incoming>
       <bpmn:outgoing>Flow_01tzdr1</bpmn:outgoing>

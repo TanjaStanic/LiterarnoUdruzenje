@@ -9,11 +9,14 @@
               <label for={{field.id}}>{{field.label}}</label>
               <input type="password" name={{field.id}} formControlName={{field.id}} class = "form-control" ngModel  *ngIf="field.id == 'passwordId'">
               <input type="text" name={{field.id}} formControlName={{field.id}} class = "form-control" ngModel  *ngIf="field.type.name=='string' && field.id !== 'passwordId'">
-              <select name="field.id" formControlName={{field.id}} class = "form-control" *ngIf="field.type.name=='enum'">
+              <select name="field.id" formControlName={{field.id}} class = "form-control" *ngIf="field.type.name=='enum' && field.id === 'roleId'">
                 <option *ngFor="let val of enumValues" value={{val}}>
                   {{field.type.values[val]}}
                 </option>
               </select>
+              <mat-select id="field.id" formControlName="{{field.id}}" multiple ngModel *ngIf="field.id === 'firstGenresListId'">
+                <mat-option *ngFor="let genre of genreValues" value = {{genre}}>{{field.type.values[genre]}}</mat-option>
+              </mat-select>
             </div>
             <div class="form-group">
               <a routerLink="/login">Already have an account? Login here.</a>

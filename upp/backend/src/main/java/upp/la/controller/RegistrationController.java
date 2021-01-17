@@ -71,8 +71,6 @@ public class RegistrationController {
         }
         System.out.println("val:" + validationOk);
 
-        HashMap<String, Object> map = this.mapListToDto(formFields);
-
         List<Task> tasks = taskService.createTaskQuery()
                 .taskName("Registration")
                 .list();
@@ -80,13 +78,25 @@ public class RegistrationController {
 
         String processInstanceId = task.getProcessInstanceId();
 
+        String genres = formFields.get(8).getFieldValue();
+        String[] parts = genres.split(",");
+        List<FormFieldDto> dto_genres = new ArrayList<FormFieldDto>();
+        for(String s : parts) {
+            FormFieldDto f = new FormFieldDto();
+            f.setFieldId(formFields.get(1).getFieldId());
+            f.setFieldValue(s);
+            dto_genres.add(f);
+        }
+        formFields.remove(formFields.size()- 1);
+        formFields.addAll(dto_genres);
+        HashMap<String, Object> map = this.mapListToDto(formFields);
         //Create variable "registration"
         runtimeService.setVariable(processInstanceId,
                                    "registration",
                                    formFields);
 
         formService.submitTaskForm(task.getId(), map);
-
+        System.out.println(formFields.toString());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -111,12 +121,11 @@ public class RegistrationController {
     @GetMapping(path = "/getGenresForm", produces = "application/json")
     public @ResponseBody FormFieldsDto getGenresForms() {
 
+        Task task  = taskService.createTaskQuery().taskName("Registration").list().get(0);
         Task task1 = taskService.createTaskQuery().taskName("Registration reader").list().get(0);
-        Task task  = taskService.createTaskQuery().taskName("Genres for beta reader").singleResult();
-        System.out.println(task.getName());
         TaskFormData tfd = formService.getTaskFormData(task1.getId());
         List<FormField> properties = tfd.getFormFields();
-        properties.addAll(formService.getTaskFormData(task.getId()).getFormFields());
+        properties.add(formService.getTaskFormData(task.getId()).getFormFields().get(8));
         for(FormField fp : properties) {
             System.out.println(fp.getId() + fp.getType());
         }
@@ -188,6 +197,8 @@ public class RegistrationController {
         // Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         processInstanceId = task.getProcessInstanceId();
 
+        System.out.println(task.getId() + " ovo je task id");
+        System.out.println(map_genres.toString() + " ovo je mapa");
         runtimeService.setVariable(processInstanceId,
                 "betaYes_registration_genres",
                 dto_genres);

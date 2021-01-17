@@ -5,17 +5,15 @@
           <mat-card>
             <h4>Registracija citaoca</h4>
             <form [formGroup]="readerForm" (ngSubmit)="onSubmit()">
-              <mat-label for="role">Beta citalac</mat-label>
-                  <mat-radio-group id="role" formControlName="role" aria-label="Beta citalac">
-                     <mat-radio-button value="Da">Da</mat-radio-button>
-                     <mat-radio-button value="Ne">Ne</mat-radio-button>
-                  </mat-radio-group>
-              <mat-form-field appearance="fill">
-                <mat-label>Zanrovi</mat-label>
-                <mat-select id="genres" formControlName="genres" multiple>
-                  <mat-option *ngFor="let genre of genreList" [value]="genre.id">{{genre.name}}</mat-option>
+              <div *ngFor="let field of formFields">
+                <label for={{field.id}}>{{field.label}}</label>
+                <mat-radio-group id={{field.id}} formControlName={{field.id}} ngModel *ngIf="field.id == 'betaReaderId'">
+                  <mat-radio-button *ngFor="let val of enumValues" value = {{val}}> {{field.type.values[val]}}</mat-radio-button>
+                </mat-radio-group>
+                <mat-select id="field.id" formControlName="{{field.id}}" multiple ngModel *ngIf="field.id === 'firstGenresListId'">
+                  <mat-option *ngFor="let genre of genreValues" value = {{genre}}>{{field.type.values[genre]}}</mat-option>
                 </mat-select>
-              </mat-form-field>
+              </div>
               <div mat-dialog-actions>
               <button mat-raised-button color="primary" class="pull-right">Register</button>
               </div>

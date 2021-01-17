@@ -47,8 +47,8 @@ public class GenreServiceDelegate implements TaskListener {
         if (properties != null) {
 
             for (FormField field : properties) {
-                if (field.getId().equals("genresListId")) {
-
+                if (field.getId().equals("genresListId") || field.getId().equals("firstGenresListId")) {
+                    System.out.println("USAO");
                     HashMap<String, String> items = (HashMap<String, String>) field.getType().getInformation("values");
 
                     for(GenreDto g: genresDTO) {

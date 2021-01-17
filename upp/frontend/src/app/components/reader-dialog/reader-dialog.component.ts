@@ -14,9 +14,9 @@ import {Router} from '@angular/router';
 export class ReaderDialogComponent implements OnInit {
 
   readerForm: FormGroup;
-  genreList: Array<Genre>;
   private formFields = [];
   private enumValues = []
+  private genreValues = [];
 
   constructor( public dialogRef: MatDialogRef<ReaderDialogComponent>,
                @Inject(MAT_DIALOG_DATA) public data: any,
@@ -33,8 +33,10 @@ export class ReaderDialogComponent implements OnInit {
         this.formFields = res.formFields;
         this.formFields.forEach( (field) => {
 
-          if ( field.type.name === 'enum') {
+          if ( field.id === 'betaReaderId') {
             this.enumValues = Object.keys(field.type.values);
+          } else if (field.id === 'firstGenresListId') {
+            this.genreValues = Object.keys(field.type.values);
           }
         });
       },
@@ -46,8 +48,8 @@ export class ReaderDialogComponent implements OnInit {
 
   ngOnInit() {
     this.readerForm = this.formBuilder.group({
-      role: new FormControl('', [Validators.required]),
-      genres : new FormControl()
+      betaReaderId: new FormControl('', [Validators.required]),
+      firstGenresListId : new FormControl()
     });
   }
 
@@ -56,6 +58,8 @@ export class ReaderDialogComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log(this.f.betaReaderId.value);
+    console.log(this.f.firstGenresListId.value);
     if (this.readerForm.invalid) {
       return;
     }
@@ -63,8 +67,8 @@ export class ReaderDialogComponent implements OnInit {
     const no = [];
     no.push({fieldId : 'betaReaderId', fieldValue: 'value_no'});
     yes.push({fieldId : 'betaReaderId', fieldValue: 'value_yes'});
-    yes.push({fieldId : 'genresListId', fieldValue: this.f.genres.value.toString()});
-    if (this.f.role.value === 'Da') {
+    yes.push({fieldId : 'genresListId', fieldValue: this.f.firstGenresListId.value.toString()});
+    if (this.f.betaReaderId.value === 'value_yes') {
       const user = this.userService.betaReaderYes(yes);
       user.subscribe(
         res => {

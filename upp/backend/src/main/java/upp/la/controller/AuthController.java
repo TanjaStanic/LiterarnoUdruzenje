@@ -39,6 +39,8 @@ public class AuthController {
   @PostMapping(path = "/login")
   public ResponseEntity<?> login(@RequestBody @Valid JwtAuthenticationRequest request)
       throws AuthorizationError {
+
+    System.out.println(request.getUsername() + " " + request.getPassword());
     try {
       Authentication authenticate =
           authenticationManager.authenticate(
@@ -56,6 +58,9 @@ public class AuthController {
     } catch (Exception ex) {
       throw new AuthorizationError("Bad credentials.");
     }
+
+    // Ovo izbrisati
+    // return new ResponseEntity<>(request.getUsername(), HttpStatus.ACCEPTED);
   }
 
   @Validated
@@ -93,7 +98,6 @@ public class AuthController {
   public ResponseEntity<User> getByName(@RequestParam(value = "username", required = true) String username) {
     User user = userRepository.findUserByUsername(username);
     if(user != null) {
-      System.out.println(user.getRole());
       return new ResponseEntity<>(user, HttpStatus.OK);
     } else {
       return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
