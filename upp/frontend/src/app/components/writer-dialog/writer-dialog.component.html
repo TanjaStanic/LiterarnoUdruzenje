@@ -1,9 +1,15 @@
-<div>
-  <h3>Izaberite dokumente koje cete okaciti</h3>
-</div>
-<input type="file" #fileInput id="uploadFile" (change)="uploadFileEvt($event)" name="uploadFile" multiple="multiple"
-       accept="image/*" />
-<div mat-dialog-actions>
-  <button mat-raised-button color="primary" class="pull-right">Register</button>
+<div class="main-content">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <mat-card>
+          <div>
+            <h3>Izaberite dokumente koje cete okaciti</h3>
+          </div>
+          <input type="file" #fileInput id="uploadFile" (change)="uploadFileEvt($event)" name="uploadFile" multiple="multiple"  accept="image/*" />
+        </mat-card>
+      </div>
+    </div>
+  </div>
 </div>
 

@@ -61,6 +61,6 @@ import { HomepageLecturerComponent } from './components/homepage-lecturer/homepa
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [ReaderDialogComponent, WriterDialogComponent]
+  entryComponents: [ReaderDialogComponent]
 })
 export class AppModule { }

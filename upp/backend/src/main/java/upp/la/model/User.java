@@ -1,5 +1,6 @@
 package upp.la.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,6 +55,7 @@ public class User {
   private Collection<Genre> betaGenres;
 
   // Books writers have contributed to/authored
+    @JsonIgnore
   @ManyToMany(
       cascade = {CascadeType.ALL},
       fetch = FetchType.LAZY)
