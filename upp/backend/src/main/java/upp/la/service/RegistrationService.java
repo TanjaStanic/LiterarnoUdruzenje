@@ -5,6 +5,8 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.identity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import upp.la.dto.FormFieldDto;
 import upp.la.model.Genre;
@@ -27,6 +29,9 @@ public class RegistrationService implements JavaDelegate {
 
     @Autowired
     GenreRepository genreRepository;
+    
+    @Lazy @Autowired 
+    PasswordEncoder passwordEncoder;
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
@@ -103,7 +108,7 @@ public class RegistrationService implements JavaDelegate {
             userModel.setGenres(tmp);
 
         }
-
+        userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
         identityService.saveUser(user);
         userRepository.save(userModel);
     }

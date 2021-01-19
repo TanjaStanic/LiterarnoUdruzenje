@@ -10,12 +10,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
 public class Requests {
 
   public static void sendEmail(EmailTemplate emailTemplate) throws IOException {
 
     URL url = new URL("https://hsejfoit96.execute-api.us-east-1.amazonaws.com/dev/email");
-
     HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
     con.setRequestMethod("POST");
@@ -32,7 +37,15 @@ public class Requests {
       byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
       os.write(input, 0, input.length);
     }
-
+   
+   /* ResponseEntity<String> responseMy = null;
+    try {
+    	responseMy = restTemplate.getForEntity(emailTemplate.getMessage(), String.class);
+    	 System.out.println("resp" + responseMy.getBody());
+    } catch (Exception e) {
+        System.out.println("Could not contact controller");
+    }*/
+    
     try (BufferedReader br =
         new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
       StringBuilder response = new StringBuilder();

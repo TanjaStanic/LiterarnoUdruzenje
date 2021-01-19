@@ -37,7 +37,7 @@ public class RegistrationServiceInt {
 
     EmailTemplate email =
         EmailTemplate.VerificationEmail(
-            env.getProperty("app.registration-url") + confirmationToken.getConfirmationToken());
+            env.getProperty("app.registration-url") + confirmationToken.getToken());
 
     email.setAddress(user.getEmail());
 
@@ -48,7 +48,7 @@ public class RegistrationServiceInt {
 
   public void verifyAccount(String confirmationToken) throws EntityNotFound {
     ConfirmationToken token =
-        confirmationTokenRepository.findByConfirmationToken(confirmationToken);
+        confirmationTokenRepository.findOneByToken(confirmationToken);
 
     if (token == null) {
       throw new EntityNotFound(ErrorMessages.TOKEN_ERROR());

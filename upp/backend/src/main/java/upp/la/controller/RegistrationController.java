@@ -10,6 +10,7 @@ import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -171,20 +172,29 @@ public class RegistrationController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @Validated
-  @GetMapping(value = "/verify-account")
-  public @ResponseBody ResponseEntity<?> verifyAccount(
-      @RequestParam @NotNull String confirmationToken, @RequestParam String processId)
+  @GetMapping(path = "/verify-account/{confirmationToken}/{processId}")
+  public  ResponseEntity<?> verifyAccount(
+		  @PathVariable("confirmationToken") String confirmationToken, 
+		  @PathVariable("processId") String processId)
       throws EntityNotFound {
 
+	  System.out.println("Dosau u verify acc");
     runtimeService.setVariable(processId, "validation_token", confirmationToken);
     MessageCorrelationResult result =
         runtimeService
             .createMessageCorrelation("recieve_verification_email")
             .processInstanceId(processId)
             .correlateWithResult();
+   
+    HttpHeaders headersRedirect = new HttpHeaders();
+    headersRedirect.add("Location", "http://localhost:4200/login");
+    headersRedirect.add("Access-Control-Allow-Origin", "*");
 
-    return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    try {
+        return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+    } catch (Exception e) {
+        return (ResponseEntity<?>) ResponseEntity.badRequest().body("Could not contact" + "http://localhost:4200/login");
+    }
   }
 
   private HashMap<String, Object> mapListToDto(List<FormFieldDto> list) {
