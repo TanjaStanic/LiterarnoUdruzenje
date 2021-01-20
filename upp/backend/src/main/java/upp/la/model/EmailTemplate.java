@@ -42,6 +42,22 @@ public class EmailTemplate {
     return "You have been assigned to review registration application material.";
   }
 
+  public static String REGISTRATION_APPLICATION_PAYMENT_SUBJECT() {
+    return "Registration application payment";
+  }
+
+  public static String REGISTRATION_APPLICATION_PAYMENT_MESSAGE(Integer days) {
+    return "You have: " + days.toString() + " to make the registration payment.";
+  }
+
+  public static String REGISTRATION_APPLICATION_FAILED_SUBJECT() {
+    return "Registration failed";
+  }
+
+  public static String REGISTRATION_APPLICATION_FAILED_MESSAGE() {
+    return "You have failed to make the payment.";
+  }
+
   private String address;
 
   private String subject;
@@ -75,5 +91,17 @@ public class EmailTemplate {
     return new EmailTemplate(
         EmailTemplate.REGISTRATION_APPLICATION_REVIEW_SUBJECT(),
         EmailTemplate.REGISTRATION_APPLICATION_REVIEW_MESSAGE());
+  }
+
+  public static EmailTemplate RegistrationApplicationPayment(Integer deadlineDays) {
+    return new EmailTemplate(
+        EmailTemplate.REGISTRATION_APPLICATION_PAYMENT_SUBJECT(),
+        EmailTemplate.REGISTRATION_APPLICATION_PAYMENT_MESSAGE(deadlineDays));
+  }
+
+  public static EmailTemplate RegistrationApplicationPaymentFailed() {
+    return new EmailTemplate(
+        EmailTemplate.REGISTRATION_APPLICATION_FAILED_SUBJECT(),
+        EmailTemplate.REGISTRATION_APPLICATION_FAILED_MESSAGE());
   }
 }
