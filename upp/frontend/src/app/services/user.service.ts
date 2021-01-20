@@ -101,6 +101,12 @@ export class UserService {
     }
   }
 
+  public isWriterFiles() {
+    if (this.isLoggedIn()) {
+      return this.user.role === Role.WRITER_FILES;
+    }
+  }
+
   public setToken(user) {
     localStorage.setItem(TOKEN, JSON.stringify(user));
     this.user = user;

@@ -85,7 +85,7 @@ public class RegistrationService implements JavaDelegate {
 
             	}
             	else if (formField.getFieldValue().equals("value_2")) {
-            		userModel.setRole(Role.WRITER);
+            		userModel.setRole(Role.WRITER_FILES);
             	}
             	
             }

@@ -5,7 +5,7 @@ INSERT INTO upp_db.user(username, first_name, last_name, password, email, city, 
     VALUES ('writer123', 'Writer1', 'Writer1', '$2a$10$BPGCvrv4ROnM70RrwZETwuU4irNlKFAQvXwYuiUrvevEIjDmhNSXi', 'email@writer.com', 'NS', 'SRB', true, 'WRITER');
 
 INSERT INTO upp_db.user(username, first_name, last_name, password, email, city, country, activated, role)
-    VALUES ('writer456', 'Writer2', 'Writer2', '$2a$10$BPGCvrv4ROnM70RrwZETwuU4irNlKFAQvXwYuiUrvevEIjDmhNSXi', 'email1@writer.com', 'NS', 'SRB', false, 'WRITER');
+    VALUES ('writer456', 'Writer2', 'Writer2', '$2a$10$BPGCvrv4ROnM70RrwZETwuU4irNlKFAQvXwYuiUrvevEIjDmhNSXi', 'email1@writer.com', 'NS', 'SRB', true, 'WRITER_FILES');
 
 INSERT INTO upp_db.user(username, first_name, last_name, password, email, city, country, activated, role)
     VALUES ('reader123', 'Reader1', 'Reader1', '$2a$10$BPGCvrv4ROnM70RrwZETwuU4irNlKFAQvXwYuiUrvevEIjDmhNSXi', 'email@reader.com', 'NS', 'SRB', true, 'READER');
