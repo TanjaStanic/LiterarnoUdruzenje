@@ -91,7 +91,8 @@ public class AuthController {
             null,
             null,
             null,
-            Role.READER);
+            null,
+            null, Role.READER);
     registrationServiceInt.registerNew(test1);
 
     return new ResponseEntity<>("OKAY", HttpStatus.CREATED);
