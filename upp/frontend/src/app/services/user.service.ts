@@ -38,6 +38,23 @@ export class UserService {
     return this.httpClient.post('http://localhost:8080/auth/login', user, {responseType: 'text'});
   }
 
+  uploadFiles(files) {
+    console.log(files);
+    const formData = new FormData();
+    for (const f of files) {
+      formData.append('files', f);
+    }
+    return this.httpClient.post('http://localhost:8080/files/multi-upload', formData);
+  }
+
+  getFilesFileds() {
+    return this.httpClient.get('http://localhost:8080/registration/getFilesField') as Observable<any>;
+  }
+
+  files(f) {
+    return this.httpClient.post('http://localhost:8080/files/filesFields/', f) as Observable<any>;
+  }
+
   public async getUser(username: string): Promise<User> {
     let params = new HttpParams();
     params = params.append('username', username);

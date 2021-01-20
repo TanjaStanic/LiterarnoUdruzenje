@@ -1,4 +1,6 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-writer-dialog',
@@ -7,36 +9,64 @@ import {Component, ElementRef, OnInit} from '@angular/core';
 })
 export class WriterDialogComponent implements OnInit {
 
+  uploadForm: FormGroup;
+  counter = 0;
+  files: [];
+  private formFields = [];
+  constructor(private formBuilder: FormBuilder,
+              private userService: UserService) {
+    const x = userService.getFilesFileds();
 
-  constructor() { }
-
-  ngOnInit() {
+    x.subscribe(
+      res => {
+        console.log(res);
+        this.formFields = res.formFields;
+      },
+      err => {
+        console.log(err);
+      }
+    );
   }
 
-  uploadFileEvt(imgFile: any) {
-    /*
-    if (imgFile.target.files && imgFile.target.files[0]) {
-      this.fileAttr = '';
-      Array.from(imgFile.target.files).forEach((file: File) => {
-        this.fileAttr += file.name + ' - ';
-      });
+  ngOnInit() {
+    this.uploadForm = this.formBuilder.group({
+    });
+  }
+  get f() {
+    return this.uploadForm.controls;
+  }
+  uploadFileEvt(event) {
+    if (event.target.files.length > 1) {
+        this.files = event.target.files;
+      }
+    }
 
-      // HTML5 FileReader API
-      let reader = new FileReader();
-      reader.onload = (e: any) => {
-        let image = new Image();
-        image.src = e.target.result;
-        image.onload = rs => {
-          let imgBase64Path = e.target.result;
-        };
-      };
-      reader.readAsDataURL(imgFile.target.files[0]);
 
-      // Reset if duplicate image uploaded again
-      this.fileInput.nativeElement.value = "";
+  onSubmit() {
+    if (this.files !== undefined) {
+      this.userService.uploadFiles(this.files).subscribe(
+        (res) => {
+          alert('Successfully uploaded files');
+          // this.userService.logOut();
+        },
+        (err) => console.log(err));
     } else {
-      this.fileAttr = 'Choose File';
-    }*/
+      console.log('error');
+    }
+
+    let str = '';
+    for (const f of this.files) {
+      // @ts-ignore
+      str = str + f.name + ',';
+    }
+    const ret = str.substr(0, str.length - 1);
+    const d = new Array();
+    d.push({fieldId : 'filesNamesId', fieldValue: ret});
+    this.userService.files(d).subscribe(
+      (res) => {console.log('uspesno'); },
+       error => {console.log(error); }
+    );
+
   }
 
 }

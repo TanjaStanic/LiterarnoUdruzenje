@@ -1,10 +1,15 @@
 package upp.la.controller;
 
+import org.camunda.bpm.engine.FormService;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StreamUtils;
@@ -12,6 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import upp.la.dto.FormFieldDto;
 import upp.la.error.ErrorMessages;
 import upp.la.model.Document;
 import upp.la.model.exceptions.FileError;
@@ -27,6 +33,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -36,6 +43,15 @@ import java.util.zip.ZipOutputStream;
 public class FileUploadController {
 
   @Autowired DocumentServiceInt documentServiceInt;
+  @Autowired
+  TaskService taskService;
+
+  String files_string = "";
+
+  @Autowired
+  FormService formService;
+
+  @Autowired RuntimeService runtimeService;
 
   @PostMapping("/upload")
   public ResponseEntity<?> uploadToLocalFileSystem(@RequestParam("file") MultipartFile file)
@@ -58,11 +74,14 @@ public class FileUploadController {
   @PostMapping("/multi-upload")
   public ResponseEntity<?> multiUpload(@RequestParam("files") MultipartFile[] files) {
     List<Object> fileDownloadUrls = new ArrayList<>();
+    files_string = "";
     Arrays.stream(files)
         .forEach(
             file -> {
               try {
                 fileDownloadUrls.add(uploadToLocalFileSystem(file).getBody());
+                String fileDownloadUri = processFile(file);
+                Document saved = documentServiceInt.createNew(fileDownloadUri);
               } catch (FileError fileError) {
                 fileError.printStackTrace();
               }
@@ -130,4 +149,27 @@ public class FileUploadController {
                                   .path(fileName)
                                   .toUriString();
   }
+
+  private HashMap<String, Object> mapListToDto(List<FormFieldDto> list) {
+    HashMap<String, Object> map = new HashMap<String, Object>();
+    for (FormFieldDto temp : list) {
+      map.put(temp.getFieldId(), temp.getFieldValue());
+    }
+
+    return map;
+  }
+
+  @PostMapping(path = "/filesFields", produces = "application/json")
+  public @ResponseBody ResponseEntity<?> post(@RequestBody List<FormFieldDto> formFields) {
+    Task task = taskService.createTaskQuery().taskName("Submit PDF documents").list().get(0);
+    String processInstanceId = task.getProcessInstanceId();
+    HashMap<String, Object> map = this.mapListToDto(formFields);
+
+    runtimeService.setVariable(processInstanceId,
+            "files",
+            formFields);
+    formService.submitTaskForm(task.getId(), map);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
 }

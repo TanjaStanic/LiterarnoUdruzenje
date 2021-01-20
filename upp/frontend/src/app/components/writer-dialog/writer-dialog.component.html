@@ -3,10 +3,16 @@
     <div class="row">
       <div class="col-md-8 offset-md-2">
         <mat-card>
+          <form [formGroup] = "uploadForm" (ngSubmit)="onSubmit()">
           <div>
             <h3>Izaberite dokumente koje cete okaciti</h3>
           </div>
-          <input type="file" #fileInput id="uploadFile" (change)="uploadFileEvt($event)" name="uploadFile" multiple="multiple"  accept="image/*" />
+          <input type="file" #fileInput id="uploadFile" (change)="uploadFileEvt($event)" name="uploadFile" multiple="multiple"/>
+          <div>
+            <p></p>
+            <button mat-raised-button color="primary" class="pull-right">Upload</button>
+          </div>
+          </form>
         </mat-card>
       </div>
     </div>
