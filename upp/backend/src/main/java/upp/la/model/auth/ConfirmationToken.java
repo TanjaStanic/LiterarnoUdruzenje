@@ -15,12 +15,11 @@ public class ConfirmationToken {
   private static final int EXPIRATION = 60 * 24;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "token_id")
-  private long id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-  @Column(name = "confirmation_token")
-  private String confirmationToken;
+  @Column
+  private String token;
 
   @Temporal(TemporalType.TIMESTAMP)
   private Date createdDate;
@@ -32,7 +31,7 @@ public class ConfirmationToken {
   public ConfirmationToken(User user) {
     this.user = user;
     createdDate = new Date();
-    confirmationToken = UUID.randomUUID().toString();
+   token = UUID.randomUUID().toString();
   }
 
   public ConfirmationToken() {

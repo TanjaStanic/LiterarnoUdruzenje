@@ -10,8 +10,8 @@ import upp.la.dto.FormFieldDto;
 import upp.la.model.auth.ConfirmationToken;
 import upp.la.model.EmailTemplate;
 import upp.la.model.User;
+import upp.la.repository.ConfirmationTokenRepository;
 import upp.la.repository.UserRepository;
-import upp.la.util.Requests;
 
 import java.util.List;
 
@@ -24,6 +24,9 @@ public class SendEmailService implements JavaDelegate{
 	
 	@Autowired 
 	private UserRepository userRepository;
+	
+	@Autowired 
+	ConfirmationTokenRepository confirmationTokenRepository;
 	
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
@@ -38,13 +41,13 @@ public class SendEmailService implements JavaDelegate{
 			}
 		}
 
-		System.out.println("Email je " + email);
 		User user = userRepository.findUserByEmail(email);
 		ConfirmationToken confirmationToken = new ConfirmationToken(user);
-		
 		String processId = execution.getProcessInstanceId();
-		String message = env.getProperty("app.registration-url") + confirmationToken.getConfirmationToken() 
+		confirmationToken = confirmationTokenRepository.save(confirmationToken);
+		String message = env.getProperty("app.registration-url") + confirmationToken.getToken() 
 			+ "/" + processId;
+		System.out.println("link je " + message);
 		
 		EmailTemplate emailTempl =
 		        new EmailTemplate(
