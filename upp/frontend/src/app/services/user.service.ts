@@ -128,4 +128,8 @@ export class UserService {
     localStorage.setItem(TOKEN, JSON.stringify(user));
     this.user = user;
   }
+
+  public getLoggedUser() {
+    return this.user;
+  }
 }
