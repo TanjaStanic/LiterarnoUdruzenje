@@ -70,7 +70,7 @@ public class User {
 
   @JsonIgnore
   @OneToOne
-  @JoinColumn(nullable = false, name = "reg_app_id")
+  @JoinColumn(nullable = true, name = "reg_app_id")
   private RegistrationApplication registrationApplication; 
     
   @Enumerated(EnumType.STRING)

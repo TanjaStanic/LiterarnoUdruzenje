@@ -1,42 +1,21 @@
 package upp.la.service.internal;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 import upp.la.dto.FormFieldDto;
-import upp.la.model.User;
-import upp.la.model.exceptions.EntityNotFound;
 import upp.la.model.registration.ApplicationResponse;
 import upp.la.model.registration.RegistrationApplicationResponse;
-import upp.la.repository.RegistrationApplicationRepository;
 import upp.la.repository.RegistrationApplicationResponseRepository;
-import upp.la.repository.UserRepository;
 
 @Service
-public class ReviewServiceInt {
-
-	@Autowired
-	UserRepository userRepository;
-	
-	@Autowired 
-	RegistrationApplicationResponseServiceInt regAppResponseServiceInt;
+public class ReviewServiceInt{
 	
 	@Autowired
 	RegistrationApplicationResponseRepository regAppResponseRepository;
-	
-	@Autowired
-	RegistrationApplicationRepository appRegRepository;
-	
-	public RegistrationApplicationResponse makeRegistrationApplicationResponse(List<FormFieldDto> reviews) throws EntityNotFound {
-		Authentication authenticate = SecurityContextHolder.getContext().getAuthentication();
-		User lecturer = userRepository.findByUsername(authenticate.getName());
-		
-		RegistrationApplicationResponse response = regAppResponseServiceInt.createNew(1L, lecturer.getId());
-		
+			
+	public void updateRegAppResponse(RegistrationApplicationResponse response,List<FormFieldDto> reviews){
+				
 		for (FormFieldDto r : reviews) {
 			if (r.getFieldId().equals("comment_id")) {
 				response.setComment(r.getFieldValue());
@@ -52,12 +31,12 @@ public class ReviewServiceInt {
 					response.setResponse(ApplicationResponse.LACKING_MATERIAL);
 				}
 			}
-		}
-		
-		response = regAppResponseRepository.save(response);
-		return response;
+		}	
+			response = regAppResponseRepository.save(response);
 
 	}
+	
+
 
 	
 }
