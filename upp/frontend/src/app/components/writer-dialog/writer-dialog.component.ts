@@ -47,7 +47,6 @@ export class WriterDialogComponent implements OnInit {
       this.userService.uploadFiles(this.files).subscribe(
         (res) => {
           alert('Successfully uploaded files');
-          // this.userService.logOut();
         },
         (err) => console.log(err));
     } else {
@@ -62,8 +61,9 @@ export class WriterDialogComponent implements OnInit {
     const ret = str.substr(0, str.length - 1);
     const d = new Array();
     d.push({fieldId : 'filesNamesId', fieldValue: ret});
+    d.push({fieldId : 'writerUsernameId', fieldValue: this.userService.getLoggedUser().username});
     this.userService.files(d).subscribe(
-      (res) => {console.log('uspesno'); },
+       (res) => { this.userService.logOut(); },
        error => {console.log(error); }
     );
 

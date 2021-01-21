@@ -9,6 +9,7 @@
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="filesNamesId" label="Files" type="string" />
+          <camunda:formField id="writerUsernameId" label="Writer username" type="string" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_14973xt</bpmn:incoming>
@@ -304,6 +305,9 @@
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="159" y="102" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_12hesn2_di" bpmnElement="submit_documents">
+        <dc:Bounds x="280" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_16cgpgo_di" bpmnElement="Activity_11d6vxa">
         <dc:Bounds x="640" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -382,6 +386,9 @@
       <bpmndi:BPMNShape id="Activity_0pkrw9k_di" bpmnElement="Activity_13ixcbm">
         <dc:Bounds x="1880" y="550" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_02u0kdz_di" bpmnElement="Activity_02u0kdz">
+        <dc:Bounds x="450" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0yq6gxk_di" bpmnElement="Activity_09coekp">
         <dc:Bounds x="1170" y="350" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -393,12 +400,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0je1yag_di" bpmnElement="Activity_0ejjy95">
         <dc:Bounds x="1680" y="350" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_02u0kdz_di" bpmnElement="Activity_02u0kdz">
-        <dc:Bounds x="450" y="80" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_12hesn2_di" bpmnElement="submit_documents">
-        <dc:Bounds x="280" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0pbv3cw_di" bpmnElement="Event_1nglods">
         <dc:Bounds x="1712" y="612" width="36" height="36" />
