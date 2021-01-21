@@ -56,6 +56,6 @@ public class SaveDocumentsService implements JavaDelegate {
             d.setRegistrationApplication(ra);
             documentRepository.save(d);
         }
-        delegateExecution.setVariable("COUNTER", 0);
+
     }
 }
