@@ -15,9 +15,11 @@ public class ReviewServiceInt{
 	RegistrationApplicationResponseRepository regAppResponseRepository;
 			
 	public void updateRegAppResponse(RegistrationApplicationResponse response,List<FormFieldDto> reviews){
-				
+		
+		System.out.println("id je " + response.getId());
 		for (FormFieldDto r : reviews) {
 			if (r.getFieldId().equals("comment_id")) {
+				System.out.println("comm je " + r.getFieldValue());
 				response.setComment(r.getFieldValue());
 			}	
 			if (r.getFieldId().equals("review_id")) {

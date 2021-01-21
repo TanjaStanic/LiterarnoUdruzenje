@@ -49,7 +49,7 @@ public class SaveDocumentsService implements JavaDelegate {
         ra.setWriter(user);
         LocalDateTime localDateTime = LocalDateTime.now();
         ra.setCreatedDate(localDateTime.toDate());
-        registrationApplicationRepository.save(ra);
+        ra = registrationApplicationRepository.save(ra);
         Document d;
         for(String s : parts) {
             d = documentRepository.findDocumentByFileUrl("http://localhost:8080/files/download/" + s);

@@ -36,6 +36,7 @@ public class CheckReviewsService implements JavaDelegate{
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		
+		System.out.println("in CheckReviewsServiceeeeeeeeeeeeeeeeeeeeeee");
 		List<FormFieldDto> files =(List<FormFieldDto>) execution.getVariable("files");
 		User writer = userRepository.findUserByUsername(files.get(1).getFieldValue());
 		

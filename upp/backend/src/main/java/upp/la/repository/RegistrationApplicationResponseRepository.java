@@ -11,6 +11,7 @@ import upp.la.model.registration.RegistrationApplicationResponse;
 public interface RegistrationApplicationResponseRepository
     extends JpaRepository<RegistrationApplicationResponse, Long> {
 	
+	RegistrationApplicationResponse findOneById(Long id);
 	RegistrationApplicationResponse findOneByLecturer(User lecturer);
 	RegistrationApplicationResponse findOneByRegistrationApplication(RegistrationApplication registrationApplication);
 }
