@@ -5,5 +5,6 @@ export enum Role {
   LECTURER,
   EDITOR,
   ADMIN,
-  NONE
+  NONE,
+  WRITER_FILES
 }

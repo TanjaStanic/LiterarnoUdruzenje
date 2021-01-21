@@ -197,6 +197,23 @@ public class RegistrationController {
     }
   }
 
+  @GetMapping(path = "/getFilesField", produces = "application/json")
+  public @ResponseBody FormFieldsDto getFiles() {
+
+    ProcessInstance pi = runtimeService.startProcessInstanceByKey("writer_registration");
+
+    List<Task> tasks = taskService.createTaskQuery().taskName("Submit PDF documents").list();
+    Task task = tasks.get(0);
+
+    TaskFormData tfd = formService.getTaskFormData(task.getId());
+    List<FormField> properties = tfd.getFormFields();
+    for (FormField fp : properties) {
+      System.out.println(fp.getId() + fp.getType());
+    }
+
+    return new FormFieldsDto(task.getId(), "123", properties);
+  }
+
   private HashMap<String, Object> mapListToDto(List<FormFieldDto> list) {
     HashMap<String, Object> map = new HashMap<String, Object>();
     for (FormFieldDto temp : list) {

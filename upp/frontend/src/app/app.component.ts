@@ -35,6 +35,9 @@ export class AppComponent {
   public isWriter() {
     return this.userService.isWriter();
   }
+  public isWriterFiles() {
+    return this.userService.isWriterFiles();
+  }
   public isLecturer() {
     return this.userService.isLecturer();
   }

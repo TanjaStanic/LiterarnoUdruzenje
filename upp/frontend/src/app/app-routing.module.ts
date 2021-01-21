@@ -7,6 +7,8 @@ import {HomepageEditorComponent} from './components/homepage-editor/homepage-edi
 import {HomepageLecturerComponent} from './components/homepage-lecturer/homepage-lecturer.component';
 import {HomepageReaderComponent} from './components/homepage-reader/homepage-reader.component';
 import {HomepageWriterComponent} from './components/homepage-writer/homepage-writer.component';
+import {WriterDialogComponent} from './components/writer-dialog/writer-dialog.component';
+import {WriterReviewComponent} from './components/writer-review/writer-review.component';
 
 
 const routes: Routes = [
@@ -41,6 +43,14 @@ const routes: Routes = [
   {
     path: 'writerHome',
     component: HomepageWriterComponent,
+  },
+  {
+    path: 'writerHomeFiles',
+    component: WriterDialogComponent,
+  },
+  {
+    path: 'writerReview',
+    component: WriterReviewComponent,
   }
 ];
 

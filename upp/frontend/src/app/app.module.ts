@@ -26,6 +26,7 @@ import { HomepageWriterComponent } from './components/homepage-writer/homepage-w
 import { HomepageAdminComponent } from './components/homepage-admin/homepage-admin.component';
 import { HomepageEditorComponent } from './components/homepage-editor/homepage-editor.component';
 import { HomepageLecturerComponent } from './components/homepage-lecturer/homepage-lecturer.component';
+import { WriterReviewComponent } from './components/writer-review/writer-review.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { HomepageLecturerComponent } from './components/homepage-lecturer/homepa
     HomepageWriterComponent,
     HomepageAdminComponent,
     HomepageEditorComponent,
-    HomepageLecturerComponent
+    HomepageLecturerComponent,
+    WriterReviewComponent
   ],
   imports: [
     BrowserModule,
@@ -61,6 +63,6 @@ import { HomepageLecturerComponent } from './components/homepage-lecturer/homepa
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [ReaderDialogComponent, WriterDialogComponent]
+  entryComponents: [ReaderDialogComponent]
 })
 export class AppModule { }
