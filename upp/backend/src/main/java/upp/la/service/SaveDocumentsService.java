@@ -43,7 +43,6 @@ public class SaveDocumentsService implements JavaDelegate {
         ArrayList<Document> documents = new ArrayList<Document>();
         for(String s : parts) {
             Document d = documentRepository.findDocumentByFileUrl("http://localhost:8080/files/download/" + s);
-            System.out.println(d.getId());
             documents.add(d);
         }
         ra.setDocuments(documents);
@@ -57,6 +56,6 @@ public class SaveDocumentsService implements JavaDelegate {
             d.setRegistrationApplication(ra);
             documentRepository.save(d);
         }
-
+        delegateExecution.setVariable("COUNTER", 0);
     }
 }
