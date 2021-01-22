@@ -36,7 +36,7 @@ public class CheckReviewsService implements JavaDelegate{
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		
-		System.out.println("in CheckReviewsServiceeeeeeeeeeeeeeeeeeeeeee");
+		System.out.println("in CheckReviewsService");
 		List<FormFieldDto> files =(List<FormFieldDto>) execution.getVariable("files");
 		User writer = userRepository.findUserByUsername(files.get(1).getFieldValue());
 		
@@ -50,6 +50,7 @@ public class CheckReviewsService implements JavaDelegate{
 		
 		Integer numAccepted = 0;
 		Integer numRejected = 0;
+		Integer numMoreDocuments = 0;
 		
 		int numReviews = app.getResponses().size();
 		if (numReviews == 3) {
@@ -61,19 +62,26 @@ public class CheckReviewsService implements JavaDelegate{
 					numRejected++;
 				}
 				else if (r.getResponse().equals(ApplicationResponse.LACKING_MATERIAL)) {
-					execution.setVariable("response", "need_more_documents");
-					app.setFinalResponse(ApplicationResponse.LACKING_MATERIAL);
+					numMoreDocuments++;
+					
 				}
 			}
-			
+			// aproved only when all of them voted for ACCEPT
 			if (numAccepted==3) {
 				execution.setVariable("response", "accepted");
 				app.setFinalResponse(ApplicationResponse.APPROVED);
 			}
-			else if (numRejected>1) {
+			// not_aproved when more then half review REJECTED
+			else if (numRejected>=2) {
 				execution.setVariable("response", "denied");
 				app.setFinalResponse(ApplicationResponse.NOT_APPROVED);
 			} 
+			//not denied, one or two lectors voted for need more documents
+			else if (numMoreDocuments>=1) {
+				execution.setVariable("response", "need_more_documents");
+				app.setFinalResponse(ApplicationResponse.LACKING_MATERIAL);
+			}
+			// not defined in specification
 			else if (numAccepted==2 && numRejected==1) {
 				execution.setVariable("response", "review_again");
 			}
