@@ -12,20 +12,44 @@ export class WriterDialogComponent implements OnInit {
   uploadForm: FormGroup;
   counter = 0;
   files: [];
+  flag = false;
   private formFields = [];
+  taskId: string;
   constructor(private formBuilder: FormBuilder,
               private userService: UserService) {
-    const x = userService.getFilesFileds();
+    this.getFlag();
+  }
 
-    x.subscribe(
-      res => {
-        console.log(res);
-        this.formFields = res.formFields;
-      },
-      err => {
-        console.log(err);
-      }
-    );
+  async getFlag() {
+    this.flag = await this.userService.getFlag(this.userService.getLoggedUser().username);
+    console.log(this.flag);
+    if (this.flag === false) {
+      const x = this.userService.getFilesFileds();
+
+      x.subscribe(
+        res => {
+          console.log(res);
+          this.taskId = res.taskId;
+          this.formFields = res.formFields;
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    } else {
+      const x = this.userService.getMoreDocumentsFields();
+
+      x.subscribe(
+        res => {
+          console.log(res);
+          this.taskId = res.taskId;
+          this.formFields = res.formFields;
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    }
   }
 
   ngOnInit() {
@@ -62,7 +86,8 @@ export class WriterDialogComponent implements OnInit {
     const d = new Array();
     d.push({fieldId : 'filesNamesId', fieldValue: ret});
     d.push({fieldId : 'writerUsernameId', fieldValue: this.userService.getLoggedUser().username});
-    this.userService.files(d).subscribe(
+    console.log('OVO JE ID KOJI MI TREBA ' + this.taskId);
+    this.userService.files(d, this.taskId).subscribe(
        (res) => { this.userService.logOut(); },
        error => {console.log(error); }
     );

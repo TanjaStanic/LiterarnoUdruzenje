@@ -52,7 +52,7 @@ public class AssignCommitteService implements JavaDelegate {
             }
         }
 
-        delegateExecution.setVariable("COUNTER", 0);
+        delegateExecution.setVariable("COUNTER", 1);
 
     }
 }

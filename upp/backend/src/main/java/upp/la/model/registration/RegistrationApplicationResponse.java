@@ -20,11 +20,11 @@ public class RegistrationApplicationResponse {
   private Long id;
 
   //The application the response is related to
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   private RegistrationApplication registrationApplication;
 
   //Lecturer making the response
-  @OneToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+  @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
   @JoinColumn(nullable = false, name = "user_id")
   private User lecturer;
 

@@ -9,6 +9,7 @@ import {HomepageReaderComponent} from './components/homepage-reader/homepage-rea
 import {HomepageWriterComponent} from './components/homepage-writer/homepage-writer.component';
 import {WriterDialogComponent} from './components/writer-dialog/writer-dialog.component';
 import {WriterReviewComponent} from './components/writer-review/writer-review.component';
+import {WriterPaymentComponent} from './components/writer-payment/writer-payment.component';
 
 
 const routes: Routes = [
@@ -51,6 +52,10 @@ const routes: Routes = [
   {
     path: 'writerReview',
     component: WriterReviewComponent,
+  },
+  {
+    path: 'writerPayment',
+    component: WriterPaymentComponent,
   }
 ];
 

@@ -1,0 +1,15 @@
+<h3>Revizija pisca</h3>
+<form [formGroup]="reviewForm" (ngSubmit)="onSubmit()">
+  <div *ngFor="let field of formFields">
+    <label for={{field.id}}>{{field.label}}</label>
+    <select name="field.id" formControlName={{field.id}} class = "form-control" *ngIf="field.type.name=='enum'">
+      <option *ngFor="let val of enumValues" value={{val}}>
+        {{field.type.values[val]}}
+      </option>
+    </select>
+    <textarea name="field.id" formControlName="{{field.id}}" class="form-control" *ngIf="field.type.name=='string'"></textarea>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button color="primary" class="pull-right">Submit</button>
+  </div>
+</form>

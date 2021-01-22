@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
     const c = await this.userService.getUser(this.f.username.value);
     console.log(c);
     this.user = new User();
-    this.user.username = c.username
+    this.user.username = c.username;
     this.user.password = this.f.password.value;
     this.userRole = c.role;
     this.attemptLogin();

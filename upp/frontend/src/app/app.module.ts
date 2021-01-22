@@ -11,7 +11,7 @@ import {
   MatListModule, MatSelectModule,
   MatSidenavModule,
   MatToolbarModule,
-  MatDialogModule, MatRadioModule
+  MatDialogModule, MatRadioModule, MatTableModule
 } from '@angular/material';
 import {RouterModule} from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
@@ -27,6 +27,8 @@ import { HomepageAdminComponent } from './components/homepage-admin/homepage-adm
 import { HomepageEditorComponent } from './components/homepage-editor/homepage-editor.component';
 import { HomepageLecturerComponent } from './components/homepage-lecturer/homepage-lecturer.component';
 import { WriterReviewComponent } from './components/writer-review/writer-review.component';
+import { WriterReviewDialogComponent } from './components/writer-review-dialog/writer-review-dialog.component';
+import { WriterPaymentComponent } from './components/writer-payment/writer-payment.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,9 @@ import { WriterReviewComponent } from './components/writer-review/writer-review.
     HomepageAdminComponent,
     HomepageEditorComponent,
     HomepageLecturerComponent,
-    WriterReviewComponent
+    WriterReviewComponent,
+    WriterReviewDialogComponent,
+    WriterPaymentComponent
   ],
   imports: [
     BrowserModule,
@@ -59,10 +63,11 @@ import { WriterReviewComponent } from './components/writer-review/writer-review.
     MatDialogModule,
     MatRadioModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [ReaderDialogComponent]
+  entryComponents: [ReaderDialogComponent, WriterReviewDialogComponent]
 })
 export class AppModule { }

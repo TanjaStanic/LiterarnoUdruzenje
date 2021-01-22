@@ -1,5 +1,6 @@
 package upp.la.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,12 +21,14 @@ public class Document {
   private Long id;
 
   //Document can be related to a book
+  @JsonIgnore
   @OneToOne(mappedBy = "document")
   private Book book;
 
   @Column private String fileUrl;
 
   //Document can be related to a registration application
+  @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
   private RegistrationApplication registrationApplication;
 

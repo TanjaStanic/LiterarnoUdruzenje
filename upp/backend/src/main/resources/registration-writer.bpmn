@@ -21,8 +21,8 @@
       <bpmn:outgoing>Flow_13civon</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:exclusiveGateway id="Gateway_0gctmid">
-      <bpmn:incoming>Flow_1grvy3n</bpmn:incoming>
       <bpmn:incoming>Flow_13civon</bpmn:incoming>
+      <bpmn:incoming>Flow_0uwv45x</bpmn:incoming>
       <bpmn:outgoing>Flow_0xshyh7</bpmn:outgoing>
       <bpmn:outgoing>Flow_1l5lg6i</bpmn:outgoing>
     </bpmn:exclusiveGateway>
@@ -70,7 +70,7 @@
     <bpmn:boundaryEvent id="Event_0lz2zc4" attachedToRef="Activity_0ejjy95">
       <bpmn:outgoing>Flow_0px73pg</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_1te77p0">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT14D</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT20160M</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:exclusiveGateway id="Gateway_128qa39">
@@ -81,7 +81,7 @@
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0e9e7nz" sourceRef="Gateway_128qa39" targetRef="Event_0qnkowj" />
     <bpmn:sequenceFlow id="Flow_0px73pg" name="Time is up" sourceRef="Event_0lz2zc4" targetRef="Gateway_128qa39" />
-    <bpmn:serviceTask id="Activity_1oan59b" name="Save documents" camunda:class="upp.la.service.AssignCommitteService">
+    <bpmn:serviceTask id="Activity_1oan59b" name="Save documents" camunda:class="upp.la.service.MoreDocumentsService">
       <bpmn:incoming>Flow_1c9gkkm</bpmn:incoming>
       <bpmn:outgoing>Flow_0uwv45x</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -110,7 +110,7 @@
     <bpmn:boundaryEvent id="Event_1nglods" attachedToRef="Activity_0xxkrrg">
       <bpmn:outgoing>Flow_083rm76</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_1q4zqw7">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT14D</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT20160M</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_083rm76" sourceRef="Event_1nglods" targetRef="Gateway_0emd1qs" />
@@ -130,7 +130,7 @@
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0pd7vc6" sourceRef="Event_004ua2b" targetRef="Activity_0grz1h7" />
     <bpmn:sequenceFlow id="Flow_0xshyh7" sourceRef="Gateway_0gctmid" targetRef="Event_004ua2b">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${COUNTER&lt;=3}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${COUNTER&lt;3}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0gq4dfe" sourceRef="Activity_09coekp" targetRef="Gateway_04rlr2w" />
     <bpmn:sequenceFlow id="Flow_0pqjvpw" sourceRef="Activity_13ixcbm" targetRef="Gateway_11lbxnn" />
@@ -148,12 +148,17 @@
       <bpmn:outgoing>Flow_0gq4dfe</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_1l5lg6i" name="More than 3 revision" sourceRef="Gateway_0gctmid" targetRef="Gateway_128qa39">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${COUNTER&gt;3}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${COUNTER&gt;=3}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_13civon" sourceRef="Activity_11d6vxa" targetRef="Gateway_0gctmid" />
-    <bpmn:sequenceFlow id="Flow_1grvy3n" sourceRef="Activity_0tjg7o6" targetRef="Gateway_0gctmid" />
-    <bpmn:sequenceFlow id="Flow_0uwv45x" sourceRef="Activity_1oan59b" targetRef="Activity_0tjg7o6" />
+    <bpmn:sequenceFlow id="Flow_0uwv45x" sourceRef="Activity_1oan59b" targetRef="Gateway_0gctmid" />
     <bpmn:userTask id="Activity_0ejjy95" name="Send more documents">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="filesNamesId" label="Files" type="string" />
+          <camunda:formField id="writerUsernameId" label="Writer username" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_15nda33</bpmn:incoming>
       <bpmn:outgoing>Flow_1c9gkkm</bpmn:outgoing>
     </bpmn:userTask>
@@ -197,14 +202,6 @@
       <bpmn:incoming>Flow_0rm6oao</bpmn:incoming>
       <bpmn:outgoing>Flow_1unxy8p</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:scriptTask id="Activity_0tjg7o6" name="Increment number of revision">
-      <bpmn:incoming>Flow_0uwv45x</bpmn:incoming>
-      <bpmn:outgoing>Flow_1grvy3n</bpmn:outgoing>
-      <bpmn:script>def ctr = 0
-        ctr = execution.getVariable(“COUNTER”)
-        ctr += 1
-        execution.setVariable(“COUNTER”,ctr)</bpmn:script>
-    </bpmn:scriptTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="writer_registration">
@@ -239,10 +236,7 @@
       <bpmndi:BPMNEdge id="Flow_0uwv45x_di" bpmnElement="Flow_0uwv45x">
         <di:waypoint x="1900" y="430" />
         <di:waypoint x="1900" y="490" />
-        <di:waypoint x="840" y="490" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1grvy3n_di" bpmnElement="Flow_1grvy3n">
-        <di:waypoint x="790" y="450" />
+        <di:waypoint x="790" y="490" />
         <di:waypoint x="790" y="415" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_13civon_di" bpmnElement="Flow_13civon">
@@ -440,9 +434,6 @@
       <bpmndi:BPMNShape id="Activity_17v58f2_di" bpmnElement="Activity_0rdvuef">
         <dc:Bounds x="2160" y="770" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0pkrw9k_di" bpmnElement="Activity_13ixcbm">
-        <dc:Bounds x="1850" y="550" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_02u0kdz_di" bpmnElement="Activity_02u0kdz">
         <dc:Bounds x="450" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -464,8 +455,8 @@
       <bpmndi:BPMNShape id="Activity_11oo61o_di" bpmnElement="Activity_1ln7p90">
         <dc:Bounds x="2160" y="550" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1nriwrb_di" bpmnElement="Activity_0tjg7o6">
-        <dc:Bounds x="740" y="450" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_0pkrw9k_di" bpmnElement="Activity_13ixcbm">
+        <dc:Bounds x="1850" y="550" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0pbv3cw_di" bpmnElement="Event_1nglods">
         <dc:Bounds x="1712" y="612" width="36" height="36" />

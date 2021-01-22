@@ -3,6 +3,8 @@ package upp.la.controller;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.form.FormField;
+import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import upp.la.dto.FormFieldDto;
+import upp.la.dto.FormFieldsDto;
 import upp.la.error.ErrorMessages;
 import upp.la.model.Document;
 import upp.la.model.exceptions.FileError;
@@ -160,16 +163,29 @@ public class FileUploadController {
   }
 
   @PostMapping(path = "/filesFields", produces = "application/json")
-  public @ResponseBody ResponseEntity<?> post(@RequestBody List<FormFieldDto> formFields) {
-    Task task = taskService.createTaskQuery().taskName("Submit PDF documents").list().get(0);
+  public @ResponseBody ResponseEntity<?> post(@RequestBody List<FormFieldDto> formFields,
+                                              @RequestParam("taskId") String taskId) {
+    Task task = taskService.createTaskQuery().taskId(taskId).list().get(0);
+    System.out.println("Naziv taska je " + task.getName());
+    System.out.println(taskId);
     String processInstanceId = task.getProcessInstanceId();
     HashMap<String, Object> map = this.mapListToDto(formFields);
 
     runtimeService.setVariable(processInstanceId,
             "files",
             formFields);
-    formService.submitTaskForm(task.getId(), map);
+    formService.submitTaskForm(taskId, map);
     return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @GetMapping(path = "/getReviewForm", produces = "application/json")
+  public @ResponseBody
+  FormFieldsDto getReviewForm() {
+
+    Task task = taskService.createTaskQuery().taskName("ReviewWriter").list().get(0);
+    TaskFormData tfd = formService.getTaskFormData(task.getId());
+    List<FormField> properties = tfd.getFormFields();
+    return new FormFieldsDto(task.getId(), "456", properties);
   }
 
 }
