@@ -23,7 +23,7 @@ public class RegistrationApplicationResponseServiceInt {
 
   @Autowired UserRepository userRepository;
 
-  public void createNew(Long applicationId, Long lecturerId) throws EntityNotFound {
+  public RegistrationApplicationResponse createNew(Long applicationId, Long lecturerId) throws EntityNotFound {
     Optional<RegistrationApplication> application = applicationRepository.findById(applicationId);
 
     if (!application.isPresent()) {
@@ -42,5 +42,9 @@ public class RegistrationApplicationResponseServiceInt {
     application.get().getResponses().add(response);
 
     applicationRepository.save(application.get());
+    
+    response = responseRepository.save(response);
+    
+    return response;
   }
 }

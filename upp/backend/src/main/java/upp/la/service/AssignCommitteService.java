@@ -10,7 +10,6 @@ import upp.la.model.Role;
 import upp.la.model.User;
 import upp.la.model.registration.RegistrationApplication;
 import upp.la.model.registration.RegistrationApplicationResponse;
-import upp.la.repository.DocumentRepository;
 import upp.la.repository.RegistrationApplicationRepository;
 import upp.la.repository.RegistrationApplicationResponseRepository;
 import upp.la.repository.UserRepository;

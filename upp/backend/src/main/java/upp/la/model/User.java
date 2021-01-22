@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import upp.la.model.registration.RegistrationApplication;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -33,6 +34,8 @@ public class User {
   @Column private String country;
 
   @Column private Boolean activated;
+  
+  @Column private Boolean confirmed;
 
   // Genres readers are interested in
   @ManyToMany(
@@ -65,10 +68,16 @@ public class User {
       inverseJoinColumns = {@JoinColumn(name = "book_id", referencedColumnName = "id")})
   private Collection<Book> books;
 
+  @JsonIgnore
+  @OneToOne
+  @JoinColumn(nullable = true, name = "reg_app_id")
+  private RegistrationApplication registrationApplication; 
+    
   @Enumerated(EnumType.STRING)
   private Role role;
 
   public User() {
     activated = false;
+    confirmed = false;
   }
 }

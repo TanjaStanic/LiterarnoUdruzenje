@@ -50,7 +50,7 @@
       <bpmn:messageEventDefinition id="MessageEventDefinition_1eapczs" />
     </bpmn:intermediateThrowEvent>
     <bpmn:sequenceFlow id="Flow_1n5772j" sourceRef="Event_0qnkowj" targetRef="Activity_1d78zhj" />
-    <bpmn:serviceTask id="Activity_1d78zhj" name="Cancel request" camunda:class="upp.la.service.AssignCommitteService">
+    <bpmn:serviceTask id="Activity_1d78zhj" name="Cancel request" camunda:class="upp.la.service.CancelRequestService">
       <bpmn:incoming>Flow_1n5772j</bpmn:incoming>
       <bpmn:outgoing>Flow_0hppyw1</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -124,7 +124,7 @@
       <bpmn:incoming>Flow_1ql626x</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1ql626x" sourceRef="Activity_0rdvuef" targetRef="Event_0q7653b" />
-    <bpmn:serviceTask id="Activity_0rdvuef" name="Cancel request" camunda:class="upp.la.service.AssignCommitteService">
+    <bpmn:serviceTask id="Activity_0rdvuef" name="Cancel request" camunda:class="upp.la.service.CancelRequestService">
       <bpmn:incoming>Flow_1iy8ag4</bpmn:incoming>
       <bpmn:outgoing>Flow_1ql626x</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -134,7 +134,7 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0gq4dfe" sourceRef="Activity_09coekp" targetRef="Gateway_04rlr2w" />
     <bpmn:sequenceFlow id="Flow_0pqjvpw" sourceRef="Activity_13ixcbm" targetRef="Gateway_11lbxnn" />
-    <bpmn:serviceTask id="Activity_13ixcbm" name="Submit payment" camunda:class="upp.la.service.AssignCommitteService">
+    <bpmn:serviceTask id="Activity_13ixcbm" name="Submit payment" camunda:class="upp.la.service.SubmitPaymentService">
       <bpmn:incoming>Flow_0e56ogl</bpmn:incoming>
       <bpmn:outgoing>Flow_0pqjvpw</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -143,7 +143,7 @@
       <bpmn:outgoing>Flow_1fgbiq8</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_1fgbiq8" sourceRef="Activity_02u0kdz" targetRef="Activity_11d6vxa" />
-    <bpmn:serviceTask id="Activity_09coekp" name="Check reviews" camunda:class="upp.la.service.AssignCommitteService">
+    <bpmn:serviceTask id="Activity_09coekp" name="Check reviews" camunda:class="upp.la.service.CheckReviewsService">
       <bpmn:incoming>Flow_1fn9qun</bpmn:incoming>
       <bpmn:outgoing>Flow_0gq4dfe</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -193,7 +193,7 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${payment_success==false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1unxy8p" sourceRef="Activity_1ln7p90" targetRef="Event_0fk3lfk" />
-    <bpmn:serviceTask id="Activity_1ln7p90" name="Confirm writer" camunda:class="upp.la.service.AssignCommitteService">
+    <bpmn:serviceTask id="Activity_1ln7p90" name="Confirm writer" camunda:class="upp.la.service.ConfirmMembershipService">
       <bpmn:incoming>Flow_0rm6oao</bpmn:incoming>
       <bpmn:outgoing>Flow_1unxy8p</bpmn:outgoing>
     </bpmn:serviceTask>
