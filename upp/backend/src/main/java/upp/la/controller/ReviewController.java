@@ -1,11 +1,13 @@
 package upp.la.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
 import org.camunda.bpm.engine.FormService;
+import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
@@ -21,6 +23,8 @@ import upp.la.dto.FormFieldsDto;
 import upp.la.error.ErrorMessages;
 import upp.la.model.User;
 import upp.la.model.exceptions.EntityNotFound;
+import upp.la.model.exceptions.ValidationError;
+import upp.la.model.registration.ApplicationResponse;
 import upp.la.model.registration.RegistrationApplication;
 import upp.la.model.registration.RegistrationApplicationResponse;
 import upp.la.repository.RegistrationApplicationRepository;
@@ -40,6 +44,7 @@ public class ReviewController {
 	RegistrationApplicationRepository registrationApplicationRepository;
 	@Autowired private FormService formService;
 	@Autowired private TaskService taskService;
+	@Autowired private RuntimeService runtimeService;
 	
 	@PostMapping(path="/submit-review", consumes = "application/json")
 	public ResponseEntity<?> submitReview(@RequestBody List<FormFieldDto> formFields,
@@ -102,10 +107,55 @@ public class ReviewController {
 	public @ResponseBody
 	FormFieldsDto getFields() {
 
-		Task task = taskService.createTaskQuery().taskName("Send more documents").list().get(0);
-		TaskFormData tfd = formService.getTaskFormData(task.getId());
-		List<FormField> properties = tfd.getFormFields();
-		return new FormFieldsDto(task.getId(), "456", properties);
+		List<Task> tasks = taskService.createTaskQuery().taskName("Send more documents").list();
+		if(!tasks.isEmpty()) {
+			Task task = tasks.get(0);
+			TaskFormData tfd = formService.getTaskFormData(task.getId());
+			List<FormField> properties = tfd.getFormFields();
+			return new FormFieldsDto(task.getId(), "456", properties);
+		}else {
+			List<FormField> properties = new ArrayList<>();
+			return new FormFieldsDto("123", "456", properties);
+		}
+	}
+
+	@GetMapping(path = "/paymentFields", produces = "application/json")
+	public @ResponseBody
+	FormFieldsDto getFiledsPayment(@RequestParam("username") String username) {
+
+		User user = userRepository.findUserByUsername(username);
+		RegistrationApplication ra = registrationApplicationRepository.findOneByWriter(user);
+		if(ra == null) {
+			ArrayList<FormField> properties = new ArrayList<>();
+			return new FormFieldsDto("123", "456", properties);
+		}else {
+			if(ra.getFinalResponse().equals(ApplicationResponse.APPROVED)) {
+				Task task = taskService.createTaskQuery().taskName("Membership payment").list().get(0);
+				TaskFormData tfd = formService.getTaskFormData(task.getId());
+				List<FormField> properties = tfd.getFormFields();
+				return new FormFieldsDto(task.getId(), "456", properties);
+			} else {
+				ArrayList<FormField> properties = new ArrayList<>();
+				return new FormFieldsDto("123", "456", properties);
+			}
+
+		}
+	}
+
+	@PostMapping(path = "/postPayment", produces = "application/json")
+	public @ResponseBody ResponseEntity<?> postPayment(@RequestBody List<FormFieldDto> formFields) {
+
+		List<Task> tasks = taskService.createTaskQuery().taskName("Membership payment").list();
+		Task task = tasks.get(0);
+
+		String processInstanceId = task.getProcessInstanceId();
+		HashMap<String, Object> map = this.mapListToDto(formFields);
+		//Create variable "registration"
+		runtimeService.setVariable(processInstanceId,
+				"payment",
+				formFields);
+		formService.submitTaskForm(task.getId(), map);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 }

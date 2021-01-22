@@ -28,6 +28,7 @@ import { HomepageEditorComponent } from './components/homepage-editor/homepage-e
 import { HomepageLecturerComponent } from './components/homepage-lecturer/homepage-lecturer.component';
 import { WriterReviewComponent } from './components/writer-review/writer-review.component';
 import { WriterReviewDialogComponent } from './components/writer-review-dialog/writer-review-dialog.component';
+import { WriterPaymentComponent } from './components/writer-payment/writer-payment.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { WriterReviewDialogComponent } from './components/writer-review-dialog/w
     HomepageEditorComponent,
     HomepageLecturerComponent,
     WriterReviewComponent,
-    WriterReviewDialogComponent
+    WriterReviewDialogComponent,
+    WriterPaymentComponent
   ],
   imports: [
     BrowserModule,

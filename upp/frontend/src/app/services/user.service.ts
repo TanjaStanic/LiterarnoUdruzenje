@@ -72,6 +72,16 @@ export class UserService {
     return this.httpClient.get('http://localhost:8080/review/getMoreDocumentsField') as Observable<any>;
   }
 
+  getPaymentFields(username) {
+    let params = new HttpParams();
+    params = params.append('username', username);
+    return this.httpClient.get('http://localhost:8080/review/paymentFields', {params}) as Observable<any>;
+  }
+
+  postPayment(fields) {
+    return this.httpClient.post('http://localhost:8080/review/postPayment/', fields) as Observable<any>;
+  }
+
   public async getUser(username: string): Promise<User> {
     let params = new HttpParams();
     params = params.append('username', username);

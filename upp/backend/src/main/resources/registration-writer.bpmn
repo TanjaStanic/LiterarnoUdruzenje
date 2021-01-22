@@ -434,9 +434,6 @@
       <bpmndi:BPMNShape id="Activity_17v58f2_di" bpmnElement="Activity_0rdvuef">
         <dc:Bounds x="2160" y="770" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0pkrw9k_di" bpmnElement="Activity_13ixcbm">
-        <dc:Bounds x="1850" y="550" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_02u0kdz_di" bpmnElement="Activity_02u0kdz">
         <dc:Bounds x="450" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -457,6 +454,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_11oo61o_di" bpmnElement="Activity_1ln7p90">
         <dc:Bounds x="2160" y="550" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0pkrw9k_di" bpmnElement="Activity_13ixcbm">
+        <dc:Bounds x="1850" y="550" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0pbv3cw_di" bpmnElement="Event_1nglods">
         <dc:Bounds x="1712" y="612" width="36" height="36" />

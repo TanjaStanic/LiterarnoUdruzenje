@@ -30,6 +30,7 @@
     </mat-nav-list>
     <mat-nav-list *ngIf="isWriterFiles()">
       <a mat-list-item routerLink="/writerHomeFiles">Home</a>
+      <a mat-list-item routerLink="/writerPayment">Writer payment</a>
       <a mat-list-item (click)="onLogout()">Logout</a>
     </mat-nav-list>
     <mat-nav-list *ngIf="isLecturer()">
