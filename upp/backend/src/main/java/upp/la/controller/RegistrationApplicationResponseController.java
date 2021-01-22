@@ -30,7 +30,7 @@ public class RegistrationApplicationResponseController {
     @GetMapping(value = "/getByUsername")
     public ResponseEntity<List<RegistrationApplicationResponse>> allForLector(@RequestParam("username") String username) {
         User user = userRepository.findUserByUsername(username);
-        System.out.println(registrationApplicationResponseRepository.findAll());
-        return new ResponseEntity<>(registrationApplicationResponseRepository.findAll(), HttpStatus.OK);
+        System.out.println(registrationApplicationResponseRepository.findAllByLecturerId(user.getId()));
+        return new ResponseEntity<>(registrationApplicationResponseRepository.findAllByLecturerId(user.getId()), HttpStatus.OK);
     }
 }

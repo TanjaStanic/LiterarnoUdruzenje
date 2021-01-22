@@ -6,6 +6,8 @@ import upp.la.model.User;
 import upp.la.model.registration.RegistrationApplication;
 import upp.la.model.registration.RegistrationApplicationResponse;
 
+import java.util.ArrayList;
+
 @Repository
 public interface RegistrationApplicationResponseRepository
     extends JpaRepository<RegistrationApplicationResponse, Long> {
