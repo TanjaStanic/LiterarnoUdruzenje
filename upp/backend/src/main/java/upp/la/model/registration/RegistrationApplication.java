@@ -1,5 +1,6 @@
 package upp.la.model.registration;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,7 @@ public class RegistrationApplication {
   private List<Document> documents = new ArrayList<>();
 
   //Responses containing lecturer comments
+  @JsonIgnore
   @OneToMany(mappedBy = "registrationApplication", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<RegistrationApplicationResponse> responses = new ArrayList<>();
 

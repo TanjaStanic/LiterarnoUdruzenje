@@ -3,6 +3,8 @@ package upp.la.controller;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.form.FormField;
+import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import upp.la.dto.FormFieldDto;
+import upp.la.dto.FormFieldsDto;
 import upp.la.error.ErrorMessages;
 import upp.la.model.Document;
 import upp.la.model.exceptions.FileError;
@@ -170,6 +173,16 @@ public class FileUploadController {
             formFields);
     formService.submitTaskForm(task.getId(), map);
     return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @GetMapping(path = "/getReviewForm", produces = "application/json")
+  public @ResponseBody
+  FormFieldsDto getGenresForms() {
+
+    Task task = taskService.createTaskQuery().taskName("ReviewWriter").list().get(0);
+    TaskFormData tfd = formService.getTaskFormData(task.getId());
+    List<FormField> properties = tfd.getFormFields();
+    return new FormFieldsDto(task.getId(), "456", properties);
   }
 
 }

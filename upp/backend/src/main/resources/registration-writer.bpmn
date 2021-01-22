@@ -201,9 +201,9 @@
       <bpmn:incoming>Flow_0uwv45x</bpmn:incoming>
       <bpmn:outgoing>Flow_1grvy3n</bpmn:outgoing>
       <bpmn:script>def ctr = 0
-        ctr = execution.getVariable(“COUNTER”)
-        ctr += 1
-        execution.setVariable(“COUNTER”,ctr)</bpmn:script>
+ctr = execution.getVariable(“COUNTER”)
+ctr += 1
+execution.setVariable(“COUNTER”,ctr)</bpmn:script>
     </bpmn:scriptTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">

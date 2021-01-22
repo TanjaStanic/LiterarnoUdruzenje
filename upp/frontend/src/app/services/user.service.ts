@@ -55,6 +55,10 @@ export class UserService {
     return this.httpClient.post('http://localhost:8080/files/filesFields/', f) as Observable<any>;
   }
 
+  getReviewFields() {
+    return this.httpClient.get('http://localhost:8080/files/getReviewForm') as Observable<any>;
+  }
+
   public async getUser(username: string): Promise<User> {
     let params = new HttpParams();
     params = params.append('username', username);
