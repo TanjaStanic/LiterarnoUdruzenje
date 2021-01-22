@@ -1,30 +1,49 @@
 package upp.la.util;
 
 import org.camunda.bpm.engine.IdentityService;
+import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.identity.Group;
 import org.camunda.bpm.engine.identity.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public class DataInsert {
+@Service
+public class DataInsert implements JavaDelegate {
 
-    public void users(IdentityService identityService) {
-        User user2 = identityService.newUser("john");
-        user2.setFirstName("John");
-        user2.setLastName("Doe");
-        user2.setPassword("john");
-        user2.setEmail("john@camunda.org");
+    @Autowired IdentityService identityService;
+
+    @Override
+    public void execute(DelegateExecution execution) throws Exception {
+        User user1 = identityService.newUser("lecturer1");
+        user1.setFirstName("John");
+        user1.setLastName("Doe");
+        user1.setPassword("123456");
+        user1.setEmail("john@camunda.org");
+        identityService.saveUser(user1);
+
+        User user2 = identityService.newUser("lecturer2");
+        user2.setFirstName("Mary");
+        user2.setLastName("Anne");
+        user2.setPassword("123456");
+        user2.setEmail("mary@camunda.org");
         identityService.saveUser(user2);
 
-        User user3 = identityService.newUser("mary");
-        user3.setFirstName("Mary");
-        user3.setLastName("Anne");
-        user3.setPassword("mary");
-        user3.setEmail("mary@camunda.org");
+        User user3 = identityService.newUser("lecturer3");
+        user3.setFirstName("Peter");
+        user3.setLastName("Meter");
+        user3.setPassword("123456");
+        user3.setEmail("peter@camunda.org");
         identityService.saveUser(user3);
 
-        User user4 = identityService.newUser("peter");
-        user4.setFirstName("Peter");
-        user4.setLastName("Meter");
-        user4.setPassword("peter");
-        user4.setEmail("peter@camunda.org");
-        identityService.saveUser(user4);
+        Group lecturers = identityService.newGroup("lecturers");
+        lecturers.setName("Lecturers Committee");
+        lecturers.setType("WORKFLOW");
+        identityService.saveGroup(lecturers);
+
+        identityService.createMembership("demo", "lecturers");
+        identityService.createMembership("lecturer1", "lecturers");
+        identityService.createMembership("lecturer2", "lecturers");
+        identityService.createMembership("lecturer3", "lecturers");
     }
 }

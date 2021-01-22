@@ -1,5 +1,6 @@
 package upp.la.util;
 
+import org.camunda.bpm.engine.delegate.BpmnError;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -66,15 +67,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @ExceptionHandler(AuthorizationError.class)
-  protected ResponseEntity<Object> handleInvalidEmailorPasswordError(AuthorizationError ex) {
-    ApiError apiError = new ApiError(UNPROCESSABLE_ENTITY);
+  protected ResponseEntity<Object> handleInvalidEmailOrPasswordError(AuthorizationError ex) {
+    ApiError apiError = new ApiError(UNAUTHORIZED);
     apiError.setMessage(ex.getMessage());
     apiError.setEx(ex);
     return buildResponseEntity(apiError);
   }
 
   @ExceptionHandler(ValidationError.class)
-  protected ResponseEntity<Object> handleValidaitonError(AuthorizationError ex) {
+  protected ResponseEntity<Object> handleValidationError(AuthorizationError ex) {
     ApiError apiError = new ApiError(UNPROCESSABLE_ENTITY);
     apiError.setMessage(ex.getMessage());
     apiError.setEx(ex);
@@ -83,15 +84,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(FileError.class)
   protected ResponseEntity<Object> handleFileError(AuthorizationError ex) {
-    ApiError apiError = new ApiError(UNPROCESSABLE_ENTITY);
+    ApiError apiError = new ApiError(INTERNAL_SERVER_ERROR);
     apiError.setMessage(ex.getMessage());
     apiError.setEx(ex);
     return buildResponseEntity(apiError);
   }
 
-  /*ERROR HANDLING
-   * Add new custom exception like ItemNotFound
-   * Make methods throw that exception
-   * Exceptions automatically get forwarded to this handler
-   * Create handler like ItemNotFound handler called handle....*/
+  @ExceptionHandler(BpmnError.class)
+  protected ResponseEntity<Object> handleBpmnError(AuthorizationError ex) {
+    ApiError apiError = new ApiError(INTERNAL_SERVER_ERROR);
+    apiError.setMessage(ex.getMessage());
+    apiError.setEx(ex);
+    return buildResponseEntity(apiError);
+  }
 }
