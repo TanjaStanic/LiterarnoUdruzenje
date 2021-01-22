@@ -106,3 +106,8 @@ INSERT INTO upp_db.writers_books(user_id, book_id)
 --INSERT INTO upp_db.document(file_url, registration_application_id)
   --  VALUES('http://localhost:8080/files/download/file2.pdf', 1);
 
+INSERT INTO upp_db.card(card_holder, card_number, cvv, expiration_date, user_id)
+    VALUES('Pera Peric', '$2y$12$Q3Ipbn/H4n5mQqV6FUu7.u3iMXzfkLKBRttMofKGfIxYKkgAv2DMC', '$2y$12$Cua1FeCtFfD9Kuz514L/0.U7ulw374aENjfM.yyQoYAjaD5/hATEK', '01/23', 3);
+
+-- card num: 1234-1234-1234-1234 cvv: 333
+   

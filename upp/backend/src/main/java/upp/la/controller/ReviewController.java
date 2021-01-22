@@ -23,7 +23,6 @@ import upp.la.dto.FormFieldsDto;
 import upp.la.error.ErrorMessages;
 import upp.la.model.User;
 import upp.la.model.exceptions.EntityNotFound;
-import upp.la.model.exceptions.ValidationError;
 import upp.la.model.registration.ApplicationResponse;
 import upp.la.model.registration.RegistrationApplication;
 import upp.la.model.registration.RegistrationApplicationResponse;
@@ -70,9 +69,6 @@ public class ReviewController {
 		}
 		reviewService.updateRegAppResponse(response, formFields);
 			
-		
-		List<Task> tasks = taskService.createTaskQuery().taskName("ReviewWriter").list();
-	    Task task = tasks.get(0);
 	    HashMap<String, Object> map = mapListToDto(formFields);
 		try {
 			formService.submitTaskForm(taskId, map);
