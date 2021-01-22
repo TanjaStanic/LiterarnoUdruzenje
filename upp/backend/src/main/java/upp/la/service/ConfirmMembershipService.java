@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import upp.la.dto.FormFieldDto;
+import upp.la.model.Role;
 import upp.la.model.User;
 import upp.la.model.registration.RegistrationApplication;
 import upp.la.repository.UserRepository;
@@ -25,6 +26,7 @@ public class ConfirmMembershipService implements JavaDelegate {
 		User writer = userRepository.findUserByUsername(files.get(1).getFieldValue());
 		
 		writer.setConfirmed(true);
+		writer.setRole(Role.WRITER);
 		userRepository.save(writer);
 		
 	}

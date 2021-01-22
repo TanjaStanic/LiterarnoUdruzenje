@@ -12,7 +12,6 @@ public interface RegistrationApplicationRepository
     extends JpaRepository<RegistrationApplication, Long> {
 	
 	RegistrationApplication findOneByWriter(User writer);
-
     RegistrationApplication findRegistrationApplicationById(Long id);
     ArrayList<RegistrationApplication> findRegistrationApplicationByWriterIdOrderByCreatedDateDesc(Long id);
 }

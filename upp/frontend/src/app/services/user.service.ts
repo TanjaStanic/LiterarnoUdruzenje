@@ -51,12 +51,25 @@ export class UserService {
     return this.httpClient.get('http://localhost:8080/registration/getFilesField') as Observable<any>;
   }
 
-  files(f) {
-    return this.httpClient.post('http://localhost:8080/files/filesFields/', f) as Observable<any>;
+  async getFlag(username): Promise<boolean> {
+    let params = new HttpParams();
+    params = params.append('username', username);
+    const response: any = this.httpClient.get('http://localhost:8080/review/get-review-flag', {params}).toPromise();
+    return response;
+  }
+
+  files(f, taskId) {
+    let params = new HttpParams();
+    params = params.append('taskId', taskId);
+    return this.httpClient.post('http://localhost:8080/files/filesFields/', f, {params}) as Observable<any>;
   }
 
   getReviewFields() {
     return this.httpClient.get('http://localhost:8080/files/getReviewForm') as Observable<any>;
+  }
+
+  getMoreDocumentsFields() {
+    return this.httpClient.get('http://localhost:8080/review/getMoreDocumentsField') as Observable<any>;
   }
 
   public async getUser(username: string): Promise<User> {

@@ -97,14 +97,12 @@ INSERT INTO upp_db.writers_books(user_id, book_id)
 INSERT INTO upp_db.writers_books(user_id, book_id)
     VALUES(2, 3);
 
-INSERT INTO upp_db.registration_application(created_date, final_response, user_id)
-    VALUES('08-07-17', null, 3);
+ --INSERT INTO upp_db.registration_application(created_date, final_response, user_id)
+  --  VALUES('08-07-17', null, 3);
 
-INSERT INTO upp_db.document(file_url, registration_application_id)
-    VALUES('http://localhost:8080/files/download/file1.pdf', 1);
+--INSERT INTO upp_db.document(file_url, registration_application_id)
+--    VALUES('http://localhost:8080/files/download/file1.pdf', 1);
 
-INSERT INTO upp_db.document(file_url, registration_application_id)
-    VALUES('http://localhost:8080/files/download/file2.pdf', 1);
+--INSERT INTO upp_db.document(file_url, registration_application_id)
+  --  VALUES('http://localhost:8080/files/download/file2.pdf', 1);
 
-INSERT INTO upp_db.registration_application_response(comment, response, user_id, registration_application_id)
-    VALUES('This is a comment', 'NOT_APPROVED', 6, 1)

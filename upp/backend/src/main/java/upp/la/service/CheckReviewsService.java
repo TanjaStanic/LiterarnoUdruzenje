@@ -80,7 +80,8 @@ public class CheckReviewsService implements JavaDelegate{
 			
 			
 		} 
-		
+
+		System.out.println("Ovo je counter varijabla " + execution.getVariable("COUNTER").toString());
 	}
 
 }
