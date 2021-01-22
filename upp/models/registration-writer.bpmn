@@ -30,8 +30,8 @@
       <bpmn:outgoing>Flow_13civon</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:exclusiveGateway id="Gateway_0gctmid">
-      <bpmn:incoming>Flow_1lbnvsx</bpmn:incoming>
       <bpmn:incoming>Flow_1grvy3n</bpmn:incoming>
+      <bpmn:incoming>Flow_0d75axn</bpmn:incoming>
       <bpmn:outgoing>Flow_0xshyh7</bpmn:outgoing>
       <bpmn:outgoing>Flow_1l5lg6i</bpmn:outgoing>
     </bpmn:exclusiveGateway>
@@ -56,10 +56,13 @@
     <bpmn:intermediateThrowEvent id="Event_004ua2b" name="Notify members of committee">
       <bpmn:incoming>Flow_0xshyh7</bpmn:incoming>
       <bpmn:outgoing>Flow_0pd7vc6</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1833qk3">
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1833qk3" camunda:class="upp.la.service.SendEmailService">
         <bpmn:extensionElements>
-          <camunda:field name="TipEmaila">
-            <camunda:string>NotifyCommittee</camunda:string>
+          <camunda:field name="Type">
+            <camunda:string>RegistrationReviewLecturers</camunda:string>
+          </camunda:field>
+          <camunda:field name="Address">
+            <camunda:string>execution.getVariable("registration");</camunda:string>
           </camunda:field>
         </bpmn:extensionElements>
       </bpmn:messageEventDefinition>
@@ -168,7 +171,7 @@
       <bpmn:outgoing>Flow_1lbnvsx</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_13civon" sourceRef="Activity_11d6vxa" targetRef="Activity_1uew4vs" />
-    <bpmn:sequenceFlow id="Flow_1lbnvsx" sourceRef="Activity_1uew4vs" targetRef="Gateway_0gctmid" />
+    <bpmn:sequenceFlow id="Flow_1lbnvsx" sourceRef="Activity_1uew4vs" targetRef="Activity_0vyt5k0" />
     <bpmn:sequenceFlow id="Flow_1grvy3n" sourceRef="Activity_0tjg7o6" targetRef="Gateway_0gctmid" />
     <bpmn:sequenceFlow id="Flow_0uwv45x" sourceRef="Activity_1oan59b" targetRef="Activity_0tjg7o6" />
     <bpmn:userTask id="Activity_0ejjy95" name="Send more documents">
@@ -180,6 +183,11 @@
       <bpmn:outgoing>Flow_1grvy3n</bpmn:outgoing>
       <bpmn:script>${revision} = ${revision} + 1;</bpmn:script>
     </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_0d75axn" sourceRef="Activity_0vyt5k0" targetRef="Gateway_0gctmid" />
+    <bpmn:serviceTask id="Activity_0vyt5k0" name="Add committee" camunda:class="upp.la.util.DataInsert">
+      <bpmn:incoming>Flow_1lbnvsx</bpmn:incoming>
+      <bpmn:outgoing>Flow_0d75axn</bpmn:outgoing>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="writer_registration">
@@ -194,8 +202,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1lbnvsx_di" bpmnElement="Flow_1lbnvsx">
         <di:waypoint x="690" y="340" />
-        <di:waypoint x="690" y="460" />
-        <di:waypoint x="765" y="460" />
+        <di:waypoint x="690" y="380" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_13civon_di" bpmnElement="Flow_13civon">
         <di:waypoint x="690" y="230" />
@@ -331,6 +338,10 @@
         <di:waypoint x="195" y="190" />
         <di:waypoint x="230" y="190" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0d75axn_di" bpmnElement="Flow_0d75axn">
+        <di:waypoint x="730" y="460" />
+        <di:waypoint x="765" y="460" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="159" y="172" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -432,6 +443,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1yy0kew_di" bpmnElement="Activity_0tjg7o6">
         <dc:Bounds x="740" y="520" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0e63p6i_di" bpmnElement="Activity_0vyt5k0">
+        <dc:Bounds x="640" y="380" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0pbv3cw_di" bpmnElement="Event_1nglods">
         <dc:Bounds x="1712" y="682" width="36" height="36" />
