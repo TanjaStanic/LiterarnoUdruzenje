@@ -30,9 +30,9 @@ export class RegistrationComponentComponent implements OnInit {
     this.form = this.formBuilder.group({
       'email': ['', Validators.compose([Validators.required])],
       'password': ['', Validators.compose([Validators.required])],
-      'city': ['', Validators.compose([Validators.required])],
-      'country': ['', Validators.compose([Validators.required])],
-      'fullname': ['', Validators.compose([Validators.required])],
+      'taxIdentificationNumber': ['', Validators.compose([Validators.required])],
+      'companyRegistrationNumber': ['', Validators.compose([Validators.required])],
+      'name': ['', Validators.compose([Validators.required])],
       'passwordConfirm': ['', Validators.compose([Validators.required])]
     }, { validator: checkIfPasswordMatch });
   }
@@ -58,15 +58,15 @@ export class RegistrationComponentComponent implements OnInit {
   get email(): AbstractControl {
     return this.form.get('email');
   }
-  get fullname(): AbstractControl {
-    return this.form.get('fullname');
+  get name(): AbstractControl {
+    return this.form.get('name');
   }
-  get city(): AbstractControl {
-    return this.form.get('city');
+  get companyRegistrationNumber(): AbstractControl {
+    return this.form.get('companyRegistrationNumber');
   }
 
-  get country(): AbstractControl {
-    return this.form.get('country');
+  get taxIdentificationNumber(): AbstractControl {
+    return this.form.get('taxIdentificationNumber');
   }
 
   get password(): AbstractControl {

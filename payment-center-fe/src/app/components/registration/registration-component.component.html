@@ -6,6 +6,7 @@
       <form [formGroup]="form">
         <p>
           <mat-form-field>
+            <mat-label>Email</mat-label>
             <input matInput placeholder="Enter email..." formControlName="email" type="email"
               [errorStateMatcher]="matcher" />
 
@@ -17,39 +18,43 @@
 
         <p>
           <mat-form-field>
-            <input matInput placeholder="Enter full name..." formControlName="fullname" type="text"
+            <mat-label>Name</mat-label>
+            <input matInput placeholder="Enter  name..." formControlName="name" type="text"
               [errorStateMatcher]="matcher" />
 
-            <mat-error *ngIf="fullname.hasError('required')">
-              Full name is <strong>required</strong>
+            <mat-error *ngIf="name.hasError('required')">
+              Name is <strong>required</strong>
             </mat-error>
           </mat-form-field>
         </p>
 
         <p>
           <mat-form-field>
-            <input matInput placeholder="Enter city..." formControlName="city" type="text"
-              [errorStateMatcher]="matcher" />
+            <mat-label>Tax Identification Number</mat-label>
+            <input matInput placeholder="Enter Tax Identification Number..." formControlName="taxIdentificationNumber"
+              type="text" [errorStateMatcher]="matcher" />
 
-            <mat-error *ngIf="city.hasError('required')">
-              City is <strong>required</strong>
+            <mat-error *ngIf="taxIdentificationNumber.hasError('required')">
+              Tax Identification Number is <strong>required</strong>
             </mat-error>
           </mat-form-field>
         </p>
 
         <p>
           <mat-form-field>
-            <input matInput placeholder="Enter country..." formControlName="country" type="text"
-              [errorStateMatcher]="matcher" />
+            <mat-label>Company Registration Number</mat-label>
+            <input matInput placeholder="Enter Company Registration Number..."
+              formControlName="companyRegistrationNumber" type="text" [errorStateMatcher]="matcher" />
 
-            <mat-error *ngIf="country.hasError('required')">
-              Country is <strong>required</strong>
+            <mat-error *ngIf="companyRegistrationNumber.hasError('required')">
+              Company Registration Number is <strong>required</strong>
             </mat-error>
           </mat-form-field>
         </p>
 
         <p>
           <mat-form-field>
+            <mat-label>Password</mat-label>
             <input matInput placeholder="Enter password..." formControlName="password" type="password"
               [errorStateMatcher]="matcher" />
             <mat-error *ngIf="password.hasError('required')">
@@ -60,6 +65,7 @@
 
         <p>
           <mat-form-field>
+            <mat-label>Confirm password</mat-label>
             <input matInput placeholder="Confirm password..." formControlName="passwordConfirm" type="password"
               [errorStateMatcher]="matcher" />
             <mat-error *ngIf="passwordConfirm.hasError('required')">
