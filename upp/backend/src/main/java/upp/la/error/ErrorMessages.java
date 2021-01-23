@@ -33,4 +33,7 @@ public class ErrorMessages {
     public static String AUTH_ERROR() {
         return "Bad credentials.";
     }
+    public static String CARD_ERROR() {
+        return "Payment failed. Bad card data.";
+    }
 }

@@ -23,12 +23,14 @@ import upp.la.dto.FormFieldsDto;
 import upp.la.error.ErrorMessages;
 import upp.la.model.User;
 import upp.la.model.exceptions.EntityNotFound;
+import upp.la.model.exceptions.ValidationError;
 import upp.la.model.registration.ApplicationResponse;
 import upp.la.model.registration.RegistrationApplication;
 import upp.la.model.registration.RegistrationApplicationResponse;
 import upp.la.repository.RegistrationApplicationRepository;
 import upp.la.repository.RegistrationApplicationResponseRepository;
 import upp.la.repository.UserRepository;
+import upp.la.service.SubmitPaymentService;
 import upp.la.service.internal.ReviewServiceInt;
 
 
@@ -39,11 +41,11 @@ public class ReviewController {
 	@Autowired ReviewServiceInt reviewService;
 	@Autowired RegistrationApplicationResponseRepository regAppResponseRepository;
 	@Autowired UserRepository userRepository;
-	@Autowired
-	RegistrationApplicationRepository registrationApplicationRepository;
+	@Autowired RegistrationApplicationRepository registrationApplicationRepository;
 	@Autowired private FormService formService;
 	@Autowired private TaskService taskService;
 	@Autowired private RuntimeService runtimeService;
+	@Autowired private SubmitPaymentService submitPaymentService;
 	
 	@PostMapping(path="/submit-review", consumes = "application/json")
 	public ResponseEntity<?> submitReview(@RequestBody List<FormFieldDto> formFields,
@@ -139,8 +141,15 @@ public class ReviewController {
 	}
 
 	@PostMapping(path = "/postPayment", produces = "application/json")
-	public @ResponseBody ResponseEntity<?> postPayment(@RequestBody List<FormFieldDto> formFields) {
+	public @ResponseBody ResponseEntity<?> postPayment(@RequestBody List<FormFieldDto> formFields)
+			throws ValidationError{
 
+		boolean paymentOk = true;
+		paymentOk = submitPaymentService.checkCardForm(formFields);
+		if (!paymentOk) {
+			throw new ValidationError(ErrorMessages.CARD_ERROR());
+		}
+		
 		List<Task> tasks = taskService.createTaskQuery().taskName("Membership payment").list();
 		Task task = tasks.get(0);
 

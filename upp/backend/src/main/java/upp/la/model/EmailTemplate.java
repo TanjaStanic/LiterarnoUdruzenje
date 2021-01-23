@@ -47,13 +47,17 @@ public class EmailTemplate {
   }
 
   public static String REGISTRATION_APPLICATION_PAYMENT_MESSAGE(Integer days) {
-    return "You have: " + days.toString() + " to make the registration payment.";
+    return "Your appliation is accespted. You have: " + days.toString() + " to make the registration payment.";
   }
 
   public static String REGISTRATION_APPLICATION_FAILED_SUBJECT() {
     return "Registration failed";
   }
 
+  public static String REGISTRATION_APPLICATION_NOT_ACCEPTED() {
+	    return "Your registration is not accepted.";
+  }
+  
   public static String REGISTRATION_APPLICATION_FAILED_MESSAGE() {
     return "You have failed to make the payment.";
   }
@@ -104,4 +108,10 @@ public class EmailTemplate {
         EmailTemplate.REGISTRATION_APPLICATION_FAILED_SUBJECT(),
         EmailTemplate.REGISTRATION_APPLICATION_FAILED_MESSAGE());
   }
+  
+  public static EmailTemplate RegistrationApplicationNotAccepted() {
+	    return new EmailTemplate(
+	        EmailTemplate.REGISTRATION_APPLICATION_FAILED_SUBJECT(),
+	        EmailTemplate.REGISTRATION_APPLICATION_NOT_ACCEPTED());
+	  }
 }

@@ -39,7 +39,7 @@
     <bpmn:intermediateThrowEvent id="Event_004ua2b" name="Notify members of committee">
       <bpmn:incoming>Flow_0xshyh7</bpmn:incoming>
       <bpmn:outgoing>Flow_0pd7vc6</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1833qk3" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1833qk3" messageRef="Message_0zhn6vq" camunda:class="upp.la.service.SendEmailService" />
     </bpmn:intermediateThrowEvent>
     <bpmn:sequenceFlow id="Flow_16lrxpe" name="Membership denied" sourceRef="Gateway_04rlr2w" targetRef="Gateway_128qa39">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${response == "denied"}</bpmn:conditionExpression>
@@ -47,7 +47,7 @@
     <bpmn:intermediateThrowEvent id="Event_0qnkowj" name="Notify writer">
       <bpmn:incoming>Flow_0e9e7nz</bpmn:incoming>
       <bpmn:outgoing>Flow_1n5772j</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1eapczs" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1eapczs" messageRef="Message_1scix9i" camunda:class="upp.la.service.SendEmailService" />
     </bpmn:intermediateThrowEvent>
     <bpmn:sequenceFlow id="Flow_1n5772j" sourceRef="Event_0qnkowj" targetRef="Activity_1d78zhj" />
     <bpmn:serviceTask id="Activity_1d78zhj" name="Cancel request" camunda:class="upp.la.service.CancelRequestService">
@@ -61,7 +61,7 @@
     <bpmn:intermediateThrowEvent id="Event_0tlawa8" name="Notify writter">
       <bpmn:incoming>Flow_112v6ei</bpmn:incoming>
       <bpmn:outgoing>Flow_15nda33</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1h3z8sq" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1h3z8sq" messageRef="Message_058tsq6" camunda:class="upp.la.service.SendEmailService" />
     </bpmn:intermediateThrowEvent>
     <bpmn:sequenceFlow id="Flow_112v6ei" name="Need more documents" sourceRef="Gateway_04rlr2w" targetRef="Event_0tlawa8">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${response == "need_more_documents"}</bpmn:conditionExpression>
@@ -89,7 +89,7 @@
     <bpmn:intermediateThrowEvent id="Event_0aid43p" name="Notify writer">
       <bpmn:incoming>Flow_145synj</bpmn:incoming>
       <bpmn:outgoing>Flow_078nal2</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1uy3mkw" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1uy3mkw" messageRef="Message_1whaw8z" camunda:class="upp.la.service.SendEmailService" />
     </bpmn:intermediateThrowEvent>
     <bpmn:sequenceFlow id="Flow_145synj" name="Membership accepted" sourceRef="Gateway_04rlr2w" targetRef="Event_0aid43p">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${response == "accepted"}</bpmn:conditionExpression>
@@ -117,7 +117,7 @@
     <bpmn:intermediateThrowEvent id="Event_1c8jy9g" name="Notify writer">
       <bpmn:incoming>Flow_1j1392a</bpmn:incoming>
       <bpmn:outgoing>Flow_1iy8ag4</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_02msmgv" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_02msmgv" messageRef="Message_166ev6a" camunda:class="upp.la.service.SendEmailService" />
     </bpmn:intermediateThrowEvent>
     <bpmn:sequenceFlow id="Flow_1iy8ag4" sourceRef="Event_1c8jy9g" targetRef="Activity_0rdvuef" />
     <bpmn:endEvent id="Event_0q7653b" name="Request canceled">
@@ -203,6 +203,11 @@
       <bpmn:outgoing>Flow_1unxy8p</bpmn:outgoing>
     </bpmn:serviceTask>
   </bpmn:process>
+  <bpmn:message id="Message_0zhn6vq" name="RegistrationReviewLecturers" />
+  <bpmn:message id="Message_058tsq6" name="RegistrationReviewMaterialWriter" />
+  <bpmn:message id="Message_1scix9i" name="RegistrationApplicationNotAccepted" />
+  <bpmn:message id="Message_166ev6a" name="RegistrationApplicationPaymentFailed" />
+  <bpmn:message id="Message_1whaw8z" name="RegistrationApplicationPaymentWriter" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="writer_registration">
       <bpmndi:BPMNEdge id="Flow_1unxy8p_di" bpmnElement="Flow_1unxy8p">
@@ -434,6 +439,9 @@
       <bpmndi:BPMNShape id="Activity_17v58f2_di" bpmnElement="Activity_0rdvuef">
         <dc:Bounds x="2160" y="770" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0pkrw9k_di" bpmnElement="Activity_13ixcbm">
+        <dc:Bounds x="1850" y="550" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_02u0kdz_di" bpmnElement="Activity_02u0kdz">
         <dc:Bounds x="450" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -454,9 +462,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_11oo61o_di" bpmnElement="Activity_1ln7p90">
         <dc:Bounds x="2160" y="550" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0pkrw9k_di" bpmnElement="Activity_13ixcbm">
-        <dc:Bounds x="1850" y="550" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0pbv3cw_di" bpmnElement="Event_1nglods">
         <dc:Bounds x="1712" y="612" width="36" height="36" />

@@ -77,5 +77,32 @@ public class SubmitPaymentService implements JavaDelegate{
 
 		}
 	}
+	
+	public boolean checkCardForm(List<FormFieldDto> formFields) {
+		for (FormFieldDto f : formFields) {
+			if (f.getFieldId().equals("card_holder_id")) {
+				if (f.getFieldValue().trim().isEmpty()) {
+					System.out.println("card holder je false");
+					return false;
+				}
+			}
+			if (f.getFieldId().equals("card_number_id")) {
+				if (f.getFieldValue().trim().isEmpty() ) {
+					return false;
+				}
+			}
+			if (f.getFieldId().equals("cvv_id")) {
+				if (f.getFieldValue().trim().isEmpty()) {
+					return false;
+				}
+			}
+			if (f.getFieldId().equals("expiration_date_id")) {
+				if (f.getFieldValue().trim().isEmpty() ) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
 }
