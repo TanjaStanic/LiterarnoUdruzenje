@@ -10,6 +10,9 @@ import com.example.paymentinfo.service.ClientService;
 import com.example.paymentinfo.service.PaymentMethodService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -116,5 +119,18 @@ public class ViewController {
     @GetMapping("/login")
     public String getLoginPage(){
         return "login";
+    }
+
+    @GetMapping("/login-error")
+    public String getLoginErrorPage(Model model){
+        model.addAttribute("loginError", true);
+        return "login";
+    }
+
+
+
+    @GetMapping("/payment-methods")
+    public String getPaymentMethods(){
+        return "payment-methods";
     }
 }

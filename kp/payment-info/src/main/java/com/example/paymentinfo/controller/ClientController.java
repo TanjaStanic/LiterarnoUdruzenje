@@ -5,9 +5,14 @@ import com.example.paymentinfo.dto.ClientBasicInfoDto;
 import com.example.paymentinfo.dto.ClientRegistrationDto;
 import com.example.paymentinfo.service.AuthService;
 import com.example.paymentinfo.service.ClientService;
+import com.example.paymentinfo.utils.ClientValidator;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,22 +29,28 @@ public class ClientController {
     private ClientService clientService;
     private RestTemplate restTemplate;
     private AuthService authService;
+    private ClientValidator clientValidator;
 
-    public ClientController(ClientService clientService, RestTemplate restTemplate, AuthService authService) {
+    public ClientController(ClientService clientService, RestTemplate restTemplate, AuthService authService, ClientValidator clientValidator) {
         this.clientService = clientService;
         this.restTemplate = restTemplate;
         this.authService = authService;
+        this.clientValidator = clientValidator;
     }
 
     @PostMapping("auth/register")
     public String register(@Valid @ModelAttribute("client") ClientRegistrationDto clientRegistrationDto,
-                           RedirectAttributes redirectAttrs, Model model) {
+                           RedirectAttributes redirectAttrs, Model model, BindingResult bindingResult) {
         System.out.println(clientRegistrationDto);
+        clientValidator.validate(clientRegistrationDto, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "registration";
+        }
         Client client = null;
         try {
             client = authService.registerClient(clientRegistrationDto);
         } catch (Exception exception) {
-
             model.addAttribute("clientRegistrationDto", clientRegistrationDto);
             model.addAttribute("error", exception.getMessage());
             return "registration";
@@ -59,6 +70,5 @@ public class ClientController {
         }
 
     }
-
-
+    
 }

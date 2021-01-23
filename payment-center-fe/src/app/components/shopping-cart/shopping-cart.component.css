@@ -1,0 +1,9 @@
+.empty-cart-button {
+  background-color: red;
+  margin: 1em;
+}
+
+.order-button {
+  background-color: #95c11f;
+  margin: 1em;
+}

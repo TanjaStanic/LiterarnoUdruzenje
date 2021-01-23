@@ -7,6 +7,9 @@ import com.example.paymentinfo.repository.RoleRepository;
 import com.example.paymentinfo.service.AuthService;
 import com.example.paymentinfo.service.ClientService;
 import com.example.paymentinfo.service.NotificationService;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
@@ -47,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Invalid email!");
         }
         Client client = clientService.findByUsername(clientRegistration.getEmail());
-        if (client!= null){
+        if (client != null) {
             throw new RuntimeException("Email already in use!");
         }
 

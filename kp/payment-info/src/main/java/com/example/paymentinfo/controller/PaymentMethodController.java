@@ -37,16 +37,16 @@ public class PaymentMethodController {
         Client client = clientService.findById(clientId);
 
         ClientBasicInfoDto clientBasicInfoDto = new ClientBasicInfoDto(client.getName(), client.getEmail());
-        ResponseEntity<String> redirectUrl = restTemplate.getForEntity(MessageFormat.format("https://{0}/clients/register-url/{1}", paymentMethod, client.getId().toString()),String.class);
+        ResponseEntity<String> redirectUrl = restTemplate.getForEntity(MessageFormat.format("https://{0}/clients/register-url/{1}", paymentMethod, client.getId().toString()), String.class);
 
-        if (redirectUrl.getStatusCode() == HttpStatus.OK){
+        if (redirectUrl.getStatusCode() == HttpStatus.OK) {
             client.getPaymentMethods().add(method);
             clientService.update(client);
             HttpHeaders headersRedirect = new HttpHeaders();
             headersRedirect.add("Location", redirectUrl.getBody());
             headersRedirect.add("Access-Control-Allow-Origin", "*");
             return new ResponseEntity<>(null, headersRedirect, HttpStatus.FOUND);
-        }else {
+        } else {
             // TODO redirect to error page
             return ResponseEntity.badRequest().build();
         }

@@ -9,4 +9,5 @@ public interface AuthService {
     Client registerClient(ClientRegistrationDto newClient);
 
     void verifyEmail(String token);
+
 }

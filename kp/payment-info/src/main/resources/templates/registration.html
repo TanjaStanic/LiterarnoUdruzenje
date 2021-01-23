@@ -57,8 +57,8 @@
 
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <div class="input-group" data-tip="Password must contain at least 8 characters, of which at least one uppercase letter, one lowercase letter, one number and one special character @ # $% ^ & + =! ~ & *">
-                                <input type="password" name="password" id="password"
+                            <div class="input-group">
+                                <input type="password" data-toggle="tooltip" title="Password must contain at least 8 characters, of which at least one uppercase letter, one lowercase letter, one number and one special character @ # $% ^ & + =! ~ & *" name="password" id="password"
                                        class="form-control" required th:field="*{password}"><br/>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>

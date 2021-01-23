@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <title>Log in</title>
     <link rel="stylesheet"
           th:href="@{https://localhost:8444/webjars/bootstrap/css/bootstrap.min.css}"/>
 
@@ -23,27 +23,24 @@
             <div class="bg-white rounded-lg shadow-sm p-5">
 
                 <div>
-                    <form id="forma" class="needs-validation" th:action="@{/login}"
-                          method="POST" role="form"
-                          th:object="${client}">
+                    <p th:if="${loginError}" class="error">Invalid username or password!</p>
+                    <form id="login_form" class="needs-validation" method="POST" role="form">
 
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type=email name="email" id="email"  required
-                                   class="form-control" th:field="*{email}"><br/>
+                            <label for="username">Email</label>
+                            <input type=email name="username" id="username" required
+                                   class="form-control"><br/>
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
 
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <div class="input-group" data-tip="Password must contain at least 8 characters, of which at least one uppercase letter, one lowercase letter, one number and one special character @ # $% ^ & + =! ~ & *">
+                            <div class="input-group">
                                 <input type="password" name="password" id="password"
-                                       class="form-control" required th:field="*{password}"><br/>
+                                       class="form-control" required><br/>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
                         </div>
-
-
 
                         <div class="form-group">
                             <button type="submit" class="btn btn-success btn-lg">Submit</button>
@@ -56,38 +53,65 @@
         </div>
     </div>
 </div>
-<script>
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
-    (function() {
-        'use strict';
-        window.addEventListener('load', function() {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-            // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        }, false);
-    })();
-</script>
 <script th:src="@{https://localhost:8444/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{https://localhost:8444/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+
+            $('#login_form').on('submit', function (e) { //use on if jQuery 1.7+
+                e.preventDefault();  //prevent form from submitting
+                let data = JSON.stringify({"username": document.querySelector('#username').value, "password":  document.querySelector('#password').value});
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "/auth/authenticate",
+                    contentType: "application/json;charset=UTF-8",
+                    data: data,
+                    dataType: "json",
+                    error: function (request) {
+                        console.log(request)
+                        console.log("Connection error");
+                        window.location.replace(request.responseText);
+                    },
+                    success: function (data) {
+                        console.log(data)
+                        localStorage.setItem("token", data.accessToken);
+                        localStorage.setItem("id", data.userId);
+
+                    }
+                });
+            });
+        }
+    )();
+
+</script>
 <script th:inline="javascript">
     /*<![CDATA[*/
 
     var flag = [[${error}]]; //Your Thymleaf variable
-    window.onload = function() {
-        if(!flag)
+    window.onload = function () {
+        if (!flag)
             return; // Exit/Return if the variable is false
         function showError() {
             alert(flag);
         }
+
         showError(); // Call your favourite method if the variable is true
     };
 

@@ -1,0 +1,41 @@
+<mat-toolbar class="navbar">
+  <mat-toolbar-row>
+    <div class="logo">
+      <!-- <img src="assets/navigation-logo-dark.png" /> -->
+    </div>
+    <div id="links">
+      <a *ngIf="isAdmin" mat-button class="button-color" [routerLink]="'/admin'">
+        Admin panel
+      </a>
+      <a mat-button [routerLink]="'/dashboard'">
+      </a>
+    </div>
+    <span class="example-spacer"></span>
+    <div>
+      <button *ngIf="roles.length > 0" class="button" mat-button [matMenuTriggerFor]="menu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button class="button-color" mat-menu-item [routerLink]="'/cart'">Cart <mat-icon>shopping_cart</mat-icon>
+        </button>
+        <button class="button-color" mat-menu-item [routerLink]="'/profile'">My profile
+        </button>
+        <button class="button-color" mat-menu-item [routerLink]="'/change-password'">
+          Change password
+        </button>
+      </mat-menu>
+
+
+      <a *ngIf="roles.length > 0" mat-button class="button-color" (click)="logout()">
+        Logout
+      </a>
+      <a *ngIf="roles.length == 0" mat-button class="button-color" [routerLink]="'/login'">
+        Sign in
+      </a>
+      <a *ngIf="roles.length == 0" mat-button class="button-color" [routerLink]="'/register'">
+        Register
+      </a>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>

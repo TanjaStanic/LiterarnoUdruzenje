@@ -1,9 +1,11 @@
 package com.example.paymentinfo.security;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.util.Assert;
 
 @Getter
+@Setter
 public class JwtAuthenticationRequest {
     private String username;
     private String password;

@@ -5,6 +5,7 @@ import com.example.paymentinfo.domain.Client;
 import com.example.paymentinfo.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -27,16 +28,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
-        Client client;
-        try {
-            client = clientService.findByUsername(username);
-        } catch (Exception exception) {
-            System.out.println(exception.getMessage());
-            throw exception;
+        Client client = clientService.findByUsername(username);
+        if (client == null){
+            throw new BadCredentialsException("Invalid username or password.");
         }
         boolean matches = passwordEncoder.matches(password, ((Client) client).getPassword());
         if (!matches) {
-            throw new RuntimeException("Invalid username or password.");
+            throw new BadCredentialsException("Invalid username or password.");
         }
         return new UsernamePasswordAuthenticationToken(client, client.getPassword(), client.getAuthorities());
     }

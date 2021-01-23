@@ -1,0 +1,15 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.logo {
+  height: 2.5em;
+  width: 15em;
+}
+
+.navbar {
+  background-color: gray;
+}
+#links > a {
+  color: teal;
+}
