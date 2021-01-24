@@ -3,13 +3,6 @@
     <div class="logo">
       <!-- <img src="assets/navigation-logo-dark.png" /> -->
     </div>
-    <div id="links">
-      <a *ngIf="isAdmin" mat-button class="button-color" [routerLink]="'/admin'">
-        Admin panel
-      </a>
-      <a mat-button [routerLink]="'/dashboard'">
-      </a>
-    </div>
     <span class="example-spacer"></span>
     <div>
       <button *ngIf="roles.length > 0" class="button" mat-button [matMenuTriggerFor]="menu">
@@ -17,7 +10,7 @@
       </button>
 
       <mat-menu #menu="matMenu">
-        <button class="button-color" mat-menu-item [routerLink]="'/cart'">Cart <mat-icon>shopping_cart</mat-icon>
+        <button *ngIf="isAdmin == true" class="button-color" mat-menu-item [routerLink]="'/admin'">Admin panel
         </button>
         <button class="button-color" mat-menu-item [routerLink]="'/profile'">My profile
         </button>
@@ -34,7 +27,7 @@
         Sign in
       </a>
       <a *ngIf="roles.length == 0" mat-button class="button-color" [routerLink]="'/register'">
-        Register
+        Sign up
       </a>
     </div>
   </mat-toolbar-row>

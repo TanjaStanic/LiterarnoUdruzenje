@@ -3,7 +3,7 @@ server:
   ssl:
     enabled: true
     protocol: TLS
-    key-store: classpath:paymentinfo.jks
+    key-store: classpath:paymentinfo2.jks
     key-store-password: paymentinfo
     key-password: paymentinfo
     keyStoreType: JKS

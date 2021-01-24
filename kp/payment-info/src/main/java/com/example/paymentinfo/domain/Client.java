@@ -39,7 +39,10 @@ public class Client implements Serializable, UserDetails {
 	private String token;
     @Column
 	private Timestamp lastPasswordResetDate;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@JoinTable(name = "client_payment_method",
+			joinColumns = { @JoinColumn(name = "fk_client") },
+			inverseJoinColumns = { @JoinColumn(name = "fk_payment_method") })
     private Set<PaymentMethod> paymentMethods = new HashSet<>();
 
 	@Override
@@ -74,5 +77,15 @@ public class Client implements Serializable, UserDetails {
 
 	@ManyToOne
 	private Role role;
+
+	public void addPaymentMethod(PaymentMethod paymentMethod) {
+		paymentMethods.add(paymentMethod);
+		paymentMethod.getClients().add(this);
+	}
+
+	public void removePaymentMethod(PaymentMethod paymentMethod) {
+		paymentMethods.remove(paymentMethod);
+		paymentMethod.getClients().remove(this);
+	}
 
 }

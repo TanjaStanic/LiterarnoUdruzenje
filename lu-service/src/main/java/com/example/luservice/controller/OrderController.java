@@ -38,9 +38,10 @@ public class OrderController {
         transactionService.initializeTransaction(requestDTO);
         ResponseEntity<String> response = null;
         try {
-            response = restTemplate.exchange("https://localhost:8444/auth/api/initiate-payment-request", HttpMethod.POST,
+            response = restTemplate.exchange("https://payment.center:8444/auth/api/initiate-payment-request", HttpMethod.POST,
                     new HttpEntity<PaymentRequestDTO>(requestDTO), String.class);
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Could not contact payment center");
             return (ResponseEntity<?>) ResponseEntity.badRequest().body("Could not contact payment center");
         }

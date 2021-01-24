@@ -6,6 +6,7 @@ import com.example.paymentinfo.service.ClientService;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.Set;
 
 @Service
@@ -50,8 +51,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Set<Client> getAll() {
-        return (Set<Client>) clientRepository.findAll();
+    public Collection<Client> getAll() {
+        return  clientRepository.findAll();
     }
 
     @Override
@@ -62,5 +63,10 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client findByUsername(String username) {
         return clientRepository.findByEmail(username);
+    }
+
+    @Override
+    public void saveRange(Collection<Client> clients) {
+        clientRepository.saveAll(clients);
     }
 }

@@ -24,9 +24,13 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.roles = this.authService.getUserRoles();
+    console.log("iz navbara")
+    console.log(this.roles)
     if (this.roles.length > 0) {
       this.roles.forEach(element => {
-        if (element.name == Role.Admin.toString()) {
+        console.log(element)
+        if (element === Role.Admin) {
+          console.log("ulogovan admin")
           this.isAdmin = true;
         }
 
@@ -40,7 +44,7 @@ export class NavbarComponent implements OnInit {
   logout() {
     this.authService.logout();
     this.cartService.empty();
-    this.router.navigate(['']);
+    this.router.navigateByUrl('login');
   }
 
 }

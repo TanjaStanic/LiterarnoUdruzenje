@@ -17,102 +17,25 @@ import { CartItem } from 'src/app/shared/models/cart-item';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit, OnDestroy {
-  books: Book[] = [];
-  private subscription: Subscription;
-  form: FormGroup;
-  matcher = new MyErrorStateMatcher();
+export class DashboardComponent implements OnInit {
+
   roles;
-  subscriptionActiveOrInitiated = false;
-  activeSubscription: any;
   authenticated = false;
 
   constructor(private router: Router, private formBuilder: FormBuilder, private authService: AuthService,
     private snackBarService: SnackBarService, private userService: UserService, private cartService: CartService) {
-    this.form = this.formBuilder.group({
-      'quantity': ['']
-    });
+
 
   }
 
   ngOnInit() {
-    this.authenticated = this.authService.isAuthenticated();
-    console.log(this.authenticated);
-    this.roles = this.authService.getUserRoles();
-    this.subscription = this.cartService.items.subscribe();
-    this.resetForm();
 
+    this.roles = this.authService.getUserRoles();
     const userId = localStorage.getItem("id");
 
-    if (userId != null && userId != undefined) {
-      this.userService.getUserSubscription(userId).subscribe(
-        data => {
-          this.activeSubscription = data;
-          this.subscriptionActiveOrInitiated = true;
-          console.log(this.activeSubscription);
-        },
-        err => {
-
-
-        }
-      );
-    }
-
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 
 
-  addToCart(book: Book) {
-    console.log(book);
-    console.log(this.quantity.value);
 
-    const cartItem = new CartItem(uuid(), book.price * this.quantity.value, this.quantity.value, book);
-    this.cartService.addItem(cartItem);
-    this.snackBarService.showMessage('Added to shopping cart.');
-    this.resetForm();
-  }
-
-  get quantity(): AbstractControl {
-    return this.form.get('quantity')
-  }
-
-  resetForm() {
-    this.form.reset();
-    this.quantity.setValue(1);
-  }
-
-  subscribe() {
-    this.userService.subscribe().subscribe(
-      data => {
-        this.subscriptionActiveOrInitiated = true;
-        window.location.href = data;
-      },
-      (error: HttpErrorResponse) => {
-        console.log(error.error);
-        console.log(error.message);
-        console.log(error.status);
-        console.log(error.headers.keys());
-        this.snackBarService.showMessage("Something went wrong, please try again.");
-      }
-    );
-  }
-
-  paypalTest() {
-    this.userService.paypalPaymnetTest().subscribe(
-      data => {
-        window.location.href = data;
-      },
-      (error: HttpErrorResponse) => {
-        console.log(error.error);
-        console.log(error.message);
-        console.log(error.status);
-        console.log(error.headers.keys());
-        this.snackBarService.showMessage("Something went wrong, please try again.");
-      }
-    );
-  }
 }
 

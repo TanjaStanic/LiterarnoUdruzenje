@@ -2,6 +2,7 @@ package com.example.paymentinfo.service;
 
 import com.example.paymentinfo.domain.Client;
 
+import java.util.Collection;
 import java.util.Set;
 
 public interface ClientService {
@@ -17,10 +18,12 @@ public interface ClientService {
 
     void deleteById(Long id);
 
-    Set<Client> getAll();
+    Collection<Client> getAll();
 
     Client findByToken(String token);
 
     Client findByUsername(String username);
+
+    void saveRange(Collection<Client> clients);
 
 }

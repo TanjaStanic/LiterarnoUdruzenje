@@ -71,7 +71,7 @@ public class ClientController {
     }
 
     @GetMapping("clients")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ClientDto>> getClients(){
         List<ClientDto> clients = clientService.getAll().stream().map(client -> new ClientDto(client)).collect(Collectors.toList());
         return ResponseEntity.ok(clients);

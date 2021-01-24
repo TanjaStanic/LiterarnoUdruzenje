@@ -2,9 +2,9 @@ server:
   port: 8447
   ssl:
     enabled: true
-    key-store: classpath:luservice.jks
+    key-store: classpath:luservice2.jks
     key-store-password: luservice
-    key-alias: luservice
+    key-alias: literary.association(localhost)
     key-store-type: JKS
     trust-store: classpath:luservice_truststore.jks
     trust-store-password: password

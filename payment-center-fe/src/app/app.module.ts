@@ -31,6 +31,7 @@ import { UserGuardService } from './shared/route-guards/user-guard.service';
 import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ErrorComponent } from './components/error/error.component';
+import { PaymentMethodDialogComponent } from './components/admin-panel/payment-method-dialog/payment-method-dialog.component';
 
 
 
@@ -50,6 +51,7 @@ import { ErrorComponent } from './components/error/error.component';
     ShoppingCartComponent,
     ProfileComponent,
     ErrorComponent,
+    PaymentMethodDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -75,6 +77,7 @@ import { ErrorComponent } from './components/error/error.component';
   ],
   bootstrap: [AppComponent],
   entryComponents: [
+    PaymentMethodDialogComponent
   ]
 })
 export class AppModule { }

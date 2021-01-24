@@ -1,7 +1,10 @@
+<app-navbar></app-navbar>
 <mat-tab-group mat-align-tabs="start" class="background" animationDuration="0ms">
     <mat-tab label="Payment methods">
+        <button class="button-color" mat-raised-button style="margin: 2em;"
+            (click)="openCreateNewPaymentMethodDialog()">Create</button>
         <div fxLayout="column" fxLayoutAlign="center stretch">
-            <mat-label>Filter</mat-label>
+
             <mat-form-field>
                 <input matInput (keyup)="applyFilterPaymentMethodsTable($event)" placeholder="Filter" #input>
             </mat-form-field>
@@ -82,7 +85,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="companyRegistrationNumber">
-                    <th class="set-padding" mat-header-cell mat-sort-header *matHeaderCellDef> Registration date </th>
+                    <th class="set-padding" mat-header-cell mat-sort-header *matHeaderCellDef> Company Registration
+                        Number </th>
                     <td class="set-padding" mat-cell *matCellDef="let client">
                         {{client.companyRegistrationNumber}} </td>
                 </ng-container>

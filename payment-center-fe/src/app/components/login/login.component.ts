@@ -47,11 +47,12 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('token', data.accessToken);
         localStorage.setItem('id', data.userId.toString());
         this.roles = this.authService.getUserRoles();
-        console.log(this.roles);
+
         let flag = false;
         if (this.roles != '') {
           this.roles.forEach(element => {
-            if (element.name == Role.Admin.toString()) {
+            if (element === Role.Admin) {
+              console.log("admin");
               flag = true;
             }
 
@@ -61,7 +62,7 @@ export class LoginComponent implements OnInit {
             this.router.navigateByUrl('dashboard');
 
           } else {
-            this.router.navigate(['admin']);
+            this.router.navigateByUrl('admin');
           }
 
         }

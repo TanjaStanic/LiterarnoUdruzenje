@@ -10,11 +10,9 @@ import com.example.paymentinfo.service.PaymentMethodService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.MessageFormat;
@@ -40,12 +38,57 @@ public class PaymentMethodController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<PaymentMethodDto>> getPaymentMethods() {
         List<PaymentMethod> paymentMethods = (ArrayList) paymentMethodService.findAll();
         List<PaymentMethodDto> retVaL = paymentMethods.stream()
                 .map(paymentMethod -> new PaymentMethodDto(paymentMethod))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(retVaL);
+    }
+
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> create(@RequestBody PaymentMethodDto paymentMethodDto) {
+        PaymentMethod entity = new PaymentMethod(paymentMethodDto.getName(), paymentMethodDto.isSubscriptionSupported(), paymentMethodDto.getApplicationName());
+        entity = paymentMethodService.save(entity);
+        if (entity != null) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().body("Failed to insert payment method.");
+        }
+
+    }
+
+    @PostMapping("/{paymentMethodId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> update(@RequestBody PaymentMethodDto paymentMethodDto, @PathVariable long paymentMethodId) {
+        PaymentMethod entity = new PaymentMethod(paymentMethodDto.getName(), paymentMethodDto.isSubscriptionSupported(), paymentMethodDto.getApplicationName());
+        entity.setId(paymentMethodId);
+        try {
+            paymentMethodService.update(entity);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to update payment method.");
+        }
+
+        List<PaymentMethodDto> retVaL = paymentMethodService.findAll().stream().map(paymentMethod -> new PaymentMethodDto(paymentMethod)).collect(Collectors.toList());
+        return ResponseEntity.ok(retVaL);
+
+
+    }
+
+    @DeleteMapping("/{paymentMethodId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> delete(@PathVariable long paymentMethodId) {
+        try {
+            paymentMethodService.deleteById(paymentMethodId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Failed to delete payment method.");
+        }
+        return ResponseEntity.ok().build();
+
+
     }
 
     @GetMapping("/register/{paymentMethod}/{clientId}")

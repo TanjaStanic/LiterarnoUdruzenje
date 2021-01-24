@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>New payment method</h1>
+<div mat-dialog-content>
+
+    <div>
+        <mat-label>Name</mat-label>
+        <input matInput [(ngModel)]="data.name" type="text">
+    </div>
+
+    <div>
+        <mat-label>Service ID</mat-label>
+        <input matInput [(ngModel)]="data.applicationName" type="text">
+    </div>
+
+    <div>
+        <mat-checkbox [(ngModel)]="data.subscriptionSupported">Subscription payment supported</mat-checkbox>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Submit</button>
+</div>

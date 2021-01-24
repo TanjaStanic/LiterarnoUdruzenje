@@ -2,7 +2,7 @@ server:
   port: ${PORT:8761}
   ssl:
     enabled: true
-    key-store: classpath:discovery.jks
+    key-store: classpath:discovery2.jks
     key-store-password: password
     key-password: password
     keyStoreType: JKS
