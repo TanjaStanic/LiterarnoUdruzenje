@@ -6,15 +6,12 @@ import com.example.paymentinfo.security.TokenUtils;
 import com.example.paymentinfo.security.UserTokenState;
 import com.example.paymentinfo.service.AuthService;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +21,7 @@ import java.text.MessageFormat;
 @RestController
 @RequestMapping("/auth")
 @Log4j2
+@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 public class AuthenticationController {
 
     private AuthService authService;
@@ -54,7 +52,7 @@ public class AuthenticationController {
             return ResponseEntity.ok(userTokenState);
 
         } catch (BadCredentialsException e) {
-            log.warn(MessageFormat.format("An unsuccessful attempt to log in with an email address: {0}", authenticationRequest.getUsername()));
+            log.error(MessageFormat.format("An unsuccessful attempt to log in with an email address: {0}", authenticationRequest.getUsername()));
             return ResponseEntity.badRequest().body("Invalid username or password!");
         }
     }

@@ -2,28 +2,27 @@ package com.example.paymentinfo.controller;
 
 import com.example.paymentinfo.domain.Client;
 import com.example.paymentinfo.dto.ClientBasicInfoDto;
+import com.example.paymentinfo.dto.ClientDto;
 import com.example.paymentinfo.dto.ClientRegistrationDto;
 import com.example.paymentinfo.service.AuthService;
 import com.example.paymentinfo.service.ClientService;
 import com.example.paymentinfo.utils.ClientValidator;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Controller
+@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 public class ClientController {
 
     private ClientService clientService;
@@ -70,4 +69,12 @@ public class ClientController {
         }
 
     }
+
+    @GetMapping("clients")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<List<ClientDto>> getClients(){
+        List<ClientDto> clients = clientService.getAll().stream().map(client -> new ClientDto(client)).collect(Collectors.toList());
+        return ResponseEntity.ok(clients);
+    }
+
 }

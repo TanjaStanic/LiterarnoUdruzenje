@@ -10,8 +10,8 @@ export class UserService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getAllUsers(): Observable<any> {
-    return this.httpClient.get(`${environment.baseUrl}auth/users`);
+  getClients(): Observable<any> {
+    return this.httpClient.get(`${environment.baseUrl}clients`);
   }
 
   subscribe(): Observable<any> {

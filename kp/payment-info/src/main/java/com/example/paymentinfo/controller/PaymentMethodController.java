@@ -3,8 +3,10 @@ package com.example.paymentinfo.controller;
 import com.example.paymentinfo.domain.Client;
 import com.example.paymentinfo.domain.PaymentMethod;
 import com.example.paymentinfo.dto.ClientBasicInfoDto;
+import com.example.paymentinfo.dto.PaymentMethodDto;
 import com.example.paymentinfo.repository.PaymentMethodRepository;
 import com.example.paymentinfo.service.ClientService;
+import com.example.paymentinfo.service.PaymentMethodService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("payment-methods")
@@ -24,11 +29,23 @@ public class PaymentMethodController {
     private RestTemplate restTemplate;
     private PaymentMethodRepository paymentMethodRepository;
     private ClientService clientService;
+    private PaymentMethodService paymentMethodService;
 
-    public PaymentMethodController(RestTemplate restTemplate, PaymentMethodRepository paymentMethodRepository, ClientService clientService) {
+    public PaymentMethodController(RestTemplate restTemplate, PaymentMethodRepository paymentMethodRepository,
+                                   ClientService clientService, PaymentMethodService paymentMethodService) {
         this.restTemplate = restTemplate;
         this.paymentMethodRepository = paymentMethodRepository;
         this.clientService = clientService;
+        this.paymentMethodService = paymentMethodService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PaymentMethodDto>> getPaymentMethods() {
+        List<PaymentMethod> paymentMethods = (ArrayList) paymentMethodService.findAll();
+        List<PaymentMethodDto> retVaL = paymentMethods.stream()
+                .map(paymentMethod -> new PaymentMethodDto(paymentMethod))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(retVaL);
     }
 
     @GetMapping("/register/{paymentMethod}/{clientId}")

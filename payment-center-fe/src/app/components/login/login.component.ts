@@ -67,6 +67,7 @@ export class LoginComponent implements OnInit {
         }
       },
       (err: HttpErrorResponse) => {
+        console.log(err);
         this.snackBarService.showMessage("Invalid username or password.");
       }
     );
