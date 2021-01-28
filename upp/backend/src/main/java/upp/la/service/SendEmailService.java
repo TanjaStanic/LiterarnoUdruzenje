@@ -1,5 +1,6 @@
 package upp.la.service;
 
+import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.model.bpmn.instance.MessageEventDefinition;
@@ -50,6 +51,7 @@ public class SendEmailService implements JavaDelegate{
 	    }
         catch(Exception e) {
         	System.out.println("No user. Tek se korisnik registruje");
+			throw new BpmnError("EmailError");
         }
 		
 	    
@@ -127,9 +129,8 @@ public class SendEmailService implements JavaDelegate{
 	        System.out.println("mail glasi: " + email.getMessage());
 	        Requests.sendEmail(email);
 	    }
-	    
+	    else {
+			throw new BpmnError("EmailError");
+		}
 	}
-
-	
-
 }
