@@ -7,6 +7,7 @@ import com.example.bankms.dto.ClientInfoDto;
 import com.example.bankms.dto.RegisterClientDTO;
 import com.example.bankms.repository.BankRepository;
 import com.example.bankms.service.ClientService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/clients")
+@RequestMapping("auth/clients")
+@Log4j2
 public class ClientController {
 
     private final ClientService clientService;
@@ -39,7 +41,7 @@ public class ClientController {
     @GetMapping("/register-url/{clientId}")
     public @ResponseBody
     ResponseEntity<String> getRegistrationUrl(@PathVariable String clientId) {
-        return ResponseEntity.ok(MessageFormat.format("https://localhost:8441/clients/register/{0}", clientId));
+        return ResponseEntity.ok(MessageFormat.format("https://localhost:8441/auth/clients/register/{0}", clientId));
     }
 
     @GetMapping("/register/{clientId}")
@@ -49,10 +51,10 @@ public class ClientController {
                 "https://localhost:8762/api/pc_info/auth/clients/" + clientId,
                 ClientInfoDto.class);
 
-        if (clientInfo.getStatusCode() == HttpStatus.OK){
+        if (clientInfo.getStatusCode() == HttpStatus.OK) {
             client.setEmail(clientInfo.getBody().getEmail());
             client.setName(clientInfo.getBody().getName());
-        }else {
+        } else {
             return ResponseEntity.badRequest().body(clientInfo.getBody());
         }
 
@@ -80,22 +82,31 @@ public class ClientController {
         Bank bank = bankRepository.findById(registerClientDTO.getBankId()).get();
 
         HttpEntity<ClientInfoDto> entity = new HttpEntity<>(new ClientInfoDto(client.getEmail(), client.getName()));
-        ResponseEntity<ClientCredentials> response = restTemplate.postForEntity(
-                bank.getUrl(), entity, ClientCredentials.class);
+        ResponseEntity<ClientCredentials> response = null;
 
-        ClientCredentials clientCredentials = response.getBody();
-        client.setMerchantID(clientCredentials.getMerchantID());
-        client.setMerchantPassword(clientCredentials.getMerchantPassword());
-        client = clientService.update(client);
+        try {
+            response = restTemplate.postForEntity(
+                    bank.getUrl(), entity, ClientCredentials.class);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            log.error(exception);
+            clientService.delete(client);
+            return ResponseEntity.badRequest().body("Failed to register with acquirer.");
+        }
 
         String redirectUrl;
         if (response.getStatusCode() == HttpStatus.OK) {
+            ClientCredentials clientCredentials = response.getBody();
+            client.setMerchantID(clientCredentials.getMerchantID());
+            client.setMerchantPassword(clientCredentials.getMerchantPassword());
+            client = clientService.update(client);
             redirectUrl = MessageFormat.format("https://localhost:8762/api/pc_info/view/select-payment-methods/{0}", client.getPcClientId());
             HttpHeaders headersRedirect = new HttpHeaders();
             headersRedirect.add("Location", redirectUrl);
             headersRedirect.add("Access-Control-Allow-Origin", "*");
             return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
         } else {
+            clientService.delete(client);
             return ResponseEntity.badRequest().body(response.getBody());
         }
 

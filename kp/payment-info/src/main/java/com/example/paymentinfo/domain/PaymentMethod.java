@@ -5,24 +5,26 @@ import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.util.Assert;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class PaymentMethod {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Setter
 	private Long id;
 	
     @Column
     private String name;
     
     @Column
+    @Setter
     private boolean subscriptionSupported;
 
     @Column
@@ -32,6 +34,8 @@ public class PaymentMethod {
     private Set<Client> clients = new HashSet<>();
 
     public PaymentMethod(String name, boolean subscriptionSupported, String applicationName) {
+        Assert.notNull(name, "Name cannot be null");
+        Assert.notNull(applicationName, "applicationName cannot be null");
         this.name = name;
         this.subscriptionSupported = subscriptionSupported;
         this.applicationName = applicationName;
@@ -48,4 +52,17 @@ public class PaymentMethod {
         client.getPaymentMethods().remove(this);
     }
 
+    public void setName(String name) {
+        Assert.notNull(name, "Name cannot be null");
+        this.name = name;
+    }
+
+    public void setApplicationName(String applicationName) {
+        Assert.notNull(applicationName, "applicationName cannot be null");
+        this.applicationName = applicationName;
+    }
+
+    public void setClients(Set<Client> clients) {
+        this.clients = clients;
+    }
 }

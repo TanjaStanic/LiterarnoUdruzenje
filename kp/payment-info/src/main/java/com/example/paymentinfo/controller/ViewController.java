@@ -9,6 +9,8 @@ import com.example.paymentinfo.service.ClientService;
 
 import com.example.paymentinfo.service.PaymentMethodService;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -88,13 +90,6 @@ public class ViewController {
         return "choose-subscription-plan";
     }
 
-    @GetMapping("/register")
-    public String getRegisterForm(Model model) {
-        model.addAttribute("client", new ClientRegistrationDto());
-        return "registration";
-    }
-
-
     @GetMapping("/select-payment-methods/{clientId}")
     public String getSelectPaymentMethodsForm(Model model, @PathVariable long clientId) {
         Map<String, String> paymentMethods;
@@ -112,23 +107,14 @@ public class ViewController {
     }
 
     @GetMapping("/register/finish")
-    public String getFinishRegistrationPage(){
-        return "registration-complete";
+    public ResponseEntity<String> getFinishRegistrationPage(){
+        HttpHeaders headersRedirect = new HttpHeaders();
+        headersRedirect.add("Location", "http://localhost:4200/register/finish");
+        headersRedirect.add("Access-Control-Allow-Origin", "*");
+        return new ResponseEntity<>(null, headersRedirect, HttpStatus.FOUND);
     }
 
-    @GetMapping("/login")
-    public String getLoginPage(){
-        return "login";
-    }
-
-    @GetMapping("/login-error")
-    public String getLoginErrorPage(Model model){
-        model.addAttribute("loginError", true);
-        return "login";
-    }
-
-
-
+    
     @GetMapping("/payment-methods")
     public String getPaymentMethods(){
         return "payment-methods";

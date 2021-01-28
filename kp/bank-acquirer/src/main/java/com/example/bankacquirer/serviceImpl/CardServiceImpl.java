@@ -15,12 +15,14 @@ import com.example.bankacquirer.service.CardService;
 @Service
 public class CardServiceImpl implements CardService{
 
-	@Autowired
 	private CardRepository cardRepository;
-	
-	@Autowired
 	private AccountRepository accountRepository;
-	
+
+	public CardServiceImpl(CardRepository cardRepository, AccountRepository accountRepository) {
+		this.cardRepository = cardRepository;
+		this.accountRepository = accountRepository;
+	}
+
 	@Override
 	public Card createNewCard(Account account, String myBankId) {
 		
@@ -46,9 +48,10 @@ public class CardServiceImpl implements CardService{
         newCard = cardRepository.save(newCard);
 		
         account.setAccountNumber(hashData(account.getAccountNumber()));
+        account.getCards().add(newCard);
+
         account = accountRepository.save(account);
-        
-        
+
         return newCard;
 	}
 	

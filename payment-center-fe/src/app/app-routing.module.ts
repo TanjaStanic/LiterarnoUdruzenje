@@ -16,11 +16,13 @@ import { ConfirmRegistrationComponent } from './components/registration/confirm-
 import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ErrorComponent } from './components/error/error.component';
+import { RegistrationProcessFinishComponent } from './components/registration/registration-process-finish/registration-process-finish.component';
 
 
 const routes: Routes = [
   { path: '', component: WelcomeComponent, pathMatch: 'full' },
   { path: 'register', component: RegistrationComponentComponent, pathMatch: 'full' },
+  { path: 'register/finish', component: RegistrationProcessFinishComponent, pathMatch: 'full' },
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
   { path: 'reset-password', component: ResetPasswordComponent, pathMatch: 'full' },
   { path: 'forgot-password', component: ForgotPasswordComponent, pathMatch: 'full' },

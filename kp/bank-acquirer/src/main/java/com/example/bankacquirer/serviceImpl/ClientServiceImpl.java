@@ -42,11 +42,10 @@ public class ClientServiceImpl implements ClientService {
         client.setName(newClient.getName());
         client.setEmail(newClient.getEmail());
         client = clientRepository.save(client);
-        
-        
+
         //Create account
         Account newAccount = accountService.createNewAccount(client, myBankId);
-        
+		newAccount = accountService.save(newAccount);
         //Create card and save both
         cardService.createNewCard(newAccount, myBankId);
         

@@ -1,10 +1,12 @@
 package com.example.paymentinfo.controller;
 
 import com.example.paymentinfo.domain.Client;
+import com.example.paymentinfo.dto.ClientRegistrationDto;
 import com.example.paymentinfo.security.JwtAuthenticationRequest;
 import com.example.paymentinfo.security.TokenUtils;
 import com.example.paymentinfo.security.UserTokenState;
 import com.example.paymentinfo.service.AuthService;
+import com.example.paymentinfo.utils.ClientValidator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +14,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -27,11 +30,29 @@ public class AuthenticationController {
     private AuthService authService;
     private AuthenticationManager authenticationManager;
     private TokenUtils tokenUtils;
+    private ClientValidator clientValidator;
 
-    public AuthenticationController(AuthService authService, AuthenticationManager authenticationManager, TokenUtils tokenUtils) {
+    public AuthenticationController(AuthService authService, AuthenticationManager authenticationManager, TokenUtils tokenUtils, ClientValidator clientValidator) {
         this.authService = authService;
         this.authenticationManager = authenticationManager;
         this.tokenUtils = tokenUtils;
+        this.clientValidator = clientValidator;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody ClientRegistrationDto clientRegistrationDto, BindingResult bindingResult) {
+        System.out.println(clientRegistrationDto);
+        clientValidator.validate(clientRegistrationDto, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
+        Client client = null;
+        try {
+            client = authService.registerClient(clientRegistrationDto);
+        } catch (Exception exception) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok("https://payment.center:8444/view/select-payment-methods/" + client.getId().toString());
     }
 
     @PostMapping("authenticate")

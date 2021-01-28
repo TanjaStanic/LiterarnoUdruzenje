@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity
 @Getter
 @Setter
@@ -31,6 +33,8 @@ public class Transaction {
     private String failedUrl;
     private String errorUrl;
     private String cancelUrl;
+    @Column
+    private Date created;
 
     public Transaction(Client seller, TransactionStatus status, Long merchantOrderId, Double amount, Currency currency) {
         this.seller = seller;

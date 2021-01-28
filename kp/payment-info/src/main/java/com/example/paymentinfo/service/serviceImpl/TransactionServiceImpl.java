@@ -12,6 +12,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.Date;
 
 @Service
 @Log4j2
@@ -45,6 +47,7 @@ public class TransactionServiceImpl implements TransactionService {
 		t.setSeller(seller);
 		t.setMerchantOrderId(pReqDTO.getMerchantOrderId());
 		t = transactionRepository.save(t);
+		t.setCreated(new Date());
         
 		log.info("CREATED | Transaction | Transction Id: " + t.getId());
 		return t;
@@ -59,5 +62,15 @@ public class TransactionServiceImpl implements TransactionService {
     public Transaction findById(long id) {
         return transactionRepository.findById(id).orElseThrow(() -> new RuntimeException(MessageFormat.format("Transaction with id {0} does not exist.", id)));
 
+    }
+
+    @Override
+    public Collection<Transaction> findAllByStatusIn(Collection<TransactionStatus> statuses){
+        return transactionRepository.findAllByStatusIn(statuses);
+    }
+
+    @Override
+    public void saveRange(Collection<Transaction> transactions) {
+        transactionRepository.saveAll(transactions);
     }
 }

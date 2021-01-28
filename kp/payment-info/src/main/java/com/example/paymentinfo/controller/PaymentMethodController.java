@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.validation.Valid;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +50,15 @@ public class PaymentMethodController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> create(@RequestBody PaymentMethodDto paymentMethodDto) {
-        PaymentMethod entity = new PaymentMethod(paymentMethodDto.getName(), paymentMethodDto.isSubscriptionSupported(), paymentMethodDto.getApplicationName());
-        entity = paymentMethodService.save(entity);
+    public ResponseEntity<?> create(@RequestBody @Valid PaymentMethodDto paymentMethodDto) {
+        PaymentMethod entity = null;
+        try {
+            entity = new PaymentMethod(paymentMethodDto.getName(), paymentMethodDto.isSubscriptionSupported(), paymentMethodDto.getApplicationName());
+            entity = paymentMethodService.save(entity);
+        } catch (Exception exception) {
+            return ResponseEntity.badRequest().body("Failed to insert payment method.");
+        }
+
         if (entity != null) {
             return ResponseEntity.ok().build();
         } else {
@@ -97,7 +104,7 @@ public class PaymentMethodController {
         Client client = clientService.findById(clientId);
 
         ClientBasicInfoDto clientBasicInfoDto = new ClientBasicInfoDto(client.getName(), client.getEmail());
-        ResponseEntity<String> redirectUrl = restTemplate.getForEntity(MessageFormat.format("https://{0}/clients/register-url/{1}", paymentMethod, client.getId().toString()), String.class);
+        ResponseEntity<String> redirectUrl = restTemplate.getForEntity(MessageFormat.format("https://{0}/auth/clients/register-url/{1}", paymentMethod, client.getId().toString()), String.class);
 
         if (redirectUrl.getStatusCode() == HttpStatus.OK) {
             client.getPaymentMethods().add(method);

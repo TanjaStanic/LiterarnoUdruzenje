@@ -66,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
         user.setName(StringUtils.capitalize(clientRegistration.getName()));
         user.setPassword(passwordEncoder.encode(clientRegistration.getPassword()));
         user.setEnabled(false);
-        user.setRole(roleRepository.findByName("CLIENT"));
+        user.setRole(roleRepository.findByName("ROLE_CLIENT"));
         user.setCompanyRegistrationNumber(clientRegistration.getCompanyRegistrationNumber());
         user.setTaxIdentificationNumber(clientRegistration.getTaxIdentificationNumber());
 

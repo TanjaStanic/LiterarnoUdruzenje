@@ -1,7 +1,10 @@
 package com.example.paymentinfo.service;
 
 import com.example.paymentinfo.domain.Transaction;
+import com.example.paymentinfo.domain.TransactionStatus;
 import com.example.paymentinfo.dto.PaymentRequestDTO;
+
+import java.util.Collection;
 
 public interface TransactionService {
 
@@ -14,4 +17,8 @@ public interface TransactionService {
     Transaction findByMerchantOrderId(long merchantOrderId);
 
     Transaction findById(long id);
+
+    Collection<Transaction> findAllByStatusIn(Collection<TransactionStatus> statuses);
+
+    void saveRange( Collection<Transaction> transactions);
 }

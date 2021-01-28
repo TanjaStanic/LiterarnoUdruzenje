@@ -87,7 +87,11 @@ const modules = [
   PortalModule,
   ScrollingModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  MatButtonModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatRippleModule
 ];
 
 @NgModule({

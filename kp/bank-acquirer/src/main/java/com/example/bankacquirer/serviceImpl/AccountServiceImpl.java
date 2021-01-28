@@ -16,12 +16,16 @@ import com.example.bankacquirer.service.AccountService;
 @Service
 public class AccountServiceImpl implements AccountService{
 
-	@Autowired
 	private BankRepository bankRepository;
-	
-	@Autowired
 	private CurrencyRepository currencyRepository;
-		
+	private AccountRepository accountRepository;
+
+	public AccountServiceImpl(BankRepository bankRepository, CurrencyRepository currencyRepository, AccountRepository accountRepository) {
+		this.bankRepository = bankRepository;
+		this.currencyRepository = currencyRepository;
+		this.accountRepository = accountRepository;
+	}
+
 	@Override
 	public Account createNewAccount(Client client,String myBankId) {
 		Bank bank = bankRepository.findOneByUniqueBankNumber(myBankId);
@@ -35,7 +39,12 @@ public class AccountServiceImpl implements AccountService{
 	    newAccount.setOwner(client);
 	    
 	    return newAccount;
-	}     
+	}
+
+	@Override
+	public Account save(Account account){
+		return accountRepository.save(account);
+	}
     
     
 }

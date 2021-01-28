@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 
 @Getter
 @Setter
@@ -14,8 +17,12 @@ import lombok.Setter;
 public class PaymentMethodDto {
 
     private Long id;
+    @NotNull
+    @NotEmpty
     private String name;
     private boolean subscriptionSupported;
+    @NotNull
+    @NotEmpty
     private String applicationName;
 
     public PaymentMethodDto(PaymentMethod paymentMethod){

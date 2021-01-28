@@ -55,7 +55,7 @@ export class AuthService {
   }
 
   register(userCredentials: RegisterUserDTO): Observable<any> {
-    return this.http.post(`${environment.baseUrl}auth/register`, userCredentials);
+    return this.http.post(`${environment.baseUrl}auth/register`, userCredentials, { responseType: 'text' });
   }
 
   login(userCredentials: UserCredentials): Observable<any> {

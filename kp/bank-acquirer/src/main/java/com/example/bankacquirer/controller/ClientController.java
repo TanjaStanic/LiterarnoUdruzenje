@@ -26,7 +26,9 @@ public class ClientController {
         Client client = null;
         try {
             client = clientService.insert(newClientDto);
+
         } catch (Exception exception) {
+            exception.printStackTrace();
             return ResponseEntity.badRequest().body("Email already in use.");
         }
         client = clientService.saveClient(client);

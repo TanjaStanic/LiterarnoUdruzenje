@@ -25,7 +25,7 @@ export class RegistrationComponentComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService,
+    private authService: AuthService
   ) {
     this.form = this.formBuilder.group({
       'email': ['', Validators.compose([Validators.required])],
@@ -46,11 +46,11 @@ export class RegistrationComponentComponent implements OnInit {
     const userDto: RegisterUserDTO = this.form.value;
     this.authService.register(userDto).subscribe(
       data => {
-        this.snackBarService.showMessage("We sent you an email to confirm your email address. Please check your email.");
-        this.router.navigateByUrl('');
+        window.location.href = data;
       },
       (err: HttpErrorResponse) => {
-        this.snackBarService.showMessage(err.message);
+        console.log(err)
+        this.snackBarService.showMessage(err.error);
       }
     );
   }

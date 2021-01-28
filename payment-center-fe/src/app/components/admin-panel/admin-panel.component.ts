@@ -64,7 +64,7 @@ export class AdminPanelComponent implements OnInit {
         this.refresClientsDataSource(this.clients);
       },
       (err: HttpErrorResponse) => {
-
+        console.log(err)
       }
     );
   }
@@ -122,22 +122,25 @@ export class AdminPanelComponent implements OnInit {
   openCreateNewPaymentMethodDialog() {
 
     const dialogRef = this.dialog.open(PaymentMethodDialogComponent, {
-      width: '500px',
-      height: '700px',
+      //width: '500px',
+      //height: '700px',
       data: new PaymentMethod()
     });
 
     dialogRef.afterClosed().subscribe(paymentMethod => {
       console.log(paymentMethod);
-      this.paymentMethodService.create(paymentMethod).subscribe(
-        data => {
-          this.paymentMethods.push(paymentMethod)
-          this.refreshPaymentMethodsDataSource(this.paymentMethods);
-        },
-        (err: HttpErrorResponse) => {
-          this.snackbarService.showMessage(err.message);
-        }
-      );
+      if (paymentMethod != undefined && paymentMethod != null) {
+        this.paymentMethodService.create(paymentMethod).subscribe(
+          data => {
+            this.paymentMethods.push(paymentMethod)
+            this.refreshPaymentMethodsDataSource(this.paymentMethods);
+          },
+          (err: HttpErrorResponse) => {
+            this.snackbarService.showMessage(err.error);
+          }
+        );
+      }
+
     });
   }
 

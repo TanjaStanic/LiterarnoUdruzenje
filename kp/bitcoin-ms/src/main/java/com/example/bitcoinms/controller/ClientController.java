@@ -17,7 +17,7 @@ import java.text.MessageFormat;
 
 
 @Controller
-@RequestMapping("/clients")
+@RequestMapping("auth/clients")
 public class ClientController {
 
     private ClientService clientService;
@@ -31,7 +31,7 @@ public class ClientController {
     @GetMapping("/register-url/{clientId}")
     public @ResponseBody
     ResponseEntity<String> getRegistrationUrl(@PathVariable String clientId) {
-        return ResponseEntity.ok(MessageFormat.format("https://localhost:8442/clients/register/{0}", clientId));
+        return ResponseEntity.ok(MessageFormat.format("https://localhost:8442/auth/clients/register/{0}", clientId));
     }
 
     @GetMapping("/register/{clientId}")

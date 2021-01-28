@@ -32,6 +32,7 @@ import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.
 import { ProfileComponent } from './components/profile/profile.component';
 import { ErrorComponent } from './components/error/error.component';
 import { PaymentMethodDialogComponent } from './components/admin-panel/payment-method-dialog/payment-method-dialog.component';
+import { RegistrationProcessFinishComponent } from './components/registration/registration-process-finish/registration-process-finish.component';
 
 
 
@@ -52,6 +53,7 @@ import { PaymentMethodDialogComponent } from './components/admin-panel/payment-m
     ProfileComponent,
     ErrorComponent,
     PaymentMethodDialogComponent,
+    RegistrationProcessFinishComponent,
   ],
   imports: [
     BrowserModule,

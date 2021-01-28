@@ -31,3 +31,7 @@ insert into currency (`code`, `name`)  values ('EUR', 'Euro');
 insert into currency (`code`, `name`)  values ('BAM', 'Convertible mark');
 insert into currency (`code`, `name`)  values ('USD', 'United States dollar');
 
+insert into transaction (amount, cancel_url, created, error_url, failed_url, merchant_order_id, paymentid, status, success_url, currency_id, seller_id) values (200, null, "2021-01-28 12:30:00", null, null, 1234254768, null, "CREATED", null, 2, 3);
+insert into transaction (amount, cancel_url, created, error_url, failed_url, merchant_order_id, paymentid, status, success_url, currency_id, seller_id) values (300, null, "2021-01-28 11:30:00", null, null, 12342548, null, "CREATED", null, 2, 3);
+
+

@@ -7,7 +7,7 @@ server:
     key-store-password: paymentinfo
     key-password: paymentinfo
     keyStoreType: JKS
-    keyAlias: payment-info
+    keyAlias: payment.center
     trust-store: classpath:paymentinfo_truststore.jks
     trust-store-password: paymentinfo
     trust-store-type: JKS
