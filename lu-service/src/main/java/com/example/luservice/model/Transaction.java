@@ -22,16 +22,10 @@ public class Transaction {
 	private Client client;
 
     @Column
-	private long paymentID;
+	private String paymentID;
 
 	@Column
 	private Long merchantOrderId;
-
-	@Column
-    private Long acquirerOrderId;
-
-    @Column
-	private ZonedDateTime acquirerTimestamp;
 
 	@Column
     @Enumerated(EnumType.STRING)

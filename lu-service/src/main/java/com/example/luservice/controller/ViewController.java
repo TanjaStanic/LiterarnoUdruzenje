@@ -1,28 +1,72 @@
 package com.example.luservice.controller;
 
-import com.example.luservice.dto.NewUserDto;
-import org.springframework.stereotype.Controller;
+import com.example.luservice.dto.PaymentResponseDto;
+import com.example.luservice.model.Transaction;
+import com.example.luservice.service.TransactionService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("view")
 public class ViewController {
 
-    @GetMapping("/success")
-    public String getSuccessPage(Model model) {
-        return "successPage";
+    private TransactionService transactionService;
+
+    public ViewController(TransactionService transactionService) {
+        this.transactionService = transactionService;
     }
 
-    @GetMapping("/failed")
-    public String getFailedPage(Model model) {
-        return "failedPage";
+    @PostMapping("/success")
+    public ResponseEntity<String> getSuccessPage(@RequestBody PaymentResponseDto paymentResponse) {
+        Transaction transaction = transactionService.findByMerchantOrderId(paymentResponse.getMerchantOrderId());
+        if (transaction != null) {
+            transaction.setStatus(paymentResponse.getStatus());
+            transaction.setPaymentID(paymentResponse.getPaymentID());
+            transactionService.save(transaction);
+            return ResponseEntity.ok("http://localhost:4200/success");
+        }
+        return ResponseEntity.ok("http://localhost:4200/error");
+
     }
 
-    @GetMapping("/error")
-    public String getErrorPage(Model model) {
-        return "errorPage";
+    @PostMapping("/failed")
+    public ResponseEntity<String> getFailedPage(@RequestBody PaymentResponseDto paymentResponse) {
+        Transaction transaction = transactionService.findByMerchantOrderId(paymentResponse.getMerchantOrderId());
+        if (transaction != null) {
+            transaction.setStatus(paymentResponse.getStatus());
+            transaction.setPaymentID(paymentResponse.getPaymentID());
+            transactionService.save(transaction);
+            return ResponseEntity.ok("http://localhost:4200/fail");
+        }
+        return ResponseEntity.ok("http://localhost:4200/error");
+    }
+
+    @PostMapping("/error")
+    public ResponseEntity<String> getErrorPage(@RequestBody PaymentResponseDto paymentResponse) {
+
+        Transaction transaction = transactionService.findByMerchantOrderId(paymentResponse.getMerchantOrderId());
+        if (transaction != null) {
+            transaction.setStatus(paymentResponse.getStatus());
+            transaction.setPaymentID(paymentResponse.getPaymentID());
+            transactionService.save(transaction);
+            return ResponseEntity.ok("http://localhost:4200/error");
+        }
+        return ResponseEntity.ok("http://localhost:4200/error");
+    }
+
+
+    @PostMapping("/cancel")
+    public ResponseEntity<String> getCancel(@RequestBody PaymentResponseDto paymentResponse) {
+
+        Transaction transaction = transactionService.findByMerchantOrderId(paymentResponse.getMerchantOrderId());
+        if (transaction != null) {
+            transaction.setStatus(paymentResponse.getStatus());
+            transaction.setPaymentID(paymentResponse.getPaymentID());
+            transactionService.save(transaction);
+            return ResponseEntity.ok("http://localhost:4200/cancel");
+        }
+        return ResponseEntity.ok("http://localhost:4200/error");
     }
 
     @GetMapping("/order")
@@ -30,9 +74,5 @@ public class ViewController {
         return "order";
     }
 
-    @GetMapping("/dashboard")
-    public String getDashboard(Model model){
-        return "dashboard";
-    }
 
 }

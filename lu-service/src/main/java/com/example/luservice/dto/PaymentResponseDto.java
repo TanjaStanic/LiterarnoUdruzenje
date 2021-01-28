@@ -1,6 +1,7 @@
-package com.example.paymentinfo.dto;
+package com.example.luservice.dto;
 
-import com.example.paymentinfo.domain.TransactionStatus;
+import com.example.luservice.model.TransactionStatus;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,8 +10,9 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
-public class TransactionDto {
+public class PaymentResponseDto {
 
     @NotNull
     private String sellerEmail;
@@ -20,5 +22,4 @@ public class TransactionDto {
     private String paymentID;
     private Double amount;
     private String currencyCode;
-
 }

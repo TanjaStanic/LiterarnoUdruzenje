@@ -34,4 +34,6 @@ public class PaymentRequestDTO {
 
     @NotNull
     private String failedUrl;
+
+    private String cancelUrl;
 }

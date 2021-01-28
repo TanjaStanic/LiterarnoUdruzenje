@@ -62,13 +62,11 @@ public class PaymentRequestController {
     public ResponseEntity<?> redirectPaymentRequest(@PathVariable String paymentMethod, @PathVariable String sellerEmail, @PathVariable long merchantOrderId) {
 
         PaymentRequest paymentRequest = paymentRequestRepository.findByMerchantOrderId(merchantOrderId);
-        System.out.println(paymentRequest.getMerchantEmail().toString());
-        System.out.println(paymentMethod.toString());
+
         HttpEntity<PaymentRequest> entity = new HttpEntity<>(paymentRequest);
         System.out.println(entity);
         ResponseEntity<String> redirectUrl = restTemplate.postForEntity("https://" + paymentMethod + "/", entity, String.class);
-        System.out.println(paymentMethod.toString());
-        System.out.println(entity.toString());
+
         HttpHeaders headersRedirect = new HttpHeaders();
         headersRedirect.add("Location", redirectUrl.getBody());
         headersRedirect.add("Access-Control-Allow-Origin", "*");

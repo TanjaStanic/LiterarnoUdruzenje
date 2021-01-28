@@ -50,6 +50,9 @@ public class Transaction {
     @Column
     private String failedUrl;
 
+    @Column
+    private String cancelUrl;
+
     public Transaction(Long merchantOrderId, Client client, Date date, TransactionStatus status,
                        Double amount, Currency currency, String successUrl, String errorUrl, String failedUrl) {
         this.merchantOrderId = merchantOrderId;

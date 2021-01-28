@@ -5,8 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.luservice.model.Transaction;
 
-@Repository
-public interface TransactionRepository extends JpaRepository<Transaction,Long> {
+public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     Transaction findByMerchantOrderId(Long merchantOrderId);
 }
 

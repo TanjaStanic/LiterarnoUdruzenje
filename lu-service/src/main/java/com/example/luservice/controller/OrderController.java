@@ -28,10 +28,10 @@ public class OrderController {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
         requestDTO.setMerchantOrderId((long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L);
         requestDTO.setMerchantEmail("sb-zx3ys4123984@business.example.com");
-        requestDTO.setSuccessUrl("http://localhost:4200/success");
-        requestDTO.setFailedUrl("http://localhost:4200/fail");
-        requestDTO.setErrorUrl("http://localhost:4200/error");
-        requestDTO.setCancelUrl("http://localhost:4200/cancel");
+        requestDTO.setSuccessUrl("https://literary.association:8447/view/success");
+        requestDTO.setFailedUrl("https://literary.association:8447/view/failed");
+        requestDTO.setErrorUrl("https://literary.association:8447/view/error");
+        requestDTO.setCancelUrl("https://literary.association:8447/view/cancel");
         requestDTO.setAmount(500);
         requestDTO.setCurrencyCode("USD");
         requestDTO.setMerchantTimestamp(new Date());
@@ -42,7 +42,7 @@ public class OrderController {
                     new HttpEntity<PaymentRequestDTO>(requestDTO), String.class);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Could not contact payment center");
+
             return (ResponseEntity<?>) ResponseEntity.badRequest().body("Could not contact payment center");
         }
         return ResponseEntity.ok(response.getBody());

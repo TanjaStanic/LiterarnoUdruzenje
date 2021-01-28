@@ -69,6 +69,8 @@ public class PaymentServiceImpl implements PaymentService {
         Transaction transaction = new Transaction(paymentRequest.getMerchantOrderId(), client, new Date(),
                 TransactionStatus.INITIATED, paymentRequest.getAmount(), currency, paymentRequest.getSuccessUrl(),
                 paymentRequest.getErrorUrl(), paymentRequest.getFailedUrl());
+
+        transaction.setCancelUrl(paymentRequest.getCancelUrl());
         transaction = transactionService.save(transaction);
 
         TransactionDto transactionDto = new TransactionDto();
@@ -145,6 +147,7 @@ public class PaymentServiceImpl implements PaymentService {
             Payment payment = new Payment();
             payment.setId(paymentId);
 
+            String retUrl = null;
             PaymentExecution paymentExecution = new PaymentExecution();
             paymentExecution.setPayerId(payerId);
             Client client = transaction.getClient();
@@ -161,22 +164,28 @@ public class PaymentServiceImpl implements PaymentService {
             //context.addHTTPHeader("PayPal-Mock-Response", "{\"mock_application_codes\": \"INSUFFICIENT_FUNDS\"}");
             try {
                 Payment executedPayment = payment.execute(context, paymentExecution);
+
+                if (executedPayment.getState().equalsIgnoreCase("APPROVED")) {
+                    transaction.setStatus(TransactionStatus.SUCCESSFUL);
+                    retUrl = transaction.getSuccessUrl();
+                   
+                } else if (executedPayment.getState().equalsIgnoreCase("FAILED")) {
+                    transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
+                    retUrl = transaction.getFailedUrl();
+                }
             } catch (PayPalRESTException exception) {
                 log.error(exception.getMessage());
                 transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
-                transaction = transactionService.save(transaction);
-                transactionDto.setStatus(transaction.getStatus());
-                transactionDto.setMerchantOrderId(transaction.getMerchantOrderId());
-                this.sendTransactionUpdate(transactionDto);
-                return transaction.getFailedUrl();
+                retUrl = transaction.getFailedUrl();
             }
-            transaction.setStatus(TransactionStatus.COMPLETED);
+
             transaction = transactionService.save(transaction);
             log.info("COMPLETED | PayPal Payment Execution");
+            transactionDto.setPaymentID(transaction.getPaymentId());
             transactionDto.setStatus(transaction.getStatus());
             transactionDto.setMerchantOrderId(transaction.getMerchantOrderId());
             this.sendTransactionUpdate(transactionDto);
-            return transaction.getSuccessUrl();
+            return retUrl;
         }
         return null;
     }
@@ -202,7 +211,7 @@ public class PaymentServiceImpl implements PaymentService {
             log.error("ERROR | TRANSACTION WITH ID: " + transactionId + " NOT FOUND");
             return null;
         }
-        return transaction.getFailedUrl();
+        return transaction.getCancelUrl();
     }
 
     @Override

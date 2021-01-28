@@ -12,19 +12,32 @@ import com.example.luservice.service.TransactionService;
 @Service
 public class TransactionServiceImpl implements TransactionService{
 
-	@Autowired
 	private TransactionRepository transactionRepository;
-	
+
+	public TransactionServiceImpl(TransactionRepository transactionRepository) {
+		this.transactionRepository = transactionRepository;
+	}
+
 	@Override
 	public Transaction initializeTransaction(PaymentRequestDTO pReqDTO) {
 		Transaction t = new Transaction();
-	
+
 		t.setAmount(pReqDTO.getAmount());
 		t.setMerchantOrderId(pReqDTO.getMerchantOrderId());
 		t.setStatus(TransactionStatus.CREATED);
 		
 		t = transactionRepository.save(t);
 		return t;
+	}
+
+	@Override
+	public Transaction findByMerchantOrderId(long merchantOrderId) {
+		return transactionRepository.findByMerchantOrderId(merchantOrderId);
+	}
+
+	@Override
+	public Transaction save(Transaction transaction) {
+		return transactionRepository.save(transaction);
 	}
 
 }
