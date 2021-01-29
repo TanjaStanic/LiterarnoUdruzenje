@@ -22,9 +22,10 @@ public class ConfirmMembershipService implements JavaDelegate {
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		
+		System.out.println("In confirm writer");
 		List<FormFieldDto> files =(List<FormFieldDto>) execution.getVariable("files");
 		User writer = userRepository.findUserByUsername(files.get(1).getFieldValue());
-
+		
 		writer.setConfirmed(true);
 		writer.setRole(Role.WRITER);
 		userRepository.save(writer);

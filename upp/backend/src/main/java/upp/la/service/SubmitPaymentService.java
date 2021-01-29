@@ -25,13 +25,15 @@ public class SubmitPaymentService implements JavaDelegate{
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		
-		List<FormFieldDto> formFields = 
+		System.out.println("In submit payment");
+		
+		/*List<FormFieldDto> formFields = 
         		(List<FormFieldDto>) execution.getVariable("payment");
 		List<FormFieldDto> files =(List<FormFieldDto>) execution.getVariable("files");
+		*/
+
 		
-		boolean paymentSuccess = true;
-		
-		User writer = userRepository.findUserByUsername(files.get(1).getFieldValue());		
+		/*User writer = userRepository.findUserByUsername(files.get(1).getFieldValue());		
 		Card card = cardReposotory.findOneByOwner(writer);
 		
 		if (card == null ) {
@@ -68,7 +70,10 @@ public class SubmitPaymentService implements JavaDelegate{
 				}
 			}
 		}
+		*/
 		
+		boolean paymentSuccess = true;
+		paymentSuccess = checkPayment();
 		if (paymentSuccess) {
 			execution.setVariable("payment_success", true);
 		}
@@ -76,6 +81,8 @@ public class SubmitPaymentService implements JavaDelegate{
 			execution.setVariable("payment_success", false);
 
 		}
+		
+		
 	}
 	
 	public boolean checkCardForm(List<FormFieldDto> formFields) {
@@ -105,4 +112,8 @@ public class SubmitPaymentService implements JavaDelegate{
 		return true;
 	}
 
+	public boolean checkPayment() {
+		System.out.println("In check payment method");
+		return true;
+	}
 }

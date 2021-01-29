@@ -30,6 +30,7 @@ public class CancelRequestService implements JavaDelegate{
 	@Override
 	public void execute(DelegateExecution execution) throws EntityNotFound {
 		
+		System.out.println("In cancel request");
 		List<FormFieldDto> files =(List<FormFieldDto>) execution.getVariable("files");
 		User writer = userRepository.findUserByUsername(files.get(1).getFieldValue());
 		
