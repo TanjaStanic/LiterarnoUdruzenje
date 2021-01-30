@@ -90,7 +90,7 @@ public class SendEmailService implements JavaDelegate{
 		      for (User l : lectors) {
 		    	  System.out.println("saljem mail na: " + l.getEmail());
 		    	  email.setAddress(l.getEmail());
-		    	  Requests.sendEmail(email);
+		    	 // Requests.sendEmail(email);
 		      }
 		 }
 	    // ACCEPTED - PAY  
@@ -99,7 +99,7 @@ public class SendEmailService implements JavaDelegate{
 	      
 			email.setAddress(mail);
 			System.out.println("mail glasi: " + email.getMessage());
-			Requests.sendEmail(email);
+			//Requests.sendEmail(email);
 
 	    }
 	    // NEED MORE MATERIAL
@@ -108,7 +108,7 @@ public class SendEmailService implements JavaDelegate{
 	      
 			email.setAddress(mail);
 			System.out.println("mail glasi: " + email.getMessage());
-			Requests.sendEmail(email);
+			//Requests.sendEmail(email);
 
 	    }
 	    //FAILED TRANSACTION
@@ -117,7 +117,7 @@ public class SendEmailService implements JavaDelegate{
 
 	        email.setAddress(mail);
 	        System.out.println("mail glasi: " + email.getMessage());
-	        Requests.sendEmail(email);
+	        //Requests.sendEmail(email);
 	    }
 	    //FAILED PAYMENT
 	    else if (receivingMessageName.equals("RegistrationApplicationPaymentFailedWriter")) {
@@ -125,7 +125,7 @@ public class SendEmailService implements JavaDelegate{
 
 	        email.setAddress(mail);
 	        System.out.println("mail glasi: " + email.getMessage());
-	        Requests.sendEmail(email);
+	       // Requests.sendEmail(email);
 	    }
 	    
 	}

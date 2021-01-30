@@ -51,8 +51,8 @@ public class AssignCommitteService implements JavaDelegate {
                 registrationApplicationResponseRepository.save(rap);
             }
         }
-
-        delegateExecution.setVariable("COUNTER", 1);
+        int set = 1; 
+        delegateExecution.setVariable("COUNTER", set);
 
     }
 }
