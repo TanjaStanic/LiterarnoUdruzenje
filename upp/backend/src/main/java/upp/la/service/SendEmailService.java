@@ -1,7 +1,9 @@
 package upp.la.service;
 
+import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.model.bpmn.instance.MessageEventDefinition;
 import org.camunda.bpm.model.bpmn.instance.ThrowEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class SendEmailService implements JavaDelegate{
 	
 	@Autowired 
 	ConfirmationTokenRepository confirmationTokenRepository;
+	
+	@Autowired 
+	private RuntimeService runtimeService;
 	
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
@@ -99,6 +104,11 @@ public class SendEmailService implements JavaDelegate{
 	      
 			email.setAddress(mail);
 			System.out.println("mail glasi: " + email.getMessage());
+			
+			runtimeService
+            .createMessageCorrelation("StartPayment")
+            .processInstanceId(execution.getProcessInstanceId())
+            .correlateWithResult();
 			//Requests.sendEmail(email);
 
 	    }

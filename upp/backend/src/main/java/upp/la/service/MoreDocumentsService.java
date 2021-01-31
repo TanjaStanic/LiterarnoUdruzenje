@@ -46,8 +46,5 @@ public class MoreDocumentsService implements JavaDelegate {
         }
 
         registrationApplicationRepository.save(ra);
-        int ctr = (int) delegateExecution.getVariable("COUNTER");
-        ctr++;
-        delegateExecution.setVariable("COUNTER", ctr);
     }
 }
