@@ -131,7 +131,9 @@ public class SendEmailService implements JavaDelegate{
 	    }
 		//PUBLISHING DECLINED BEFORE MANUSCRIPT
 		else if (receivingMessageName.equals("BookPublishingNotifyWriterDeclined")) {
-			EmailTemplate email = EmailTemplate.PublishingDeclinedBeforeManuscript();
+			String reason = (String) execution.getVariable("reason");
+
+			EmailTemplate email = EmailTemplate.PublishingDeclinedBeforeManuscript(reason);
 
 			email.setAddress(mail);
 			System.out.println("mail glasi: " + email.getMessage());
@@ -140,6 +142,22 @@ public class SendEmailService implements JavaDelegate{
 		//PUBLISHING NOTIFY WRITER EXPIRED
 		else if (receivingMessageName.equals("BookPublishingNotifyWriterExpired")) {
 			EmailTemplate email = EmailTemplate.PublishingNotifyWriterExpired();
+
+			email.setAddress(mail);
+			System.out.println("mail glasi: " + email.getMessage());
+			Requests.sendEmail(email);
+		}
+		//PLAGIARISM NOTIFY CHIEF EDITOR
+		else if (receivingMessageName.equals("PlagiarismComplaintNotifyChiefEditor")) {
+			EmailTemplate email = EmailTemplate.PlagiarismComplaintNotifyChiefEditor();
+
+			email.setAddress(mail);
+			System.out.println("mail glasi: " + email.getMessage());
+			Requests.sendEmail(email);
+		}
+		//PLAGIARISM NOTIFY WRITER DECISION
+		else if (receivingMessageName.equals("PlagiarismNotifyWriterDecision")) {
+			EmailTemplate email = EmailTemplate.PlagiarismNotifyWriterDecision("TODO: DECISIONS");
 
 			email.setAddress(mail);
 			System.out.println("mail glasi: " + email.getMessage());
