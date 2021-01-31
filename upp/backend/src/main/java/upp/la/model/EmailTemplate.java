@@ -47,7 +47,9 @@ public class EmailTemplate {
   }
 
   public static String REGISTRATION_APPLICATION_PAYMENT_MESSAGE(Integer days) {
-    return "Your appliation is accespted. You have: " + days.toString() + " to make the registration payment.";
+    return "Your appliation is accespted. You have: "
+        + days.toString()
+        + " to make the registration payment.";
   }
 
   public static String REGISTRATION_APPLICATION_FAILED_SUBJECT() {
@@ -55,11 +57,27 @@ public class EmailTemplate {
   }
 
   public static String REGISTRATION_APPLICATION_NOT_ACCEPTED() {
-	    return "Your registration is not accepted.";
+    return "Your registration is not accepted.";
   }
-  
+
   public static String REGISTRATION_APPLICATION_FAILED_MESSAGE() {
     return "You have failed to make the payment.";
+  }
+
+  public static String PUBLISHING_DECLINED_BEFORE_MANUSCRIPT() {
+    return "Book declined";
+  }
+
+  public static String PUBLISHING_DECLINED_BEFORE_MANUSCRIPT_MESSAGE() {
+    return "Your book publishing request has been declined.";
+  }
+
+  public static String PUBLISHING_NOTIFY_WRITER_EXPIRED() {
+    return "Your time to provide a manuscript has expired";
+  }
+
+  public static String PUBLISHING_NOTIFY_WRITER_EXPIRED_MESSAGE() {
+    return "Your time to provide a manuscript for your book publishing request has expired. Please try again.";
   }
 
   private String address;
@@ -108,10 +126,22 @@ public class EmailTemplate {
         EmailTemplate.REGISTRATION_APPLICATION_FAILED_SUBJECT(),
         EmailTemplate.REGISTRATION_APPLICATION_FAILED_MESSAGE());
   }
-  
+
   public static EmailTemplate RegistrationApplicationNotAccepted() {
-	    return new EmailTemplate(
-	        EmailTemplate.REGISTRATION_APPLICATION_FAILED_SUBJECT(),
-	        EmailTemplate.REGISTRATION_APPLICATION_NOT_ACCEPTED());
-	  }
+    return new EmailTemplate(
+        EmailTemplate.REGISTRATION_APPLICATION_FAILED_SUBJECT(),
+        EmailTemplate.REGISTRATION_APPLICATION_NOT_ACCEPTED());
+  }
+
+  public static EmailTemplate PublishingDeclinedBeforeManuscript() {
+    return new EmailTemplate(
+        EmailTemplate.PUBLISHING_DECLINED_BEFORE_MANUSCRIPT(),
+        EmailTemplate.PUBLISHING_DECLINED_BEFORE_MANUSCRIPT_MESSAGE());
+  }
+
+  public static EmailTemplate PublishingNotifyWriterExpired() {
+    return new EmailTemplate(
+        EmailTemplate.PUBLISHING_NOTIFY_WRITER_EXPIRED(),
+        EmailTemplate.PUBLISHING_NOTIFY_WRITER_EXPIRED_MESSAGE());
+  }
 }

@@ -129,6 +129,22 @@ public class SendEmailService implements JavaDelegate{
 	        System.out.println("mail glasi: " + email.getMessage());
 	        Requests.sendEmail(email);
 	    }
+		//PUBLISHING DECLINED BEFORE MANUSCRIPT
+		else if (receivingMessageName.equals("BookPublishingNotifyWriterDeclined")) {
+			EmailTemplate email = EmailTemplate.PublishingDeclinedBeforeManuscript();
+
+			email.setAddress(mail);
+			System.out.println("mail glasi: " + email.getMessage());
+			Requests.sendEmail(email);
+		}
+		//PUBLISHING NOTIFY WRITER EXPIRED
+		else if (receivingMessageName.equals("BookPublishingNotifyWriterExpired")) {
+			EmailTemplate email = EmailTemplate.PublishingNotifyWriterExpired();
+
+			email.setAddress(mail);
+			System.out.println("mail glasi: " + email.getMessage());
+			Requests.sendEmail(email);
+		}
 	    else {
 			throw new BpmnError("EmailError");
 		}
