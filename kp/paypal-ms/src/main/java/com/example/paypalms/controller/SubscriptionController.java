@@ -110,10 +110,21 @@ public class SubscriptionController {
         Subscription subscription = subscriptionService.findById(subscriptionId);
         subscription.setSubscriptionStatus(SubscriptionStatus.CANCELED);
         subscriptionService.save(subscription);
-        HttpHeaders headersRedirect = new HttpHeaders();
-        headersRedirect.add("Location", subscription.getCancelUrl());
-        headersRedirect.add("Access-Control-Allow-Origin", "*");
-        return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+        try {
+            HttpEntity<SubscriptionDto> entity = new HttpEntity<>(new SubscriptionDto(subscription));
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(subscription.getCancelUrl(), entity, String.class);
+
+            HttpHeaders headersRedirect = new HttpHeaders();
+            headersRedirect.add("Location", responseEntity.getBody());
+            headersRedirect.add("Access-Control-Allow-Origin", "*");
+            return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            log.error(exception);
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/{sellerEmail}")
