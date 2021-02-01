@@ -29,5 +29,5 @@ public class BankAcquirerRequestDTO {
     private String failedUrl;
     @NotNull
     private String errorUrl;
-    private Currency currency;
+    private String currencyCode;
 }

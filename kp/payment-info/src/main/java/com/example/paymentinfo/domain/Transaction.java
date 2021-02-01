@@ -34,6 +34,7 @@ public class Transaction {
     private String errorUrl;
     private String cancelUrl;
     @Column
+    @Temporal(TemporalType.TIMESTAMP)
     private Date created;
 
     public Transaction(Client seller, TransactionStatus status, Long merchantOrderId, Double amount, Currency currency) {
@@ -42,6 +43,7 @@ public class Transaction {
         this.merchantOrderId = merchantOrderId;
         this.amount = amount;
         this.currency = currency;
+        this.created = new Date();
     }
 
 

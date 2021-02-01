@@ -41,16 +41,16 @@ public class TransactionServiceImpl implements TransactionService {
 	public Transaction initializeTransaction(PaymentRequestDTO pReqDTO) {
 		
 		Client seller = clientRepository.findByEmail(pReqDTO.getMerchantEmail());
-		Transaction t = new Transaction();
-		t.setStatus(TransactionStatus.CREATED);
-		t.setAmount(pReqDTO.getAmount());
-		t.setSeller(seller);
-		t.setMerchantOrderId(pReqDTO.getMerchantOrderId());
-		t = transactionRepository.save(t);
-		t.setCreated(new Date());
-        
-		log.info("CREATED | Transaction | Transction Id: " + t.getId());
-		return t;
+		Transaction transaction = new Transaction();
+        transaction.setStatus(TransactionStatus.CREATED);
+        transaction.setAmount(pReqDTO.getAmount());
+        transaction.setSeller(seller);
+        transaction.setMerchantOrderId(pReqDTO.getMerchantOrderId());
+        transaction.setCreated(new Date());
+        transaction = transactionRepository.save(transaction);
+
+		log.info("CREATED | Transaction | Transction Id: " + transaction.getId());
+		return transaction;
 	}
 
     @Override

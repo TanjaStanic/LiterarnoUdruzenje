@@ -21,3 +21,8 @@ insert into books (name, description, authors, genres, price) values("Faust", "L
 insert into books (name, description, authors, genres, price) values("Hamlet", "Lorem ipsum", "William Shakespeare", "Drama, Tragedy", "500");
 insert into books (name, description, authors, genres, price) values("The Hobbit", "Lorem ipsum", "J.R.R. Tolkien", "Epic", "1500");
 insert into books (name, description, authors, genres, price) values("Grimms’ Fairy Tales", "Lorem ipsum", "Jacob Grimm, Wilhelm Grimm", "Fairy tale, Folklore", "500");
+
+insert into currency (`code`, `name`)  values ('RSD', 'Serbian dinar');
+insert into currency (`code`, `name`)  values ('EUR', 'Euro');
+insert into currency (`code`, `name`)  values ('BAM', 'Convertible mark');
+insert into currency (`code`, `name`)  values ('USD', 'United States dollar');

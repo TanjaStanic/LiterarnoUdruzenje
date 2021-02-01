@@ -6,5 +6,6 @@ import com.example.bankacquirer.dto.NewClientDto;
 public interface ClientService {
 
     Client insert(NewClientDto newClient);
+
     Client saveClient(Client client);
 }

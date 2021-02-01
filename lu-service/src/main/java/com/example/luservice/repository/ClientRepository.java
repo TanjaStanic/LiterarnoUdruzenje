@@ -5,9 +5,14 @@ import org.springframework.stereotype.Repository;
 
 import com.example.luservice.model.Client;
 
-@Repository
-public interface ClientRepository extends JpaRepository<Client,Long> {
+
+public interface ClientRepository extends JpaRepository<Client, Long> {
     Client findClientById(Long id);
+
     Client findClientByUserId(Long userId);
+
+    Client findByEmail(String email);
+
+
 
 }

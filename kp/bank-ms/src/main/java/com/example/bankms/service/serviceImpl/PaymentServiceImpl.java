@@ -43,7 +43,7 @@ public class PaymentServiceImpl implements PaymentService {
 
                 BankAcquirerRequestDTO bankRequest = new BankAcquirerRequestDTO(request.getAmount(), seller.getMerchantID(),
                         seller.getMerchantPassword(), request.getMerchantOrderId(), request.getMerchantTimestamp(),
-                        request.getSuccessUrl(), request.getFailedUrl(), request.getErrorUrl(), currency);
+                        request.getSuccessUrl(), request.getFailedUrl(), request.getErrorUrl(), request.getCurrencyCode());
                 try {
                     ResponseEntity<BankAcquirerResponseDTO> responseDTO = restTemplate.postForEntity("https://localhost:8445/payment/create-response", bankRequest,
                             BankAcquirerResponseDTO.class);
