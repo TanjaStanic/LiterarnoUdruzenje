@@ -46,8 +46,9 @@ import java.util.zip.ZipOutputStream;
 public class FileUploadController {
 
   @Autowired DocumentServiceInt documentServiceInt;
-  @Autowired
-  TaskService taskService;
+
+  @Autowired TaskService taskService;
+
 
   String files_string = "";
 
