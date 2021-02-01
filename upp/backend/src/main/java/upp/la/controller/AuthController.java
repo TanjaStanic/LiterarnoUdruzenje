@@ -88,11 +88,13 @@ public class AuthController {
             "asd",
             "asdf",
             true,
+            true,
+            1,
             null,
             null,
             null,
             null,
-            null, Role.READER);
+                Role.READER);
     registrationServiceInt.registerNew(test1);
 
     return new ResponseEntity<>("OKAY", HttpStatus.CREATED);

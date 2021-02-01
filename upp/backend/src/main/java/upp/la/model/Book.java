@@ -41,6 +41,15 @@ public class Book {
 
   @Column private String synopsis;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  private User editor;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  private User lecturer;
+
+  @ManyToMany
+  private List<BookComments> comments;
+
   //Document object containing the path to the file
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "document_id", referencedColumnName = "id")
