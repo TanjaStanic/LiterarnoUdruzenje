@@ -69,4 +69,9 @@ public class ClientServiceImpl implements ClientService {
     public void saveRange(Collection<Client> clients) {
         clientRepository.saveAll(clients);
     }
+
+	@Override
+	public Client save(Client client) {
+		return clientRepository.save(client);
+	}
 }

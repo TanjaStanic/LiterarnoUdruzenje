@@ -27,5 +27,21 @@ export class PaymentMethodService {
     console.log(paymentMethod.id);
     return this.httpClient.put(`${environment.baseUrl}payment-methods/${paymentMethod.id}`, paymentMethod);
   }
+ 
+  getClientsPaymentMethods(id:number): Observable<any> {
+	return this.httpClient.get(`${environment.baseUrl}payment-methods/clientsMethods/${id}`);
+  }
+
+  getNoClientsPaymentMethods(id:number): Observable<any> {
+	return this.httpClient.get(`${environment.baseUrl}payment-methods/noClientsMethods/${id}`);
+  }
+  
+  deleteFromClient(userId: number, pmId: number): Observable<any> {
+	return this.httpClient.get(`${environment.baseUrl}payment-methods/delete/${userId}/${pmId}`);
+  }
+
+  add(userId: number, pmId: number): Observable<any> {
+	return this.httpClient.get(`${environment.baseUrl}payment-methods/add/${userId}/${pmId}`);
+  }
 
 }

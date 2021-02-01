@@ -20,7 +20,7 @@ insert into payment_method (name, subscription_supported, application_name) valu
 
 insert into client_payment_method (fk_client, fk_payment_method) values (1,1);
 insert into client_payment_method (fk_client, fk_payment_method) values (1,2);
-insert into client_payment_method (fk_client, fk_payment_method) values (1,3);
+#insert into client_payment_method (fk_client, fk_payment_method) values (1,3);
 
 insert into client_payment_method (fk_client, fk_payment_method) values (2,1);
 insert into client_payment_method (fk_client, fk_payment_method) values (2,2);

@@ -25,5 +25,7 @@ public interface ClientService {
     Client findByUsername(String username);
 
     void saveRange(Collection<Client> clients);
+    
+    Client save(Client client);
 
 }

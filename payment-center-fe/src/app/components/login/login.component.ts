@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
           });
 
           if (flag == false) {
-            this.router.navigateByUrl('dashboard');
+            this.router.navigateByUrl('client');
 
           } else {
             this.router.navigateByUrl('admin');

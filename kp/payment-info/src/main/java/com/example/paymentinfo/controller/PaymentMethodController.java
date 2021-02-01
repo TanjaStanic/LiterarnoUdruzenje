@@ -137,6 +137,52 @@ public class PaymentMethodController {
 
 
     }
+    
+    @GetMapping("/clientsMethods/{clientId}")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<List<PaymentMethodDto>> getClientPaymentMethods(@PathVariable long clientId) {
+        List<PaymentMethod> paymentMethods = (ArrayList) paymentMethodRepository.findAllByClients_id(clientId);
+        List<PaymentMethodDto> retVaL = paymentMethods.stream()
+                .map(paymentMethod -> new PaymentMethodDto(paymentMethod))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(retVaL);
+    }
+   
+    @GetMapping("/noClientsMethods/{clientId}")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<List<PaymentMethodDto>> getNoClientPaymentMethods(@PathVariable long clientId) {
+        List<PaymentMethod> paymentMethods = (ArrayList) paymentMethodService.findAllNoSupportedByClient(clientId);
+        List<PaymentMethodDto> retVaL = paymentMethods.stream()
+                .map(paymentMethod -> new PaymentMethodDto(paymentMethod))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(retVaL);
+    }
+
+    @GetMapping("delete/{userId}/{paymentMethodId}")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<?> deleteFromUser(@PathVariable long userId,@PathVariable long paymentMethodId) {
+        try {
+        	paymentMethodService.deleteOneFromUser(userId, paymentMethodId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Failed to delete payment method from user.");
+        }
+        return ResponseEntity.ok().build();
+
+    }
+    
+    @GetMapping("add/{userId}/{paymentMethodId}")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<?> addNewMethod(@PathVariable long userId,@PathVariable long paymentMethodId) {
+        try {
+        	paymentMethodService.addPaymetMethodToClient(userId, paymentMethodId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Failed to add new payment method. ");
+        }
+        return ResponseEntity.ok().build();
 
 
+    }
+    
 }
