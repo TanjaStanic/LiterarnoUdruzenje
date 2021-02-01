@@ -24,7 +24,7 @@
             </camunda:formField>
             <camunda:formField id="bookAuthorId" type="string" />
           </camunda:formData>
-          <camunda:taskListener class="upp.la.listener.plagiarism.InsertUsersOnCreate" event="create" />
+          <camunda:taskListener class="upp.la.listener.InsertUsersOnCreate" event="create" />
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1jub1ue</bpmn:incoming>
         <bpmn:incoming>Flow_1d455u0</bpmn:incoming>

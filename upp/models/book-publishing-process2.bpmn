@@ -13,7 +13,7 @@
 Listeners:
   start: # Insert users into Identity Service</bpmn:documentation>
         <bpmn:extensionElements>
-          <camunda:executionListener class="upp.la.util.DataInsert" event="start" />
+          <camunda:executionListener class="upp.la.listener.InsertUsersOnCreate" event="start" />
         </bpmn:extensionElements>
         <bpmn:outgoing>Flow_1dhsmcv</bpmn:outgoing>
       </bpmn:startEvent>
@@ -103,23 +103,16 @@ Select one, and assing to task.</bpmn:documentation>
           <bpmn:outgoing>Flow_0g26fcf</bpmn:outgoing>
           <bpmn:errorEventDefinition id="ErrorEventDefinition_1ql897v" errorRef="Error_0nn4s3v" />
         </bpmn:startEvent>
-        <bpmn:serviceTask id="Activity_05jokux" name="Notify writer" camunda:class="upp.la.service.EmailService">
-          <bpmn:extensionElements>
-            <camunda:field name="Type">
-              <camunda:string>BookPublishingNotifyWriterDeclined</camunda:string>
-            </camunda:field>
-            <camunda:field name="Address">
-              <camunda:string>${writer}</camunda:string>
-            </camunda:field>
-          </bpmn:extensionElements>
-          <bpmn:incoming>Flow_0g26fcf</bpmn:incoming>
-          <bpmn:outgoing>Flow_1yd8k96</bpmn:outgoing>
-        </bpmn:serviceTask>
         <bpmn:endEvent id="Event_0u1e8uq">
-          <bpmn:incoming>Flow_1yd8k96</bpmn:incoming>
+          <bpmn:incoming>Flow_0wj7s75</bpmn:incoming>
         </bpmn:endEvent>
-        <bpmn:sequenceFlow id="Flow_0g26fcf" sourceRef="Event_06w72e5" targetRef="Activity_05jokux" />
-        <bpmn:sequenceFlow id="Flow_1yd8k96" sourceRef="Activity_05jokux" targetRef="Event_0u1e8uq" />
+        <bpmn:sequenceFlow id="Flow_0g26fcf" sourceRef="Event_06w72e5" targetRef="Event_0of0nse" />
+        <bpmn:intermediateThrowEvent id="Event_0of0nse" name="BookPublishingNotifyWriterDeclined">
+          <bpmn:incoming>Flow_0g26fcf</bpmn:incoming>
+          <bpmn:outgoing>Flow_0wj7s75</bpmn:outgoing>
+          <bpmn:messageEventDefinition id="MessageEventDefinition_1af5dxh" messageRef="Message_09lbdgp" camunda:class="upp.la.service.SendEmailService" />
+        </bpmn:intermediateThrowEvent>
+        <bpmn:sequenceFlow id="Flow_0wj7s75" sourceRef="Event_0of0nse" targetRef="Event_0u1e8uq" />
       </bpmn:subProcess>
       <bpmn:endEvent id="Event_0clwp5h" name="DeclinedBeforeManuscript">
         <bpmn:incoming>Flow_0nbrevs</bpmn:incoming>
@@ -134,23 +127,16 @@ Select one, and assing to task.</bpmn:documentation>
           <bpmn:outgoing>Flow_12zrwlj</bpmn:outgoing>
           <bpmn:errorEventDefinition id="ErrorEventDefinition_0r9jdjy" errorRef="Error_0au9plp" />
         </bpmn:startEvent>
-        <bpmn:serviceTask id="Activity_14h4hc5" name="Notify writer" camunda:class="upp.la.service.EmailService">
-          <bpmn:extensionElements>
-            <camunda:field name="Type">
-              <camunda:string>BookPublishingNotifyWriterExpired</camunda:string>
-            </camunda:field>
-            <camunda:field name="Address">
-              <camunda:string>${writer}</camunda:string>
-            </camunda:field>
-          </bpmn:extensionElements>
-          <bpmn:incoming>Flow_12zrwlj</bpmn:incoming>
-          <bpmn:outgoing>Flow_0njfqmc</bpmn:outgoing>
-        </bpmn:serviceTask>
         <bpmn:endEvent id="Event_0kexwro">
-          <bpmn:incoming>Flow_0njfqmc</bpmn:incoming>
+          <bpmn:incoming>Flow_11bu5sx</bpmn:incoming>
         </bpmn:endEvent>
-        <bpmn:sequenceFlow id="Flow_12zrwlj" sourceRef="Event_1ro7rkn" targetRef="Activity_14h4hc5" />
-        <bpmn:sequenceFlow id="Flow_0njfqmc" sourceRef="Activity_14h4hc5" targetRef="Event_0kexwro" />
+        <bpmn:sequenceFlow id="Flow_12zrwlj" sourceRef="Event_1ro7rkn" targetRef="Event_01be2b2" />
+        <bpmn:intermediateThrowEvent id="Event_01be2b2" name="BookPublishingNotifyWriterExpired">
+          <bpmn:incoming>Flow_12zrwlj</bpmn:incoming>
+          <bpmn:outgoing>Flow_11bu5sx</bpmn:outgoing>
+          <bpmn:messageEventDefinition id="MessageEventDefinition_0fsasny" messageRef="Message_19rmxzd" camunda:class="upp.la.service.SendEmailService" />
+        </bpmn:intermediateThrowEvent>
+        <bpmn:sequenceFlow id="Flow_11bu5sx" sourceRef="Event_01be2b2" targetRef="Event_0kexwro" />
       </bpmn:subProcess>
       <bpmn:exclusiveGateway id="Gateway_0nkj26r" name="Send to beta readers?">
         <bpmn:incoming>Flow_1860n6d</bpmn:incoming>
@@ -508,6 +494,8 @@ Select one, and assing to task.</bpmn:documentation>
   <bpmn:error id="Error_0nn4s3v" name="DeclinedBeforeManuscript" errorCode="DeclinedBeforeManuscript" camunda:errorMessage="Declined before manuscript" />
   <bpmn:error id="Error_0au9plp" name="FailedToProvideManuscript" errorCode="FailedToProvideManuscript" camunda:errorMessage="Failed to provide manuscript" />
   <bpmn:message id="Message_0atjwov" name="CheckBetaReaderStatus" />
+  <bpmn:message id="Message_09lbdgp" name="BookPublishingNotifyWriterDeclined" />
+  <bpmn:message id="Message_19rmxzd" name="BookPublishingNotifyWriterExpired" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="bookPublishingProcessId">
       <bpmndi:BPMNEdge id="Flow_0gclykn_di" bpmnElement="Flow_0gclykn">
@@ -526,6 +514,10 @@ Select one, and assing to task.</bpmn:documentation>
       <bpmndi:BPMNShape id="Activity_0q0g47c_di" bpmnElement="Activity_0q0g47c" isExpanded="true">
         <dc:Bounds x="320" y="80" width="2790" height="1250" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_18udoj3_di" bpmnElement="Flow_18udoj3">
+        <di:waypoint x="2500" y="960" />
+        <di:waypoint x="2500" y="905" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_16l98y0_di" bpmnElement="Flow_16l98y0">
         <di:waypoint x="2820" y="270" />
         <di:waypoint x="2884" y="270" />
@@ -753,10 +745,6 @@ Select one, and assing to task.</bpmn:documentation>
         <di:waypoint x="419" y="270" />
         <di:waypoint x="481" y="270" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_18udoj3_di" bpmnElement="Flow_18udoj3">
-        <di:waypoint x="2500" y="960" />
-        <di:waypoint x="2500" y="905" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_1slz7hq_di" bpmnElement="Event_1slz7hq">
         <dc:Bounds x="383" y="252" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -780,15 +768,6 @@ Select one, and assing to task.</bpmn:documentation>
         <bpmndi:BPMNLabel>
           <dc:Bounds x="872" y="535" width="85" height="14" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_18dkjka_di" bpmnElement="Activity_17yocao">
-        <dc:Bounds x="2450" y="825" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0or3es4_di" bpmnElement="Activity_0or3es4">
-        <dc:Bounds x="2554" y="1060" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1s14t9t_di" bpmnElement="Activity_0k8dvo2">
-        <dc:Bounds x="2450" y="960" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0f7kjgu_di" bpmnElement="Activity_0jadwzh" isExpanded="true">
         <dc:Bounds x="960" y="1060" width="350" height="200" />
@@ -825,13 +804,13 @@ Select one, and assing to task.</bpmn:documentation>
       <bpmndi:BPMNShape id="Activity_0bsetgj_di" bpmnElement="Activity_0bsetgj" isExpanded="true">
         <dc:Bounds x="960" y="580" width="350" height="200" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_1yd8k96_di" bpmnElement="Flow_1yd8k96">
-        <di:waypoint x="1190" y="680" />
-        <di:waypoint x="1252" y="680" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0g26fcf_di" bpmnElement="Flow_0g26fcf">
         <di:waypoint x="1036" y="680" />
-        <di:waypoint x="1090" y="680" />
+        <di:waypoint x="1122" y="680" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wj7s75_di" bpmnElement="Flow_0wj7s75">
+        <di:waypoint x="1158" y="680" />
+        <di:waypoint x="1252" y="680" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_06w72e5_di" bpmnElement="Event_06w72e5">
         <dc:Bounds x="1000" y="662" width="36" height="36" />
@@ -839,11 +818,14 @@ Select one, and assing to task.</bpmn:documentation>
           <dc:Bounds x="976" y="705" width="85" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_05jokux_di" bpmnElement="Activity_05jokux">
-        <dc:Bounds x="1090" y="640" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0u1e8uq_di" bpmnElement="Event_0u1e8uq">
         <dc:Bounds x="1252" y="662" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0of0nse_di" bpmnElement="Event_0of0nse">
+        <dc:Bounds x="1122" y="662" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1098" y="705" width="87" height="40" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0hwgvl9_di" bpmnElement="Event_0clwp5h">
         <dc:Bounds x="1082" y="172" width="36" height="36" />
@@ -860,13 +842,13 @@ Select one, and assing to task.</bpmn:documentation>
       <bpmndi:BPMNShape id="Activity_1ys6lde_di" bpmnElement="Activity_1ys6lde" isExpanded="true">
         <dc:Bounds x="960" y="820" width="350" height="200" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0njfqmc_di" bpmnElement="Flow_0njfqmc">
-        <di:waypoint x="1190" y="920" />
-        <di:waypoint x="1252" y="920" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_12zrwlj_di" bpmnElement="Flow_12zrwlj">
         <di:waypoint x="1036" y="920" />
-        <di:waypoint x="1090" y="920" />
+        <di:waypoint x="1122" y="920" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11bu5sx_di" bpmnElement="Flow_11bu5sx">
+        <di:waypoint x="1158" y="920" />
+        <di:waypoint x="1252" y="920" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_1ro7rkn_di" bpmnElement="Event_1ro7rkn">
         <dc:Bounds x="1000" y="902" width="36" height="36" />
@@ -874,11 +856,14 @@ Select one, and assing to task.</bpmn:documentation>
           <dc:Bounds x="974" y="945" width="89" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_14h4hc5_di" bpmnElement="Activity_14h4hc5">
-        <dc:Bounds x="1090" y="880" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0kexwro_di" bpmnElement="Event_0kexwro">
         <dc:Bounds x="1252" y="902" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_01be2b2_di" bpmnElement="Event_01be2b2">
+        <dc:Bounds x="1122" y="902" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1097" y="945" width="87" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0nkj26r_di" bpmnElement="Gateway_0nkj26r" isMarkerVisible="true">
         <dc:Bounds x="1675" y="365" width="50" height="50" />
@@ -928,6 +913,10 @@ Select one, and assing to task.</bpmn:documentation>
       <bpmndi:BPMNShape id="Activity_15mkmrz_di" bpmnElement="Activity_1jeibw8" isExpanded="true">
         <dc:Bounds x="1766" y="700" width="654" height="310" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_06wxs9z_di" bpmnElement="Flow_06wxs9z">
+        <di:waypoint x="2340" y="821" />
+        <di:waypoint x="2362" y="821" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10qsenp_di" bpmnElement="Flow_10qsenp">
         <di:waypoint x="1822" y="821" />
         <di:waypoint x="1845" y="821" />
@@ -949,12 +938,11 @@ Select one, and assing to task.</bpmn:documentation>
         <di:waypoint x="1945" y="821" />
         <di:waypoint x="1980" y="821" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_06wxs9z_di" bpmnElement="Flow_06wxs9z">
-        <di:waypoint x="2340" y="821" />
-        <di:waypoint x="2362" y="821" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Activity_0j801ms_di" bpmnElement="Activity_0j801ms">
         <dc:Bounds x="1845" y="781" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ddncvt_di" bpmnElement="Activity_1ddncvt">
+        <dc:Bounds x="1980" y="781" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_197456z_di" bpmnElement="Event_197456z">
         <dc:Bounds x="2126" y="923" width="36" height="36" />
@@ -962,14 +950,11 @@ Select one, and assing to task.</bpmn:documentation>
           <dc:Bounds x="2102" y="966" width="85" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_06s2yz0_di" bpmnElement="Event_06s2yz0">
-        <dc:Bounds x="1786" y="803" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ddncvt_di" bpmnElement="Activity_1ddncvt">
-        <dc:Bounds x="1980" y="781" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0t0dxti_di" bpmnElement="Activity_0t0dxti">
         <dc:Bounds x="2110" y="781" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_06s2yz0_di" bpmnElement="Event_06s2yz0">
+        <dc:Bounds x="1786" y="803" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0yq9wf5_di" bpmnElement="Event_0yq9wf5">
         <dc:Bounds x="2362" y="803" width="36" height="36" />
@@ -986,6 +971,9 @@ Select one, and assing to task.</bpmn:documentation>
           <dc:Bounds x="1658" y="955" width="86" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_18dkjka_di" bpmnElement="Activity_17yocao">
+        <dc:Bounds x="2450" y="825" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1soxy6u_di" bpmnElement="Gateway_1soxy6u" isMarkerVisible="true">
         <dc:Bounds x="2579" y="840" width="50" height="50" />
       </bpmndi:BPMNShape>
@@ -1000,6 +988,9 @@ Select one, and assing to task.</bpmn:documentation>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1agi2wt_di" bpmnElement="Event_1agi2wt">
         <dc:Bounds x="2966" y="847" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0or3es4_di" bpmnElement="Activity_0or3es4">
+        <dc:Bounds x="2554" y="1060" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1coyg94_di" bpmnElement="Event_0ffoufq">
         <dc:Bounds x="2831" y="1002" width="36" height="36" />
@@ -1034,6 +1025,9 @@ Select one, and assing to task.</bpmn:documentation>
       <bpmndi:BPMNShape id="Activity_032oatm_di" bpmnElement="Activity_1w8nj12">
         <dc:Bounds x="2720" y="230" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1s14t9t_di" bpmnElement="Activity_0k8dvo2">
+        <dc:Bounds x="2450" y="960" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_08qu8a2_di" bpmnElement="Event_08qu8a2">
         <dc:Bounds x="1322" y="412" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -1058,11 +1052,11 @@ Select one, and assing to task.</bpmn:documentation>
       <bpmndi:BPMNShape id="Event_1nlp480_di" bpmnElement="Event_0uadpzo">
         <dc:Bounds x="2776" y="807" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1m4bdj3_di" bpmnElement="Event_00w913k">
-        <dc:Bounds x="2636" y="412" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0kmgbwu_di" bpmnElement="Event_0ttmeo2">
         <dc:Bounds x="2636" y="1082" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1m4bdj3_di" bpmnElement="Event_00w913k">
+        <dc:Bounds x="2636" y="412" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1669ywm_di" bpmnElement="Event_1669ywm">
         <dc:Bounds x="3032" y="1392" width="36" height="36" />
