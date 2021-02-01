@@ -403,15 +403,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public String executeBillingAgreement(long subscriptionId, String token) throws PayPalRESTException {
-        Subscription subscription;
-        try {
-            subscription = subscriptionService.findById(subscriptionId);
-        } catch (Exception exception) {
-            log.error(exception.getMessage());
-            throw exception;
-        }
-
+    public String executeBillingAgreement(Subscription subscription, String token) throws PayPalRESTException {
         Agreement agreement = new Agreement();
         agreement.setToken(token);
 
@@ -436,7 +428,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         subscription.setSubscriptionStatus(SubscriptionStatus.ACTIVE);
         subscriptionService.save(subscription);
-        log.info("SUBSCRIPTION ID: " + subscriptionId + "   ACTIVE");
+        log.info("SUBSCRIPTION ID: " + subscription.getId() + "   ACTIVE");
         sendSubscriptionUpdate(subscription);
         return subscription.getSuccessUrl();
     }

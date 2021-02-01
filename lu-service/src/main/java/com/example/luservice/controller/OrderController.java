@@ -2,14 +2,18 @@ package com.example.luservice.controller;
 
 import com.example.luservice.dto.OrderDTO;
 import com.example.luservice.dto.PaymentRequestDTO;
+import com.example.luservice.model.User;
 import com.example.luservice.service.TransactionService;
+import com.example.luservice.service.UserService;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth/orders")
@@ -17,14 +21,16 @@ import java.util.Date;
 public class OrderController {
     private TransactionService transactionService;
     private RestTemplate restTemplate;
+    private UserService userService;
 
-    public OrderController(TransactionService transactionService, RestTemplate restTemplate) {
+    public OrderController(TransactionService transactionService, RestTemplate restTemplate, UserService userService) {
         this.transactionService = transactionService;
         this.restTemplate = restTemplate;
+        this.userService = userService;
     }
 
     @PostMapping
-    public ResponseEntity<?> makeOrder(@RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<?> makeOrder(@RequestBody OrderDTO orderDTO, @AuthenticationPrincipal User user) {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
         requestDTO.setMerchantOrderId((long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L);
         requestDTO.setMerchantEmail("sb-zx3ys4123984@business.example.com");
@@ -40,6 +46,11 @@ public class OrderController {
         try {
             response = restTemplate.exchange("https://payment.center:8444/auth/api/initiate-payment-request", HttpMethod.POST,
                     new HttpEntity<PaymentRequestDTO>(requestDTO), String.class);
+
+            if (user != null){
+                user.getBooks().addAll(orderDTO.getOrderItems().stream().map(orderItemDto -> orderItemDto.getBook()).collect(Collectors.toList()));
+                userService.update(user);
+            }
         } catch (Exception e) {
             e.printStackTrace();
 

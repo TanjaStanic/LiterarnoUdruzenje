@@ -1,6 +1,7 @@
 package com.example.luservice.dto;
 
 
+import com.example.luservice.model.SubscriptionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,9 +15,8 @@ import java.util.Date;
 @NoArgsConstructor
 public class SubscriptionDto {
 
-    private Long id;
     private Date expirationDate;
-    private String subscriptionStatus;
+    private SubscriptionStatus subscriptionStatus;
     private double paymentAmount;
     private Long merchantOrderId;
     private String currency;

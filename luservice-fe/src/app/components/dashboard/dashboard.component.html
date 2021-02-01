@@ -1,6 +1,6 @@
 <app-navbar></app-navbar>
 
-<div *ngIf="subscriptionActiveOrInitiated != true && authenticated === true" style="text-align: start; margin: 1em;">
+<div *ngIf="subscriptionActive != true && authenticated === true" style="text-align: start; margin: 1em;">
     <button mat-raised-button color="primary" (click)="subscribe()">Subscribe<mat-icon>card-membership</mat-icon>
     </button>
 </div>
@@ -19,20 +19,27 @@
                     <p>Authors <b>{{book.authors}}</b></p>
                     <p>Genre(s) <b>{{book.genres}}</b></p>
                     <p>Description <b>{{book.description}}</b></p>
-                    <ng-container *ngIf="book.price != null ">
-                        <p>Price<b> {{book.price | currency: 'USD'}}</b></p>
-                    </ng-container>
-                    <hr>
-                    <p>
-                        <mat-form-field>
-                            <input matInput type="number" min="1" formControlName="quantity" value="1">
-                        </mat-form-field>
-                    </p>
+                    <ng-container *ngIf="subscriptionActive === false">
+                        <ng-container *ngIf="book.price != null ">
+                            <p>Price<b> {{book.price | currency: 'USD'}}</b></p>
+                        </ng-container>
+                        <hr>
+                        <p>
+                            <mat-form-field>
+                                <input matInput type="number" min="1" formControlName="quantity" value="1">
+                            </mat-form-field>
+                        </p>
 
-                    <p>
-                        <button class="primary button" mat-raised-button (click)="addToCart(book)">Add to
-                            cart</button>
-                    </p>
+                        <p>
+                            <button class="primary button" mat-raised-button (click)="addToCart(book)">Add to
+                                cart</button>
+                        </p>
+                    </ng-container>
+                    <ng-container *ngIf="subscriptionActive === true">
+                        <p>
+                            <button class="primary button" mat-raised-button (click)="download(book)">Download</button>
+                        </p>
+                    </ng-container>
                 </form>
             </mat-card-content>
         </mat-card>

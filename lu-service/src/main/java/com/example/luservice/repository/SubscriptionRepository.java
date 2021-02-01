@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface SubscriptionRepository extends JpaRepository<UserSubscription, Long> {
     UserSubscription findByOwnerIdAndSubscriptionStatusIn(long userId, List<SubscriptionStatus> statuses);
+
+    UserSubscription findByMerchantOrderId(long merchantOrderId);
 }

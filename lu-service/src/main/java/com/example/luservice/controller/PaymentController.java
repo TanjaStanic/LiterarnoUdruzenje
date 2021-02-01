@@ -174,14 +174,13 @@ public class PaymentController {
         PaymentRequestDTO requestDTO = new PaymentRequestDTO();
         requestDTO.setMerchantOrderId((long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L);
         requestDTO.setMerchantEmail("sb-zx3ys4123984@business.example.com");
-        requestDTO.setSuccessUrl("http://localhost:4200/success");
-        requestDTO.setFailedUrl("http://localhost:4200/fail");
-        requestDTO.setErrorUrl("http://localhost:4200/error");
-        requestDTO.setCancelUrl("http://localhost:4200/cancel");
+        requestDTO.setSuccessUrl("https://literary.association:8447/auth/subscriptions");
+        requestDTO.setFailedUrl("https://literary.association:8447/auth/subscriptions");
+        requestDTO.setErrorUrl("https://literary.association:8447/auth/subscriptions");
+        requestDTO.setCancelUrl("https://literary.association:8447/auth/subscriptions");
         requestDTO.setAmount(10);
         requestDTO.setCurrencyCode("USD");
         requestDTO.setMerchantTimestamp(new Date());
-        transactionService.initializeTransaction(requestDTO);
 
         UserSubscription subscription = new UserSubscription();
         subscription.setOwner(user);

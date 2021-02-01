@@ -2,18 +2,23 @@ package com.example.paypalms.controller;
 
 import com.example.paypalms.domain.Subscription;
 import com.example.paypalms.domain.SubscriptionPlan;
+import com.example.paypalms.domain.Transaction;
+import com.example.paypalms.dto.SubscriptionDto;
 import com.example.paypalms.dto.SubscriptionPlanDto;
 import com.example.paypalms.dto.SubscriptionRequestDto;
+import com.example.paypalms.dto.TransactionDto;
 import com.example.paypalms.enums.SubscriptionStatus;
 import com.example.paypalms.service.PaymentService;
 import com.example.paypalms.service.SubscriptionPlanService;
 import com.example.paypalms.service.SubscriptionService;
 import com.paypal.base.rest.PayPalRESTException;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -30,11 +35,14 @@ public class SubscriptionController {
     private SubscriptionPlanService subscriptionPlanService;
     private PaymentService paymentService;
     private SubscriptionService subscriptionService;
+    private RestTemplate restTemplate;
 
-    public SubscriptionController(SubscriptionPlanService subscriptionPlanService, PaymentService paymentService, SubscriptionService subscriptionService) {
+    public SubscriptionController(SubscriptionPlanService subscriptionPlanService, PaymentService paymentService,
+                                  SubscriptionService subscriptionService, RestTemplate restTemplate) {
         this.subscriptionPlanService = subscriptionPlanService;
         this.paymentService = paymentService;
         this.subscriptionService = subscriptionService;
+        this.restTemplate = restTemplate;
     }
 
     @PostMapping
@@ -64,16 +72,37 @@ public class SubscriptionController {
 
     @GetMapping("/complete")
     public ResponseEntity<?> completeSubscription(@RequestParam Long subscriptionId, @RequestParam String token) {
+        Subscription subscription;
+        try {
+            subscription = subscriptionService.findById(subscriptionId);
+        } catch (Exception exception) {
+            log.error(exception.getMessage());
+            throw exception;
+        }
+
         String redirectUrl = null;
         try {
-            redirectUrl = paymentService.executeBillingAgreement(subscriptionId, token);
+            redirectUrl = paymentService.executeBillingAgreement(subscription, token);
         } catch (PayPalRESTException exception) {
             exception.printStackTrace();
         }
-        HttpHeaders headersRedirect = new HttpHeaders();
-        headersRedirect.add("Location", redirectUrl);
-        headersRedirect.add("Access-Control-Allow-Origin", "*");
-        return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+
+        try {
+            HttpEntity<SubscriptionDto> entity = new HttpEntity<>(new SubscriptionDto(subscription));
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(redirectUrl, entity, String.class);
+
+            HttpHeaders headersRedirect = new HttpHeaders();
+            headersRedirect.add("Location", responseEntity.getBody());
+            headersRedirect.add("Access-Control-Allow-Origin", "*");
+            return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            log.error(exception);
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/cancel")

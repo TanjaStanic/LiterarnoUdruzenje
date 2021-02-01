@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   form: FormGroup;
   matcher = new MyErrorStateMatcher();
   roles;
-  subscriptionActiveOrInitiated = false;
+  subscriptionActive = false;
   activeSubscription: any;
   authenticated = false;
 
@@ -50,7 +50,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.userService.getUserSubscription(userId).subscribe(
         data => {
           this.activeSubscription = data;
-          this.subscriptionActiveOrInitiated = true;
+          this.subscriptionActive = true;
           console.log(this.activeSubscription);
         },
         err => {
@@ -67,15 +67,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   getBooks() {
-    this.bookService.getBooks().subscribe(
-      data => {
-        console.log(data);
-        this.books = data;
-      },
-      (err: HttpErrorResponse) => {
-        this.snackBarService.showMessage(err.message);
-      }
-    );
+    if (this.authenticated === true) {
+      this.bookService.getBooksUserAuthenticated().subscribe(
+        data => {
+          console.log(data);
+          this.books = data;
+        },
+        (err: HttpErrorResponse) => {
+          this.snackBarService.showMessage(err.message);
+        }
+      );
+    } else {
+      this.bookService.getBooks().subscribe(
+        data => {
+          console.log(data);
+          this.books = data;
+        },
+        (err: HttpErrorResponse) => {
+          this.snackBarService.showMessage(err.message);
+        }
+      );
+    }
+
   }
 
   addToCart(book: Book) {
@@ -100,7 +113,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   subscribe() {
     this.userService.subscribe().subscribe(
       data => {
-        this.subscriptionActiveOrInitiated = true;
+        this.subscriptionActive = true;
         window.location.href = data;
       },
       (error: HttpErrorResponse) => {
@@ -111,6 +124,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.snackBarService.showMessage("Something went wrong, please try again.");
       }
     );
+  }
+
+  download(book) {
+
   }
 
   paypalTest() {
