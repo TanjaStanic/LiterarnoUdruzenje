@@ -7,11 +7,12 @@ import com.example.paymentinfo.dto.PaymentMethodDto;
 import com.example.paymentinfo.repository.PaymentMethodRepository;
 import com.example.paymentinfo.service.ClientService;
 import com.example.paymentinfo.service.PaymentMethodService;
+import com.example.paymentinfo.utils.PaymentMethodValidator;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Controller
+@RestController
 @RequestMapping("payment-methods")
 public class PaymentMethodController {
 
@@ -29,13 +30,16 @@ public class PaymentMethodController {
     private PaymentMethodRepository paymentMethodRepository;
     private ClientService clientService;
     private PaymentMethodService paymentMethodService;
+    private PaymentMethodValidator paymentMethodValidator;
 
     public PaymentMethodController(RestTemplate restTemplate, PaymentMethodRepository paymentMethodRepository,
-                                   ClientService clientService, PaymentMethodService paymentMethodService) {
+                                   ClientService clientService, PaymentMethodService paymentMethodService,
+                                   PaymentMethodValidator paymentMethodValidator) {
         this.restTemplate = restTemplate;
         this.paymentMethodRepository = paymentMethodRepository;
         this.clientService = clientService;
         this.paymentMethodService = paymentMethodService;
+        this.paymentMethodValidator = paymentMethodValidator;
     }
 
     @GetMapping
@@ -50,8 +54,15 @@ public class PaymentMethodController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> create(@RequestBody @Valid PaymentMethodDto paymentMethodDto) {
+    public ResponseEntity<?> create(@RequestBody @Valid PaymentMethodDto paymentMethodDto, BindingResult bindingResult) {
         PaymentMethod entity = null;
+
+        paymentMethodValidator.validate(paymentMethodDto, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("Failed to insert payment method.");
+        }
+
         try {
             entity = new PaymentMethod(paymentMethodDto.getName(), paymentMethodDto.isSubscriptionSupported(), paymentMethodDto.getApplicationName());
             entity = paymentMethodService.save(entity);
@@ -67,9 +78,15 @@ public class PaymentMethodController {
 
     }
 
-    @PostMapping("/{paymentMethodId}")
+    @PutMapping("/{paymentMethodId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> update(@RequestBody PaymentMethodDto paymentMethodDto, @PathVariable long paymentMethodId) {
+    public ResponseEntity<?> update(@PathVariable long paymentMethodId, @RequestBody PaymentMethodDto paymentMethodDto, BindingResult bindingResult) {
+        paymentMethodValidator.validate(paymentMethodDto, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("Failed to update payment method.");
+        }
+
         PaymentMethod entity = new PaymentMethod(paymentMethodDto.getName(), paymentMethodDto.isSubscriptionSupported(), paymentMethodDto.getApplicationName());
         entity.setId(paymentMethodId);
         try {

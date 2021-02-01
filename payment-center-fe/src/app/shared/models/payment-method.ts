@@ -3,4 +3,5 @@ export class PaymentMethod {
     id: number;
     subscriptionSupported: boolean;
     applicationName: string;
+
 }

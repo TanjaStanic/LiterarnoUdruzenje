@@ -3,24 +3,47 @@
     <mat-card>
         <div mat-dialog-content>
 
-            <p>
-                <mat-label>Name</mat-label>
-                <input matInput [(ngModel)]="data.name" type="text">
-            </p>
-            <p>
-                <mat-label>Service ID</mat-label>
-                <input matInput [(ngModel)]="data.applicationName" type="text">
-            </p>
-            <p>
-                <mat-checkbox [(ngModel)]="data.subscriptionSupported">Subscription payment supported
-                </mat-checkbox>
-            </p>
+            <form [formGroup]="form">
+                <p>
+                    <mat-form-field>
+                        <mat-label>Name</mat-label>
+                        <input matInput placeholder="Enter name..." formControlName="name" type="text"
+                            [errorStateMatcher]="matcher" />
+
+                        <mat-error *ngIf="name.hasError('required')">
+                            Name is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </p>
+
+
+
+                <p>
+                    <mat-form-field>
+                        <mat-label>Service ID</mat-label>
+                        <input matInput placeholder="Enter service ID..." formControlName="applicationName" type="text"
+                            [errorStateMatcher]="matcher" />
+                        <input matInput formControlName="id" type="text" hidden name="id">
+                        <mat-error *ngIf="applicationName.hasError('required')">
+                            Service ID is <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+
+
+                </p>
+
+                <p>
+                    <mat-checkbox formControlName="subscriptionSupported">Subscription payment supported
+                    </mat-checkbox>
+                </p>
+
+            </form>
 
         </div>
 
     </mat-card>
     <div mat-dialog-actions>
         <button mat-button (click)="onNoClick()">Cancel</button>
-        <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Submit</button>
+        <button mat-raised-button (click)="submit()" cdkFocusInitial [disabled]="!form.valid">Submit</button>
     </div>
 </div>

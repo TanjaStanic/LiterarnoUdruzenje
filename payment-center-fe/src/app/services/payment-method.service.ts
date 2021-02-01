@@ -23,4 +23,9 @@ export class PaymentMethodService {
     return this.httpClient.post(`${environment.baseUrl}payment-methods`, paymentMethod);
   }
 
+  edit(paymentMethod: PaymentMethod): Observable<any> {
+    console.log(paymentMethod.id);
+    return this.httpClient.put(`${environment.baseUrl}payment-methods/${paymentMethod.id}`, paymentMethod);
+  }
+
 }
