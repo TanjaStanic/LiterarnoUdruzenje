@@ -407,9 +407,15 @@ Select one, and assing to task.</bpmn:documentation>
       <bpmn:sequenceFlow id="Flow_0jcq6h6" sourceRef="Activity_019hk0i" targetRef="Activity_0sderqm" />
       <bpmn:sequenceFlow id="Flow_05215ly" sourceRef="Event_0y6q4fh" targetRef="Event_1jpo6xs" />
       <bpmn:sequenceFlow id="Flow_046n9kk" sourceRef="Activity_0sderqm" targetRef="Gateway_0zjiwgo" />
-      <bpmn:sequenceFlow id="Flow_1g2tyjd" name="Yes" sourceRef="Gateway_0zjiwgo" targetRef="Activity_15ylpe3" />
-      <bpmn:sequenceFlow id="Flow_0nbrevs" name="No" sourceRef="Gateway_0zjiwgo" targetRef="Event_0clwp5h" />
-      <bpmn:sequenceFlow id="Flow_1vzwo9x" name="Yes" sourceRef="Gateway_19yuh9c" targetRef="Activity_15ylpe3" />
+      <bpmn:sequenceFlow id="Flow_1g2tyjd" name="Yes" sourceRef="Gateway_0zjiwgo" targetRef="Activity_15ylpe3">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${readManuscript==true}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_0nbrevs" name="No" sourceRef="Gateway_0zjiwgo" targetRef="Event_0clwp5h">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${readManuscript==false}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_1vzwo9x" name="Yes" sourceRef="Gateway_19yuh9c" targetRef="Activity_15ylpe3">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${moreWork==true}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_0opx804" sourceRef="Activity_15ylpe3" targetRef="Activity_1j2yl2k" />
       <bpmn:sequenceFlow id="Flow_0nzmuqq" name="Failed to provide manuscript within given time frame" sourceRef="Event_08qu8a2" targetRef="Event_01vh2ss" />
       <bpmn:sequenceFlow id="Flow_1860n6d" sourceRef="Activity_128eyvj" targetRef="Gateway_0nkj26r" />
@@ -432,7 +438,9 @@ Select one, and assing to task.</bpmn:documentation>
       <bpmn:sequenceFlow id="Flow_1izu1da" sourceRef="Activity_0u64ie0" targetRef="Activity_0674hz6" />
       <bpmn:sequenceFlow id="Flow_09vtx9h" sourceRef="Activity_0674hz6" targetRef="Activity_1x13987" />
       <bpmn:sequenceFlow id="Flow_172z03e" sourceRef="Activity_1x13987" targetRef="Gateway_19yuh9c" />
-      <bpmn:sequenceFlow id="Flow_1lhky8v" name="No" sourceRef="Gateway_19yuh9c" targetRef="Activity_0hizowk" />
+      <bpmn:sequenceFlow id="Flow_1lhky8v" name="No" sourceRef="Gateway_19yuh9c" targetRef="Activity_0hizowk">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${moreWork==false}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1jceqtg" sourceRef="Event_01kes4v" targetRef="Event_0maqmus" />
       <bpmn:sequenceFlow id="Flow_0o49mzz" sourceRef="Activity_0hizowk" targetRef="Activity_1jeibw8" />
       <bpmn:sequenceFlow id="Flow_1hayhr6" sourceRef="Activity_1jeibw8" targetRef="Activity_17yocao" />
@@ -610,8 +618,8 @@ Select one, and assing to task.</bpmn:documentation>
         <di:waypoint x="2325" y="510" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0fbu70c_di" bpmnElement="Flow_0fbu70c">
-        <di:waypoint x="2075" y="448" />
-        <di:waypoint x="2075" y="510" />
+        <di:waypoint x="2100" y="448" />
+        <di:waypoint x="2100" y="510" />
         <di:waypoint x="2165" y="510" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0nc8x9q_di" bpmnElement="Flow_0nc8x9q">
@@ -752,9 +760,6 @@ Select one, and assing to task.</bpmn:documentation>
           <dc:Bounds x="872" y="535" width="85" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0h7efab_di" bpmnElement="Activity_1j2yl2k">
-        <dc:Bounds x="1324" y="350" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0f7kjgu_di" bpmnElement="Activity_0jadwzh" isExpanded="true">
         <dc:Bounds x="960" y="1060" width="350" height="200" />
       </bpmndi:BPMNShape>
@@ -831,13 +836,13 @@ Select one, and assing to task.</bpmn:documentation>
       <bpmndi:BPMNShape id="Activity_1ys6lde_di" bpmnElement="Activity_1ys6lde" isExpanded="true">
         <dc:Bounds x="960" y="820" width="350" height="200" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_12zrwlj_di" bpmnElement="Flow_12zrwlj">
-        <di:waypoint x="1036" y="920" />
-        <di:waypoint x="1122" y="920" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_07sd0p8_di" bpmnElement="Flow_07sd0p8">
         <di:waypoint x="1158" y="920" />
         <di:waypoint x="1252" y="920" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12zrwlj_di" bpmnElement="Flow_12zrwlj">
+        <di:waypoint x="1036" y="920" />
+        <di:waypoint x="1122" y="920" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_1ro7rkn_di" bpmnElement="Event_1ro7rkn">
         <dc:Bounds x="1000" y="902" width="36" height="36" />
@@ -1010,6 +1015,9 @@ Select one, and assing to task.</bpmn:documentation>
           <dc:Bounds x="742" y="175" width="85" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0h7efab_di" bpmnElement="Activity_1j2yl2k">
+        <dc:Bounds x="1324" y="350" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1kov7ah_di" bpmnElement="Event_1xe1z5u">
         <dc:Bounds x="676" y="212" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -1021,9 +1029,6 @@ Select one, and assing to task.</bpmn:documentation>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0kok8gm_di" bpmnElement="Event_1pghnpo">
         <dc:Bounds x="1737" y="412" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_167ccyq_di" bpmnElement="Event_1gsbnb5">
-        <dc:Bounds x="2057" y="412" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1smo3x1_di" bpmnElement="Event_04dqukw">
         <dc:Bounds x="2197" y="532" width="36" height="36" />
@@ -1045,6 +1050,9 @@ Select one, and assing to task.</bpmn:documentation>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1m4bdj3_di" bpmnElement="Event_00w913k">
         <dc:Bounds x="2636" y="412" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_167ccyq_di" bpmnElement="Event_1gsbnb5">
+        <dc:Bounds x="2082" y="412" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1669ywm_di" bpmnElement="Event_1669ywm">
         <dc:Bounds x="3032" y="1392" width="36" height="36" />
