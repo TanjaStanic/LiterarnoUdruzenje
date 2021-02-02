@@ -104,11 +104,7 @@ public class SendEmailService implements JavaDelegate{
 	      
 			email.setAddress(mail);
 			System.out.println("mail glasi: " + email.getMessage());
-			
-			runtimeService
-            .createMessageCorrelation("StartPayment")
-            .processInstanceId(execution.getProcessInstanceId())
-            .correlateWithResult();
+
 			//Requests.sendEmail(email);
 
 	    }

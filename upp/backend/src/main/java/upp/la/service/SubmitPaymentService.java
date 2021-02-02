@@ -41,9 +41,7 @@ public class SubmitPaymentService implements JavaDelegate {
 			execution.setVariable("payment_success", false);
 
 		}
-		runtimeService
-		  .createSignalEvent("PaymentSignal") 
-		  .send();
+
 }
 	
 	public boolean checkCardForm(List<FormFieldDto> formFields) {
