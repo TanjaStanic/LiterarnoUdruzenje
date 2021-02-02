@@ -113,4 +113,16 @@ INSERT INTO upp_db.card(card_holder, card_number, cvv, expiration_date, user_id)
     VALUES('Pera Peric', '$2y$12$Q3Ipbn/H4n5mQqV6FUu7.u3iMXzfkLKBRttMofKGfIxYKkgAv2DMC', '$2y$12$Cua1FeCtFfD9Kuz514L/0.U7ulw374aENjfM.yyQoYAjaD5/hATEK', '01/23', 3);
 
 -- card num: 1234-1234-1234-1234 cvv: 333
-   
+
+INSERT INTO upp_db.plagiarism_complaint(plagiarised_book_id, writers_book_id)
+    VALUES(1, 2);
+
+INSERT INTO upp_db.plagiarism_complaint_response(plagiarism_complaint_id, comment, user_id, plagiarised_response)
+    VALUES(1, 'Ovo je comment.', 1, true);
+
+INSERT INTO upp_db.plagiarism_complaint_response(plagiarism_complaint_id, comment, user_id, plagiarised_response)
+    VALUES(1, 'Ovo je comment 2.', 2, false);
+
+INSERT INTO upp_db.plagiarism_complaint_response(plagiarism_complaint_id, comment, user_id, plagiarised_response)
+    VALUES(1, 'Ovo je comment 3.', 3, false);
+

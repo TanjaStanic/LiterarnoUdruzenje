@@ -13,11 +13,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import upp.la.config.security.JwtTokenUtils;
 import upp.la.error.ErrorMessages;
-import upp.la.model.exceptions.AuthorizationError;
-import upp.la.model.exceptions.EntityNotFound;
-import upp.la.model.auth.JwtAuthenticationRequest;
 import upp.la.model.Role;
 import upp.la.model.User;
+import upp.la.model.auth.JwtAuthenticationRequest;
+import upp.la.model.exceptions.AuthorizationError;
+import upp.la.model.exceptions.EntityNotFound;
 import upp.la.repository.UserRepository;
 import upp.la.service.internal.RegistrationServiceInt;
 
