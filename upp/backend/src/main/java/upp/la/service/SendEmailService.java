@@ -1,8 +1,12 @@
 package upp.la.service;
 
+import org.camunda.bpm.engine.RuntimeService;
+
 import org.camunda.bpm.engine.delegate.BpmnError;
+
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.model.bpmn.instance.MessageEventDefinition;
 import org.camunda.bpm.model.bpmn.instance.ThrowEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +35,9 @@ public class SendEmailService implements JavaDelegate{
 	
 	@Autowired 
 	ConfirmationTokenRepository confirmationTokenRepository;
+	
+	@Autowired 
+	private RuntimeService runtimeService;
 	
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
@@ -92,7 +99,7 @@ public class SendEmailService implements JavaDelegate{
 		      for (User l : lectors) {
 		    	  System.out.println("saljem mail na: " + l.getEmail());
 		    	  email.setAddress(l.getEmail());
-		    	  Requests.sendEmail(email);
+		    	 // Requests.sendEmail(email);
 		      }
 		 }
 	    // ACCEPTED - PAY  
@@ -101,7 +108,8 @@ public class SendEmailService implements JavaDelegate{
 	      
 			email.setAddress(mail);
 			System.out.println("mail glasi: " + email.getMessage());
-			Requests.sendEmail(email);
+
+			//Requests.sendEmail(email);
 
 	    }
 	    // NEED MORE MATERIAL
@@ -110,7 +118,7 @@ public class SendEmailService implements JavaDelegate{
 	      
 			email.setAddress(mail);
 			System.out.println("mail glasi: " + email.getMessage());
-			Requests.sendEmail(email);
+			//Requests.sendEmail(email);
 
 	    }
 	    //FAILED TRANSACTION
@@ -119,7 +127,7 @@ public class SendEmailService implements JavaDelegate{
 
 	        email.setAddress(mail);
 	        System.out.println("mail glasi: " + email.getMessage());
-	        Requests.sendEmail(email);
+	        //Requests.sendEmail(email);
 	    }
 	    //FAILED PAYMENT
 	    else if (receivingMessageName.equals("RegistrationApplicationPaymentFailedWriter")) {
@@ -127,7 +135,7 @@ public class SendEmailService implements JavaDelegate{
 
 	        email.setAddress(mail);
 	        System.out.println("mail glasi: " + email.getMessage());
-	        Requests.sendEmail(email);
+	       // Requests.sendEmail(email);
 	    }
 		//PUBLISHING DECLINED BEFORE MANUSCRIPT
 		else if (receivingMessageName.equals("BookPublishingNotifyWriterDeclined")) {

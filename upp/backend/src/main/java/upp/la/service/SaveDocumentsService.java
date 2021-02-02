@@ -36,7 +36,7 @@ public class SaveDocumentsService implements JavaDelegate {
     public void execute(DelegateExecution delegateExecution) throws Exception {
         List<FormFieldDto> files =
                 (List<FormFieldDto>) delegateExecution.getVariable("files");
-
+        int num = 0;
         User user = userRepository.findUserByUsername(files.get(1).getFieldValue());
         String[] parts = files.get(0).getFieldValue().split(",");
         RegistrationApplication ra = new RegistrationApplication();
@@ -55,7 +55,8 @@ public class SaveDocumentsService implements JavaDelegate {
             d = documentRepository.findDocumentByFileUrl("http://localhost:8080/files/download/" + s);
             d.setRegistrationApplication(ra);
             documentRepository.save(d);
+            num++;
         }
-
+        delegateExecution.setVariable("docNumber", num);
     }
 }
