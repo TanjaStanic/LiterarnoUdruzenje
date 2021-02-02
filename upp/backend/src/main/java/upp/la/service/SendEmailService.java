@@ -1,5 +1,6 @@
 package upp.la.service;
 
+import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.RuntimeService;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
@@ -21,6 +22,7 @@ import upp.la.model.User;
 import upp.la.repository.ConfirmationTokenRepository;
 import upp.la.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -48,8 +50,7 @@ public class SendEmailService implements JavaDelegate{
 	        .getEventDefinitions().iterator().next();
 	    String receivingMessageName = messageEventDefinition.getMessage().getName();
 	    System.out.println("message name je: " + receivingMessageName);
-	    
-	    
+
 	    String mail = "";
 	    try {
 	    	List<FormFieldDto> files =(List<FormFieldDto>) execution.getVariable("files");
@@ -58,10 +59,10 @@ public class SendEmailService implements JavaDelegate{
 	    }
         catch(Exception e) {
         	System.out.println("No user. Tek se korisnik registruje");
-			throw new BpmnError("EmailError");
+			//throw new BpmnError("EmailError");
         }
-		
-	    
+	   
+
 	    //send email to confirm registration
 	    if (receivingMessageName.equals("send_verification_email")) {
 	    	String email = "";
@@ -171,8 +172,34 @@ public class SendEmailService implements JavaDelegate{
 			System.out.println("mail glasi: " + email.getMessage());
 			Requests.sendEmail(email);
 		}
-	    else {
+
+	    //NOTIFY CHOSEN EDITORS
+	    String messageParam="";		
+		try {
+			messageParam = (String) runtimeService.getVariableLocal(execution.getId(), "messageId");
+		}
+		catch (ProcessEngineException  e) {
+			System.out.println("Username failed");
+		}
+	    
+		if (messageParam.equals("NotifyChosenEditors")) {
+			EmailTemplate email = EmailTemplate.PlagiarismComplaintNotifyEditors(14);
+			
+			ArrayList<org.camunda.bpm.engine.identity.User> editors = 
+					(ArrayList<org.camunda.bpm.engine.identity.User>)execution.getVariable("chosenEditors");
+			
+			for (org.camunda.bpm.engine.identity.User e : editors) {
+				email.setAddress(e.getEmail());
+				System.out.println("mail glasi: " + email.getMessage());
+				Requests.sendEmail(email);
+				
+			}
+			
+		}else {
 			throw new BpmnError("EmailError");
 		}
+	    
+	    
+
 	}
 }
