@@ -1,5 +1,6 @@
 package com.example.bankacquirer.serviceImpl;
 
+import com.example.bankacquirer.domain.*;
 import com.example.bankacquirer.dto.CardDataDTO;
 import com.example.bankacquirer.dto.CompletedPaymentDTO;
 import com.example.bankacquirer.dto.PaymentConcentratorRequestDTO;
@@ -28,13 +29,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.bankacquirer.domain.Account;
-import com.example.bankacquirer.domain.Card;
-import com.example.bankacquirer.domain.Client;
-import com.example.bankacquirer.domain.PaymentConcentratorRequest;
-import com.example.bankacquirer.domain.Transaction;
-import com.example.bankacquirer.domain.TransactionStatus;
-
 
 @Service
 @Log4j2
@@ -47,14 +41,14 @@ public class PaymentServiceImpl implements PaymentService {
     private TransactionRepository transactionRepository;
     private CurrencyRepository currencyRepository;
     private RestTemplate restTemplate;
-    
+
     @Value("${bankId}")
     private String myBankId;
 
     @Autowired
     public PaymentServiceImpl(PcRequestRepository pcRequestRepository, CardRepository cardRepository,
                               ClientRepository clientRepository, AccountRepository accountRepository,
-                              TransactionRepository transactionRepository,CurrencyRepository currencyRepository, RestTemplate restTemplate) {
+                              TransactionRepository transactionRepository, CurrencyRepository currencyRepository, RestTemplate restTemplate) {
         this.pcRequestRepository = pcRequestRepository;
         this.cardRepository = cardRepository;
         this.clientRepository = clientRepository;
@@ -81,20 +75,20 @@ public class PaymentServiceImpl implements PaymentService {
             return false;
         }
 
-       // Client merchant = clientRepository.findOneByMerchantID(pcRequestDTO.getMerchantId());
+        // Client merchant = clientRepository.findOneByMerchantID(pcRequestDTO.getMerchantId());
         Client merchant = null;
         List<Client> allClients = clientRepository.findAll();
         for (Client c : allClients) {
-        	if (org.springframework.security.crypto.bcrypt.BCrypt.checkpw(pcRequestDTO.getMerchantId(), c.getMerchantID())) {
-        		merchant = c;
-        	}
+            if (org.springframework.security.crypto.bcrypt.BCrypt.checkpw(pcRequestDTO.getMerchantId(), c.getMerchantID())) {
+                merchant = c;
+            }
         }
         if (merchant == null || merchant.getAccount() == null) {
             log.info("ERROR | Payment Concentrator Requests | Merchant acc i doesnt exists in this bank or doesn't have account in this bank");
             System.out.println("Merchant acc i doesnt exists in this bank or doesn't have account in this bank!");
             return false;
         }
-    	if (!(org.springframework.security.crypto.bcrypt.BCrypt.checkpw(pcRequestDTO.getMerchantPassword(), merchant.getMerchantPassword()))) {
+        if (!(org.springframework.security.crypto.bcrypt.BCrypt.checkpw(pcRequestDTO.getMerchantPassword(), merchant.getMerchantPassword()))) {
             log.info("ERROR | Payment Concentrator Requests | Merchant password is not ok!");
             System.out.println("Merchant password is not ok!");
             return false;
@@ -126,9 +120,10 @@ public class PaymentServiceImpl implements PaymentService {
 
         //CHECK IF ALL THE ELEMENTS ARE OK
 
-        PaymentConcentratorRequest pcRequest = pcRequestRepository.getOne(pcRequestId);
+        PaymentConcentratorRequest pcRequest = pcRequestRepository.findById(pcRequestId).get();
         Transaction transaction = new Transaction();
         long generatedId = (long) Math.floor(Math.random() * 9_000_000_000L) + 1_000_000_000L;
+        Currency currency = currencyRepository.findOneByCode(pcRequest.getCurrencyCode());
 
         transaction.setId(generatedId);
         transaction.setPaymentID(pcRequestId.toString());
@@ -138,7 +133,8 @@ public class PaymentServiceImpl implements PaymentService {
         transaction.setCurrency(currencyRepository.findOneByCode(pcRequest.getCurrencyCode()));
         transaction.setAcquirerOrderId(transaction.getId());
         transaction.setAcquirerTimestamp(new Date());
-        
+        transaction.setCurrency(currency);
+
         transactionRepository.save(transaction);
 
         //check if bank acquirer and bank issuer are the same
@@ -166,7 +162,7 @@ public class PaymentServiceImpl implements PaymentService {
                 log.error("ERROR | Transaction canceled | There is no such card in the bank.");
                 transaction.setStatus(TransactionStatus.ERROR);
                 transactionRepository.save(transaction);
-                sendResponse(pcRequest, TransactionStatus.ERROR,transaction.getId());
+                sendResponse(pcRequest, TransactionStatus.ERROR, transaction.getId());
                 return pcRequest.getErrorUrl();
             }
 
@@ -184,21 +180,21 @@ public class PaymentServiceImpl implements PaymentService {
                     System.out.println("Other data elements on card are not the same.");
                     transaction.setStatus(TransactionStatus.ERROR);
                     transactionRepository.save(transaction);
-                    sendResponse(pcRequest, TransactionStatus.ERROR,transaction.getId());
+                    sendResponse(pcRequest, TransactionStatus.ERROR, transaction.getId());
                     log.error("ERROR | Transaction canceled | Card data doesn't match");
                     return pcRequest.getErrorUrl();
                 }
             }
 
             transaction.setClient(client);
-            
+
             // check avalailable funds
             if (pcRequest.getAmount() > account.getAvailableFunds()) {
 
                 System.out.println("No available funds!");
                 transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
                 transactionRepository.save(transaction);
-                sendResponse(pcRequest, TransactionStatus.UNSUCCESSFUL,transaction.getId());
+                sendResponse(pcRequest, TransactionStatus.UNSUCCESSFUL, transaction.getId());
                 log.info("CANCELED | Transaction canceled | No available funds: ");
                 return pcRequest.getFailedUrl();
             }
@@ -206,33 +202,32 @@ public class PaymentServiceImpl implements PaymentService {
             //check data about merchant
             Client merchant = new Client();
             List<Client> allClients = clientRepository.findAll();
-            boolean clientFound  = false;
+            boolean clientFound = false;
             for (Client c : allClients) {
-            	if (org.springframework.security.crypto.bcrypt.BCrypt.checkpw(pcRequest.getMerchantId(), c.getMerchantID())) {
-            		System.out.println("Bank has merchent : " + c.getMerchantID());
-            		merchant = c;
-            		clientFound = true;
-            	}
+                if (org.springframework.security.crypto.bcrypt.BCrypt.checkpw(pcRequest.getMerchantId(), c.getMerchantID())) {
+                    System.out.println("Bank has merchent : " + c.getMerchantID());
+                    merchant = c;
+                    clientFound = true;
+                }
             }
             //merchant doesn't exists
             if (!clientFound) {
-            	System.out.println("Merchant doesnt exists in db!");
+                System.out.println("Merchant doesnt exists in db!");
                 transaction.setStatus(TransactionStatus.ERROR);
                 transactionRepository.save(transaction);
-                sendResponse(pcRequest, TransactionStatus.ERROR,transaction.getId());
+                sendResponse(pcRequest, TransactionStatus.ERROR, transaction.getId());
                 log.error("ERROR | Transaction error | Merchant doesn't exists in db");
                 return pcRequest.getErrorUrl();
-            }
-            else {
-            	if (!(org.springframework.security.crypto.bcrypt.BCrypt.checkpw(pcRequest.getMerchantPassword(), merchant.getMerchantPassword()))) {
-            		System.out.println("Merchant password doesn't match!");
+            } else {
+                if (!(org.springframework.security.crypto.bcrypt.BCrypt.checkpw(pcRequest.getMerchantPassword(), merchant.getMerchantPassword()))) {
+                    System.out.println("Merchant password doesn't match!");
                     transaction.setStatus(TransactionStatus.ERROR);
                     transactionRepository.save(transaction);
-                    sendResponse(pcRequest, TransactionStatus.ERROR,transaction.getId());
+                    sendResponse(pcRequest, TransactionStatus.ERROR, transaction.getId());
                     log.error("ERROR | Transaction error | Merchant password doesn't match!");
                     return pcRequest.getErrorUrl();
-            	}
-            	
+                }
+
             }
 
             System.out.println("all good");
@@ -287,7 +282,7 @@ public class PaymentServiceImpl implements PaymentService {
             pccRequest.setAcquirerOrderId(transaction.getId());
             pccRequest.setAcquirerTimestamp(new Date());
             pccRequest.setCurrencyCode(pcRequest.getCurrencyCode());
-                       
+
             PccResponseDTO response = new PccResponseDTO();
 
             try {
@@ -296,60 +291,60 @@ public class PaymentServiceImpl implements PaymentService {
                 System.out.println("Test pcc aut: " + response.getIsAutorized());
             } catch (Exception e) {
                 System.out.println("Could not contact PCC");
-                
+
             }
-        	if (response.getIsAuthentificated()==null) {
-        		System.out.println("Not authentificated!");
+            if (response.getIsAuthentificated() == null) {
+                System.out.println("Not authentificated!");
                 transaction.setStatus(TransactionStatus.ERROR);
                 transactionRepository.save(transaction);
-                sendResponse(pcRequest, TransactionStatus.ERROR,transaction.getId());
+                sendResponse(pcRequest, TransactionStatus.ERROR, transaction.getId());
                 log.error("ERROR | Transaction error | Merchant doesn't match");
                 return pcRequest.getErrorUrl();
-        	}
-        	
+            }
+
             //NOT AUTHENTIFICATED
             if (!response.getIsAuthentificated()) {
-            	System.out.println("Not authentificated!");
+                System.out.println("Not authentificated!");
                 transaction.setStatus(TransactionStatus.ERROR);
                 transactionRepository.save(transaction);
-                sendResponse(pcRequest, TransactionStatus.ERROR,transaction.getId());
+                sendResponse(pcRequest, TransactionStatus.ERROR, transaction.getId());
                 log.error("ERROR | Transaction error | Merchant doesn't match");
                 return pcRequest.getErrorUrl();
-            	
+
             }
-            
+
             transaction.setAcquirerOrderId(response.getAcquirerOrederId());
             transaction.setAcquirerTimestamp(response.getAcquirerTimestamp());
             //NOT AUTORIZED - NOT AVAILABLE FUNDS
-            
+
             if (response.getIsAuthentificated() && !response.getIsAutorized()) {
-            	 System.out.println("No available funds!");
-                 transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
-                 transactionRepository.save(transaction);
-                 sendResponse(pcRequest, TransactionStatus.UNSUCCESSFUL,transaction.getId());
-                 log.info("CANCELED | Transaction canceled | No available funds: ");
-                 return pcRequest.getFailedUrl();
+                System.out.println("No available funds!");
+                transaction.setStatus(TransactionStatus.UNSUCCESSFUL);
+                transactionRepository.save(transaction);
+                sendResponse(pcRequest, TransactionStatus.UNSUCCESSFUL, transaction.getId());
+                log.info("CANCELED | Transaction canceled | No available funds: ");
+                return pcRequest.getFailedUrl();
             }
-            
+
             //payment successful
             //Client seller = clientRepository.findOneByMerchantID(pcRequest.getMerchantId());
-        	Client seller = new Client();
+            Client seller = new Client();
             List<Client> allClients = clientRepository.findAll();
             for (Client c : allClients) {
-            	if (org.springframework.security.crypto.bcrypt.BCrypt.checkpw(pcRequest.getMerchantId(), c.getMerchantID())) {
-            		seller = c;
-            	}
+                if (org.springframework.security.crypto.bcrypt.BCrypt.checkpw(pcRequest.getMerchantId(), c.getMerchantID())) {
+                    seller = c;
+                }
             }
-        	Account merchantAccount = accountRepository.findOneByOwner(seller);
+            Account merchantAccount = accountRepository.findOneByOwner(seller);
 
             if (response.getIsAuthentificated() && response.getIsAutorized()) {
-            	
+
                 merchantAccount.setAvailableFunds(merchantAccount.getAvailableFunds() + pcRequest.getAmount());
                 transaction.setStatus(TransactionStatus.SUCCESSFUL);
-               
+
                 transactionRepository.save(transaction);
                 clientRepository.save(seller);
-                
+
                 CompletedPaymentDTO cpDTO = new CompletedPaymentDTO();
                 cpDTO.setTransactionStatus(TransactionStatus.SUCCESSFUL);
                 cpDTO.setMerchantOrderID(pcRequest.getMerchantOrderId());
@@ -369,6 +364,19 @@ public class PaymentServiceImpl implements PaymentService {
             }
             return pcRequest.getErrorUrl();
         }
+    }
+
+    @Override
+    public PaymentConcentratorRequest findById(long id) {
+        if (pcRequestRepository.findById(id).isPresent()) {
+            return pcRequestRepository.findById(id).get();
+        }
+        return null;
+    }
+
+    @Override
+    public Transaction findTransactionByMerchantOrderId(long merchantOrderId) {
+        return transactionRepository.findByMerchantOrderId(merchantOrderId);
     }
 
     public void sendResponse(PaymentConcentratorRequest pcRequest, TransactionStatus transactionStatus, Long transactionID) {

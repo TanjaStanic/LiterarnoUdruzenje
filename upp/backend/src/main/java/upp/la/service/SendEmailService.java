@@ -1,6 +1,9 @@
 package upp.la.service;
 
 import org.camunda.bpm.engine.RuntimeService;
+
+import org.camunda.bpm.engine.delegate.BpmnError;
+
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
@@ -55,6 +58,7 @@ public class SendEmailService implements JavaDelegate{
 	    }
         catch(Exception e) {
         	System.out.println("No user. Tek se korisnik registruje");
+			throw new BpmnError("EmailError");
         }
 		
 	    
@@ -133,9 +137,42 @@ public class SendEmailService implements JavaDelegate{
 	        System.out.println("mail glasi: " + email.getMessage());
 	       // Requests.sendEmail(email);
 	    }
-	    
+		//PUBLISHING DECLINED BEFORE MANUSCRIPT
+		else if (receivingMessageName.equals("BookPublishingNotifyWriterDeclined")) {
+			String reason = (String) execution.getVariable("reason");
+
+			EmailTemplate email = EmailTemplate.PublishingDeclinedBeforeManuscript(reason);
+
+			email.setAddress(mail);
+			System.out.println("mail glasi: " + email.getMessage());
+			Requests.sendEmail(email);
+		}
+		//PUBLISHING NOTIFY WRITER EXPIRED
+		else if (receivingMessageName.equals("BookPublishingNotifyWriterExpired")) {
+			EmailTemplate email = EmailTemplate.PublishingNotifyWriterExpired();
+
+			email.setAddress(mail);
+			System.out.println("mail glasi: " + email.getMessage());
+			Requests.sendEmail(email);
+		}
+		//PLAGIARISM NOTIFY CHIEF EDITOR
+		else if (receivingMessageName.equals("PlagiarismComplaintNotifyChiefEditor")) {
+			EmailTemplate email = EmailTemplate.PlagiarismComplaintNotifyChiefEditor();
+
+			email.setAddress(mail);
+			System.out.println("mail glasi: " + email.getMessage());
+			Requests.sendEmail(email);
+		}
+		//PLAGIARISM NOTIFY WRITER DECISION
+		else if (receivingMessageName.equals("PlagiarismNotifyWriterDecision")) {
+			EmailTemplate email = EmailTemplate.PlagiarismNotifyWriterDecision("TODO: DECISIONS");
+
+			email.setAddress(mail);
+			System.out.println("mail glasi: " + email.getMessage());
+			Requests.sendEmail(email);
+		}
+	    else {
+			throw new BpmnError("EmailError");
+		}
 	}
-
-	
-
 }

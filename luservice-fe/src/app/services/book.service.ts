@@ -13,4 +13,8 @@ export class BookService {
   getBooks(): Observable<any> {
     return this.httpClient.get(`${environment.baseUrl}auth/books`);
   }
+
+  getBooksUserAuthenticated(): Observable<any> {
+    return this.httpClient.get(`${environment.baseUrl}books`);
+  }
 }

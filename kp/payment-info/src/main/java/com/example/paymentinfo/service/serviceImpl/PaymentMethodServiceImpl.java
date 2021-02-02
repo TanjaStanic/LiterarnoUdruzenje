@@ -8,9 +8,11 @@ import com.example.paymentinfo.service.PaymentMethodService;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -72,4 +74,59 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
     public Collection<PaymentMethod> findAllBySubscriptionSupportedIsTrueAndClientsEmail(String email) {
         return paymentMethodRepository.findAllBySubscriptionSupportedIsTrueAndClientsEmail(email);
     }
+
+	@Override
+	public void deleteOneFromUser(Long userId, Long paymentMethodId) {
+		try {
+			Client client = clientService.findById(userId);
+			PaymentMethod paymentMethod = paymentMethodRepository.findOneById(paymentMethodId);
+			client.removePaymentMethod(paymentMethod);
+			paymentMethod.removeClient(client);
+			
+			client = clientService.save(client);
+			paymentMethod = paymentMethodRepository.save(paymentMethod);
+			
+		} catch (Exception e) {
+			System.out.println("Cant find entities.");
+		}
+		
+	}
+
+	@Override
+	public List<PaymentMethod> findAllNoSupportedByClient(Long id) {
+		List<PaymentMethod> allMethods = new ArrayList<PaymentMethod>();
+		List<PaymentMethod> tempList = new ArrayList<PaymentMethod>();
+		List<PaymentMethod> returnList = new ArrayList<PaymentMethod>();
+
+		try {
+			allMethods = paymentMethodRepository.findAll();
+			tempList = paymentMethodRepository.findAllByClients_id(id);
+		} catch (Exception e) {
+			System.out.println("Cant find entities.");
+		}
+		for (PaymentMethod p : allMethods) {
+			if (!tempList.contains(p)) {
+				returnList.add(p);
+			}
+		}
+		
+		return returnList;
+	}
+
+	@Override
+	public void addPaymetMethodToClient(Long userId, Long paymentMethodId) {
+		try {
+			Client client = clientService.findById(userId);
+			PaymentMethod paymentMethod = paymentMethodRepository.findOneById(paymentMethodId);
+			client.addPaymentMethod(paymentMethod);
+			paymentMethod.addClient(client);
+			
+			client = clientService.save(client);
+			paymentMethod = paymentMethodRepository.save(paymentMethod);
+			
+		} catch (Exception e) {
+			System.out.println("Cant find entities.");
+		}
+		
+	}
 }

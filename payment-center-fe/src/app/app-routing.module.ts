@@ -8,6 +8,7 @@ import { RegistrationComponentComponent } from './components/registration/regist
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
+import { ClientPanelComponent } from './components/client-panel/client-panel.component';
 import { AuthGuardService } from './shared/route-guards/auth-guard.service';
 import { AdminGuardService } from './shared/route-guards/admin-guard.service';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -29,6 +30,7 @@ const routes: Routes = [
   { path: 'change-password', component: ChangePasswordComponent, pathMatch: 'full' },
   { path: 'activate-account/:token', component: ConfirmRegistrationComponent, pathMatch: 'full' },
   { path: 'admin', component: AdminPanelComponent, pathMatch: 'full', canActivate: [AdminGuardService] },
+  { path: 'client', component: ClientPanelComponent, pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent, pathMatch: 'full' },
   { path: 'profile', component: ProfileComponent, pathMatch: 'full', canActivate: [AuthGuardService] }
 

@@ -17,12 +17,8 @@ import javax.validation.constraints.NotNull;
 public class PaymentMethodDto {
 
     private Long id;
-    @NotNull
-    @NotEmpty
     private String name;
     private boolean subscriptionSupported;
-    @NotNull
-    @NotEmpty
     private String applicationName;
 
     public PaymentMethodDto(PaymentMethod paymentMethod){

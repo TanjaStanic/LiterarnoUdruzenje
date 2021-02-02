@@ -10,6 +10,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "users")
 @Getter
@@ -52,6 +54,9 @@ public class User implements Serializable, UserDetails {
 
     @OneToOne
     private UserSubscription subscription;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Book> books = new HashSet<>();
 
     @Override
     public String getUsername() {

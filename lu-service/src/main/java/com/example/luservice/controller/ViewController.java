@@ -1,7 +1,11 @@
 package com.example.luservice.controller;
 
 import com.example.luservice.dto.PaymentResponseDto;
+import com.example.luservice.model.Client;
+import com.example.luservice.model.Currency;
 import com.example.luservice.model.Transaction;
+import com.example.luservice.service.ClientService;
+import com.example.luservice.service.CurrencyService;
 import com.example.luservice.service.TransactionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -20,6 +24,7 @@ public class ViewController {
     @PostMapping("/success")
     public ResponseEntity<String> getSuccessPage(@RequestBody PaymentResponseDto paymentResponse) {
         Transaction transaction = transactionService.findByMerchantOrderId(paymentResponse.getMerchantOrderId());
+
         if (transaction != null) {
             transaction.setStatus(paymentResponse.getStatus());
             transaction.setPaymentID(paymentResponse.getPaymentID());
@@ -33,6 +38,7 @@ public class ViewController {
     @PostMapping("/failed")
     public ResponseEntity<String> getFailedPage(@RequestBody PaymentResponseDto paymentResponse) {
         Transaction transaction = transactionService.findByMerchantOrderId(paymentResponse.getMerchantOrderId());
+
         if (transaction != null) {
             transaction.setStatus(paymentResponse.getStatus());
             transaction.setPaymentID(paymentResponse.getPaymentID());
@@ -46,6 +52,7 @@ public class ViewController {
     public ResponseEntity<String> getErrorPage(@RequestBody PaymentResponseDto paymentResponse) {
 
         Transaction transaction = transactionService.findByMerchantOrderId(paymentResponse.getMerchantOrderId());
+
         if (transaction != null) {
             transaction.setStatus(paymentResponse.getStatus());
             transaction.setPaymentID(paymentResponse.getPaymentID());

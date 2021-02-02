@@ -10,7 +10,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { ChangePasswordComponent } from "./components/change-password/change-password.component";
 import { TokenInterceptor } from "./shared/interceptors/token-interceptor";
-
 import { LoginComponent } from "./components/login/login.component";
 import {
   ErrorStateMatcher,
@@ -33,6 +32,8 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ErrorComponent } from './components/error/error.component';
 import { PaymentMethodDialogComponent } from './components/admin-panel/payment-method-dialog/payment-method-dialog.component';
 import { RegistrationProcessFinishComponent } from './components/registration/registration-process-finish/registration-process-finish.component';
+import { ClientPanelComponent } from './components/client-panel/client-panel.component';
+import { NewPmDialogComponent } from './components/client-panel/new-payment-method-dialog/new-pm-dialog.component';
 
 
 
@@ -54,6 +55,9 @@ import { RegistrationProcessFinishComponent } from './components/registration/re
     ErrorComponent,
     PaymentMethodDialogComponent,
     RegistrationProcessFinishComponent,
+    ClientPanelComponent,
+    NewPmDialogComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -79,7 +83,9 @@ import { RegistrationProcessFinishComponent } from './components/registration/re
   ],
   bootstrap: [AppComponent],
   entryComponents: [
+NewPmDialogComponent,
     PaymentMethodDialogComponent
+    
   ]
 })
 export class AppModule { }

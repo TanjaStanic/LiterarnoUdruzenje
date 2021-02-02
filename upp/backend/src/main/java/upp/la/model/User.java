@@ -37,6 +37,8 @@ public class User {
   
   @Column private Boolean confirmed;
 
+  @Column private int points;
+
   // Genres readers are interested in
   @ManyToMany(
       cascade = {CascadeType.ALL},
@@ -79,5 +81,6 @@ public class User {
   public User() {
     activated = false;
     confirmed = false;
+    this.points = 0;
   }
 }

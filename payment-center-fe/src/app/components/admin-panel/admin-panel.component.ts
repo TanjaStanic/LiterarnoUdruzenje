@@ -97,8 +97,28 @@ export class AdminPanelComponent implements OnInit {
     }
   }
 
-  edit(paymentMethod) {
+  edit(method: PaymentMethod) {
+    const dialogRef = this.dialog.open(PaymentMethodDialogComponent, {
+      //width: '500px',
+      //height: '700px',
+      data: method
+    });
 
+    dialogRef.afterClosed().subscribe(paymentMethod => {
+      console.log(paymentMethod);
+      if (paymentMethod != undefined && paymentMethod != null) {
+        this.paymentMethodService.edit(paymentMethod).subscribe(
+          data => {
+            this.paymentMethods = data;
+            this.refreshPaymentMethodsDataSource(this.paymentMethods);
+          },
+          (err: HttpErrorResponse) => {
+            this.snackbarService.showMessage(err.error);
+          }
+        );
+      }
+
+    });
   }
 
   remove(paymentMethod) {
@@ -120,11 +140,12 @@ export class AdminPanelComponent implements OnInit {
   deactivate(client) { }
 
   openCreateNewPaymentMethodDialog() {
-
+    let newPaymentMethod = new PaymentMethod();
+    newPaymentMethod.subscriptionSupported = false;
     const dialogRef = this.dialog.open(PaymentMethodDialogComponent, {
       //width: '500px',
       //height: '700px',
-      data: new PaymentMethod()
+      data: newPaymentMethod
     });
 
     dialogRef.afterClosed().subscribe(paymentMethod => {

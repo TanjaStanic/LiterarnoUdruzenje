@@ -7,5 +7,7 @@ import com.example.bankacquirer.domain.Transaction;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-	Transaction save(Transaction t);
+    Transaction save(Transaction t);
+
+    Transaction findByMerchantOrderId(long merchantOrderId);
 }

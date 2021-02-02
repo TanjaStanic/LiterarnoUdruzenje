@@ -14,20 +14,20 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 public class PaymentMethod {
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter
-	private Long id;
-	
+    private Long id;
+
     @Column
     private String name;
-    
+
     @Column
     @Setter
     private boolean subscriptionSupported;
 
-    @Column
+    @Column(unique = true)
     private String applicationName;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "paymentMethods")
