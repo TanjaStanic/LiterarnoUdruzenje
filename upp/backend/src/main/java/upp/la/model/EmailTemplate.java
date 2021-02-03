@@ -99,6 +99,15 @@ public class EmailTemplate {
         + "The complaint has been marked as: " + decision + ".";
   }
 
+  public static String PLAGIARISM_COMPLAINT_NOTIFY_EDITORS() {
+	    return "New plagiarism complaint to review";
+  }
+
+  public static String PLAGIARISM_COMPLAINT_NOTIFY_EDITORS_MESSAGE() {
+	    return "There is a new plagiarism complaint ready for a review.";
+  }
+
+  
   private String address;
 
   private String subject;
@@ -175,4 +184,11 @@ public class EmailTemplate {
         EmailTemplate.PLAGIARISM_NOTIFY_WRITER_DECISION(),
         EmailTemplate.PLAGIARISM_NOTIFY_WRITER_DECISION_MESSAGE(decision));
   }
+  
+  public static EmailTemplate PlagiarismComplaintNotifyEditors(Integer deadlineDays) {
+	    return new EmailTemplate(
+	        EmailTemplate.PLAGIARISM_COMPLAINT_NOTIFY_EDITORS(),
+	        EmailTemplate.PLAGIARISM_COMPLAINT_NOTIFY_EDITORS_MESSAGE()
+	            + EmailTemplate.REGISTRATION_APPLICATION_DEADLINE_MESSAGE(deadlineDays));
+	  }
 }
