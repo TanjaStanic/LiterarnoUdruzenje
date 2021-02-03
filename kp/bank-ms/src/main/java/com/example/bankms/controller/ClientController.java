@@ -38,16 +38,25 @@ public class ClientController {
         this.restTemplate = restTemplate;
         this.bankRepository = bankRepository;
     }
-    @GetMapping("/all-banks") 
-    public ResponseEntity<?> getAllBanks(){
-    	List<Bank> banks = new ArrayList<Bank>();
+    @GetMapping("/delete-client/{clientId}")
+    public ResponseEntity<?> deleteClient(@PathVariable String clientId){
     	
+    	Client client = clientService.findById(Long.parseLong(clientId));
     	try {
-    		banks = bankRepository.findAll();
-    	}catch(Exception e) {
-    		System.out.println("Coudn't load banks");
-    	}
-    	return new ResponseEntity<>(banks,HttpStatus.OK);
+            restTemplate.getForEntity("https://localhost:8445/clients/deleteClient/" + client.getEmail(),
+            		ClientInfoDto.class);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            log.error("ERROR | Could not contact payment-acq.");
+            log.error(exception.getMessage());
+            return ResponseEntity.badRequest().body("Could not contact bank acq.");
+        }
+    	String redirectUrl = MessageFormat.format("http://localhost:4200/client", client.getEmail());
+        HttpHeaders headersRedirect = new HttpHeaders();
+        headersRedirect.add("Location", redirectUrl);
+        headersRedirect.add("Access-Control-Allow-Origin", "*");
+        return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
     }
     
     @GetMapping("/register-url/{clientId}")
@@ -105,14 +114,28 @@ public class ClientController {
             clientService.delete(client);
             return ResponseEntity.badRequest().body("Failed to register with acquirer.");
         }
+       
+        ResponseEntity<ClientInfoDto> response2 = null;
 
+        try {
+            response2 = restTemplate.getForEntity("https://localhost:8762/api/pc_info/payment-methods/updateClientsMethods/Banking/" + client.getEmail() ,
+            		ClientInfoDto.class);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            log.error("ERROR | Could not contact payment-info.");
+            log.error(exception.getMessage());
+            return ResponseEntity.badRequest().body("Could not contact payment-info.");
+        }
+        	
         String redirectUrl;
-        if (response.getStatusCode() == HttpStatus.OK) {
+        
+        if (response.getStatusCode() == HttpStatus.OK && response2.getStatusCode() == HttpStatus.OK) {
             ClientCredentials clientCredentials = response.getBody();
             client.setMerchantID(clientCredentials.getMerchantID());
             client.setMerchantPassword(clientCredentials.getMerchantPassword());
             client = clientService.update(client);
-            redirectUrl = MessageFormat.format("https://localhost:8762/api/pc_info/view/select-payment-methods/{0}", client.getPcClientId());
+            redirectUrl = MessageFormat.format("http://localhost:4200/client", client.getPcClientId());
             HttpHeaders headersRedirect = new HttpHeaders();
             headersRedirect.add("Location", redirectUrl);
             headersRedirect.add("Access-Control-Allow-Origin", "*");

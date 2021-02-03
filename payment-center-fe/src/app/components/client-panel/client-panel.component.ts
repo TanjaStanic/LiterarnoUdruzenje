@@ -85,7 +85,11 @@ export class ClientPanelComponent implements OnInit {
 			        this.snackbarService.showMessage(err.error);
 			      }
 			    );
-		}  
+		  if (paymentMethod.name=='Banking'){
+		     var url = 'https://localhost:8762/api/'+paymentMethod.name.toLowerCase()+'/auth/clients/delete-client/'+this.authService.getUserId();
+	          window.location.href = url;
+        }
+	  }  
   }
   
   openNewPaymentMethodDialog() {
@@ -102,24 +106,8 @@ export class ClientPanelComponent implements OnInit {
 	  dialogRef.afterClosed().subscribe(paymentMethod => {
 	      console.log(paymentMethod);
 	      
-	     /* if (paymentMethod != undefined && paymentMethod != null) {
-	        this.paymentMethodService.add(this.authService.getUserId(),paymentMethod.id).subscribe(
-	          data => {
-	            this.paymentMethods.push(paymentMethod)
-	            this.refreshPaymentMethodsDataSource(this.paymentMethods);
-	            this.noPaymentMethods.pop()
-	            this.refreshNoPaymentMethodsDataSource(this.noPaymentMethods);
-	          },
-	          (err: HttpErrorResponse) => {
-	            this.snackbarService.showMessage(err.error);
-	          }
-	        );
-	      }*/
-	     
-	      var urllll = 'https://'+paymentMethod.applicationName+'/auth/clients/register-url/'+this.authService.getUserId();
-	      console.log(urllll);
-	   
-	      //window.location.href = url;
+	      var url = 'https://localhost:8762/api/'+paymentMethod.name.toLowerCase()+'/auth/clients/register/'+this.authService.getUserId();     
+	      window.location.href = url;
 
 	    });
   }
