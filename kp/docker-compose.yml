@@ -61,8 +61,8 @@ services:
     depends_on:
       - service-discovery
       - config-server
-    links:
-      - bank-acquirer
+#    links:
+#      - bank-acquirer
     external_links:
       - mysql
 
@@ -104,7 +104,7 @@ services:
     image: 127.0.0.1:5000/payment_info
     container_name: payment_info
     environment:
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: https://service-discovery:8761/eureka
     restart: on-failure
     build:
       context: ./payment-info
@@ -119,34 +119,34 @@ services:
     external_links:
       - mysql
 
-  bank-acquirer:
-    image:  127.0.0.1:5000/bank-acquirer
-    container_name:  bank-acquirer
-    restart: on-failure
-    environment:
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
-    build:
-      context: ./bank-acquirer
-      dockerfile: Dockerfile
-    ports:
-      - "8445:8445"
-    depends_on:
-      - service-discovery
-    external_links:
-      - mysql
-
-  bank-pcc:
-    image: 127.0.0.1:5000/bank-pcc
-    container_name: bank-pcc
-    restart: on-failure
-    environment:
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
-    build:
-       context: ./bank-pcc
-       dockerfile: Dockerfile
-    ports:
-    - "8446:8446"
-    depends_on:
-    - service-discovery
-    external_links:
-    - mysql
+#  bank-acquirer:
+#    image:  127.0.0.1:5000/bank-acquirer
+#    container_name:  bank-acquirer
+#    restart: on-failure
+#    environment:
+#      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+#    build:
+#      context: ./bank-acquirer
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8445:8445"
+#    depends_on:
+#      - service-discovery
+#    external_links:
+#      - mysql
+#
+#  bank-pcc:
+#    image: 127.0.0.1:5000/bank-pcc
+#    container_name: bank-pcc
+#    restart: on-failure
+#    environment:
+#      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+#    build:
+#       context: ./bank-pcc
+#       dockerfile: Dockerfile
+#    ports:
+#    - "8446:8446"
+#    depends_on:
+#    - service-discovery
+#    external_links:
+#    - mysql
