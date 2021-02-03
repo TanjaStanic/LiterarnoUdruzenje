@@ -94,26 +94,32 @@ export class ClientPanelComponent implements OnInit {
 		    data: { dataSourceNoPaymentMethods : this.dataSourceNoPaymentMethods },
 
 	      position: {
-	        top: '0px',
+	        top: '20px',
 	        left: '50px'
 	      }
 	    });
 	  
 	  dialogRef.afterClosed().subscribe(paymentMethod => {
 	      console.log(paymentMethod);
-	      if (paymentMethod != undefined && paymentMethod != null) {
+	      
+	     /* if (paymentMethod != undefined && paymentMethod != null) {
 	        this.paymentMethodService.add(this.authService.getUserId(),paymentMethod.id).subscribe(
 	          data => {
 	            this.paymentMethods.push(paymentMethod)
 	            this.refreshPaymentMethodsDataSource(this.paymentMethods);
-	            this.noPaymentMethods.pop(paymentMethod)
+	            this.noPaymentMethods.pop()
 	            this.refreshNoPaymentMethodsDataSource(this.noPaymentMethods);
 	          },
 	          (err: HttpErrorResponse) => {
 	            this.snackbarService.showMessage(err.error);
 	          }
 	        );
-	      }
+	      }*/
+	     
+	      var urllll = 'https://'+paymentMethod.applicationName+'/auth/clients/register-url/'+this.authService.getUserId();
+	      console.log(urllll);
+	   
+	      //window.location.href = url;
 
 	    });
   }

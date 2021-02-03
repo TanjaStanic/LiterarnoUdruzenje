@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -37,7 +38,18 @@ public class ClientController {
         this.restTemplate = restTemplate;
         this.bankRepository = bankRepository;
     }
-
+    @GetMapping("/all-banks") 
+    public ResponseEntity<?> getAllBanks(){
+    	List<Bank> banks = new ArrayList<Bank>();
+    	
+    	try {
+    		banks = bankRepository.findAll();
+    	}catch(Exception e) {
+    		System.out.println("Coudn't load banks");
+    	}
+    	return new ResponseEntity<>(banks,HttpStatus.OK);
+    }
+    
     @GetMapping("/register-url/{clientId}")
     public @ResponseBody
     ResponseEntity<String> getRegistrationUrl(@PathVariable String clientId) {
