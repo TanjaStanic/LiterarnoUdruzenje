@@ -1,0 +1,177 @@
+version: '3.9'
+
+services:
+
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3308:3306"
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  service-discovery:
+    image: 127.0.0.1:5000/service-discovery
+    ports:
+      - "8761:8761"
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  config-server:
+    image: 127.0.0.1:5000/config-server
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+    ports:
+      - "8888:8888"
+    depends_on:
+      - service-discovery
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  service-gateway:
+    image: 127.0.0.1:5000/service-gateway
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+    ports:
+      - "8762:8762"
+    depends_on:
+      - config-server
+      - service-discovery
+    external_links:
+      - mysql
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  banking:
+    image: 127.0.0.1:5000/banking
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+    ports:
+      - "8441:8441"
+    depends_on:
+      - service-discovery
+      - config-server
+    links:
+      - bank-acquirer
+    external_links:
+      - mysql
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+      restart_policy:
+        condition: on-failure
+
+  bitcoin:
+    image: 127.0.0.1:5000/bitcoin
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+    ports:
+      - "8442:8442"
+    depends_on:
+      - service-discovery
+      - config-server
+    external_links:
+      - mysql
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+      restart_policy:
+        condition: on-failure
+
+  paypal:
+    image: 127.0.0.1:5000/paypal
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+    ports:
+      - "8443:8443"
+    depends_on:
+      - service-discovery
+      - config-server
+    external_links:
+      - mysql
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+      restart_policy:
+        condition: on-failure
+
+  payment-info:
+    image: 127.0.0.1:5000/payment_info
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+    ports:
+      - "8444:8444"
+    depends_on:
+      - service-discovery
+      - config-server
+    links:
+      - banking
+    external_links:
+      - mysql
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+      restart_policy:
+        condition: on-failure
+
+  bank-acquirer:
+    image:  127.0.0.1:5000/bank-acquirer
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+    restart: on-failure
+    ports:
+      - "8445:8445"
+    depends_on:
+      - service-discovery
+    external_links:
+      - mysql
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  bank-pcc:
+    image: 127.0.0.1:5000/bank-pcc
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+    ports:
+      - "8446:8446"
+    depends_on:
+      - service-discovery
+    external_links:
+      - mysql
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
