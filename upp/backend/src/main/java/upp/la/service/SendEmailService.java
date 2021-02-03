@@ -140,7 +140,7 @@ public class SendEmailService implements JavaDelegate{
 	    }
 		//PUBLISHING DECLINED BEFORE MANUSCRIPT
 		else if (receivingMessageName.equals("BookPublishingNotifyWriterDeclined")) {
-			String reason = (String) execution.getVariable("reason");
+			String reason = (String) execution.getVariable("explanation");
 
 			EmailTemplate email = EmailTemplate.PublishingDeclinedBeforeManuscript(reason);
 

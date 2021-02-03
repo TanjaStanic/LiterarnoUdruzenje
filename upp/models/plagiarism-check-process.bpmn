@@ -159,6 +159,7 @@
               </camunda:validation>
             </camunda:formField>
           </camunda:formData>
+          <camunda:executionListener class="upp.la.listener.plaiarism.SaveDecisions" event="end" />
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1py8c7u</bpmn:incoming>
         <bpmn:outgoing>Flow_0cvwe3t</bpmn:outgoing>
@@ -222,8 +223,6 @@
         <bpmn:messageEventDefinition id="MessageEventDefinition_1wxwgi3" messageRef="Message_1yo0ozj" camunda:class="upp.la.service.SendEmailService" />
       </bpmn:intermediateThrowEvent>
       <bpmn:sequenceFlow id="Flow_1qgj3mx" sourceRef="Event_1m7x2lm" targetRef="Activity_06vh65n" />
-      <bpmn:textAnnotation id="TextAnnotation_0ebtav7" />
-      <bpmn:association id="Association_134d4jn" sourceRef="Activity_1bvgg13" targetRef="TextAnnotation_0ebtav7" />
     </bpmn:subProcess>
     <bpmn:boundaryEvent id="Event_01378tv" name="Main process timer" attachedToRef="Activity_139afpl">
       <bpmn:outgoing>Flow_0b8mfbs</bpmn:outgoing>
@@ -267,9 +266,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_139afpl_di" bpmnElement="Activity_139afpl" isExpanded="true">
         <dc:Bounds x="250" y="80" width="2040" height="620" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0ebtav7_di" bpmnElement="TextAnnotation_0ebtav7">
-        <dc:Bounds x="1550" y="270" width="99.98292349726775" height="29.99772313296903" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1qgj3mx_di" bpmnElement="Flow_1qgj3mx">
         <di:waypoint x="738" y="390" />
@@ -412,6 +408,12 @@
           <dc:Bounds x="628" y="165" width="85" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_12cs2lj_di" bpmnElement="Event_0unvmw2">
+        <dc:Bounds x="952" y="252" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="928" y="295" width="86" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_03nqtf5_di" bpmnElement="Event_04mviam">
         <dc:Bounds x="1262" y="252" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -440,12 +442,6 @@
         <dc:Bounds x="1892" y="492" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1868" y="535" width="85" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_12cs2lj_di" bpmnElement="Event_0unvmw2">
-        <dc:Bounds x="952" y="252" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="928" y="295" width="86" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0wg8ru7_di" bpmnElement="Activity_0wg8ru7" isExpanded="true">
@@ -483,10 +479,6 @@
           <dc:Bounds x="675" y="415" width="90" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_134d4jn_di" bpmnElement="Association_134d4jn">
-        <di:waypoint x="1538" y="350" />
-        <di:waypoint x="1586" y="300" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_03l65q1_di" bpmnElement="Event_1ominbz">
         <dc:Bounds x="1802" y="412" width="36" height="36" />
         <bpmndi:BPMNLabel>

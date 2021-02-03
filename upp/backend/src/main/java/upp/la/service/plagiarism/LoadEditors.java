@@ -11,6 +11,7 @@ import upp.la.repository.UserRepository;
 
 import org.camunda.bpm.engine.identity.User;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class LoadEditors implements JavaDelegate{
@@ -42,6 +43,10 @@ public class LoadEditors implements JavaDelegate{
 		execution.setVariable("allEditors", allEditors);
 		execution.setVariable("allEditorsCamunda", allEditorsCamunda);
 		execution.setVariable("chiefEditor", chiefEditor);
+
+		execution.setVariable("decisionsMultiInstancePositive", 0);
+
+		execution.setVariable("decisionsMultiInstanceNegative", 0);
 	}
 	
 

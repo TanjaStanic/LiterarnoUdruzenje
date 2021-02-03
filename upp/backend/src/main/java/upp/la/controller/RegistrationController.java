@@ -41,13 +41,6 @@ public class RegistrationController {
   @Autowired ApplicationEventPublisher eventPublisher;
   @Autowired RegistrationServiceInt registrationServiceInt;
 
-  // ONLY FOR AUTH TEST
-  @GetMapping(value = "/test-auth")
-  @RolesAllowed({"READER", "WRITER"}) // Name of the allowed role
-  public @ResponseBody ResponseEntity<?> testAuth() {
-    return new ResponseEntity<>(HttpStatus.OK);
-  }
-
   @PostMapping(path = "/post", produces = "application/json")
   public @ResponseBody ResponseEntity<?> post(@RequestBody List<FormFieldDto> formFields)
       throws ValidationError {

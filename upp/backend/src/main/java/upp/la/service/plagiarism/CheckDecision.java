@@ -1,15 +1,16 @@
 package upp.la.service.plagiarism;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import upp.la.dto.FormFieldDto;
 import upp.la.error.ErrorMessages;
+import upp.la.model.Book;
 import upp.la.model.exceptions.EntityNotFound;
 import upp.la.model.plagiarism.PlagiarismComplaint;
-import upp.la.model.plagiarism.PlagiarismComplaintResponse;
+import upp.la.repository.BookRepository;
 import upp.la.repository.PlagiarismComplaintRepository;
 import upp.la.repository.PlagiarismComplaintResponseRepository;
 import upp.la.repository.UserRepository;
@@ -27,22 +28,32 @@ public class CheckDecision implements JavaDelegate {
 
   @Autowired PlagiarismComplaintResponseRepository complaintResponseRepository;
 
+  @Autowired BookRepository bookRepository;
+
   @Override
   public void execute(DelegateExecution delegateExecution) throws Exception {
-    //TODO: Get and set true id of complaint
-    Long complaintId = (Long) delegateExecution.getVariable("complaintId");
 
-    Optional<PlagiarismComplaint> complaint = complaintRepository.findById(complaintId);
+    List<FormFieldDto> plagiarismForm = (List<FormFieldDto>) delegateExecution.getVariable("Plagiarism complaint");
 
-    if(!complaint.isPresent()) {
-      throw new EntityNotFound(ErrorMessages.ENTITY_NOT_FOUND());
+    String title = plagiarismForm.get(2).getFieldValue();
+
+    Optional<Book> writersBook = bookRepository.findByTitle(title);
+
+    if(!writersBook.isPresent()) {
+      throw new EntityNotFound("Book does not exist");
     }
 
-    int positiveResponses = complaintResponseRepository.countByPlagiarismComplaintAndPlagiarisedResponseIsTrue(complaint.get());
+    Optional<PlagiarismComplaint> complaint = complaintRepository.findByWritersBook(writersBook.get());
 
-    int totalResponses = complaintResponseRepository.countByPlagiarismComplaint(complaint.get());
+    if(!complaint.isPresent()) {
+      throw new EntityNotFound("Complaint does not exist");
+    }
 
-    if (positiveResponses==0 && totalResponses!=0) {
+    int positiveResponses = (int) delegateExecution.getVariable("decisionsMultiInstancePositive");
+
+    int negativeResponses = (int) delegateExecution.getVariable("decisionsMultiInstanceNegative");
+
+    if (positiveResponses==0 && negativeResponses!=0) {
       System.out.println("NOT PLAGIARISED");
 
       complaint.get().setFinalResponse(false);
@@ -50,7 +61,7 @@ public class CheckDecision implements JavaDelegate {
       complaintRepository.save(complaint.get());
 
       delegateExecution.setVariable("uniform", true);
-    } else if (positiveResponses==totalResponses && totalResponses!=0) {
+    } else if (positiveResponses!=0 && negativeResponses==0) {
       System.out.println("PLAGIARISED");
 
       complaint.get().setFinalResponse(true);
@@ -58,7 +69,7 @@ public class CheckDecision implements JavaDelegate {
       complaintRepository.save(complaint.get());
       delegateExecution.setVariable("uniform", true);
     } else {
-      System.out.println("NOT UNIFORM");
+      System.out.println("NOT UNIFORM OR EMPTY");
 
       delegateExecution.setVariable("uniform", false);
     }
