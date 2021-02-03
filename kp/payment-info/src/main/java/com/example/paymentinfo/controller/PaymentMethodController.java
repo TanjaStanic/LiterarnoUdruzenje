@@ -3,6 +3,7 @@ package com.example.paymentinfo.controller;
 import com.example.paymentinfo.domain.Client;
 import com.example.paymentinfo.domain.PaymentMethod;
 import com.example.paymentinfo.dto.ClientBasicInfoDto;
+import com.example.paymentinfo.dto.ClientDto;
 import com.example.paymentinfo.dto.PaymentMethodDto;
 import com.example.paymentinfo.repository.PaymentMethodRepository;
 import com.example.paymentinfo.service.ClientService;
@@ -185,4 +186,17 @@ public class PaymentMethodController {
 
     }
     
+    @GetMapping("/updateClientsMethods/{paymentMethod}/{clientEmail}")
+    public ResponseEntity<?> updateClient(@PathVariable String paymentMethodName,
+    			@PathVariable String clientEmail){
+    	System.out.println("tu saaaaaaaaaaaaaaam");
+    	try {
+    		clientService.updatePaymentMethod(paymentMethodName, clientEmail);
+    	} catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Failed to update new payment method. ");
+        }
+
+    	return ResponseEntity.ok().build();
+    }
 }

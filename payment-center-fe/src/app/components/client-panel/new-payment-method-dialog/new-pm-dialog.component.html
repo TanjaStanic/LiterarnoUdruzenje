@@ -31,7 +31,8 @@
                     <th mat-header-cell mat-sort-header *matHeaderCellDef disabled>
                     </th>
                     <td mat-cell *matCellDef="let paymentMethod">
-                        <button mat-icon-button color="success"  [mat-dialog-close]="paymentMethod">
+                    <!-- [mat-dialog-close]="paymentMethod" -->
+                        <button mat-icon-button color="success" [mat-dialog-close]="paymentMethod" >
                             <mat-icon aria-label="Add payment method">add_box</mat-icon>
                         </button>
                     </td>
@@ -42,8 +43,8 @@
             </table>
      
         </div>
-    </mat-card>
-
+   	<br/><br/>
+		 </mat-card>
 	<div mat-dialog-actions>
         <button mat-button (click)="onNoClick()">Cancel</button>
     </div>
