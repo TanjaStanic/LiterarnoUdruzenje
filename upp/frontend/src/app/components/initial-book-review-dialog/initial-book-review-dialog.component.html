@@ -1,0 +1,5 @@
+<h3>Proces objavljivanja knjige</h3>
+<form [formGroup]="bookReviewForm" (ngSubmit)="onSubmit()">
+  <app-generic-form #genericForm [fields]="fields"></app-generic-form>
+  <button mat-raised-button color="primary" class="pull-right">Submit</button>
+</form>

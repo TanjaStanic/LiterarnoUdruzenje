@@ -87,6 +87,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .permitAll()
             .antMatchers("/rap/**")
             .permitAll()
+            .antMatchers("/book/**")
+            .permitAll()
         // Our private endpoints
         .anyRequest()
         .authenticated();

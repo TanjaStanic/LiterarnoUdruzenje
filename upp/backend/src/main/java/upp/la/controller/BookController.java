@@ -13,15 +13,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upp.la.dto.FormFieldDto;
 import upp.la.dto.FormFieldsDto;
+import upp.la.model.Book;
 import upp.la.model.User;
+import upp.la.repository.BookRepository;
 import upp.la.repository.UserRepository;
 
+import javax.annotation.security.RolesAllowed;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 @RestController
 @RequestMapping("/book")
+@RolesAllowed({"WRITER", "EDITOR"})
 public class BookController {
 
     @Autowired
@@ -32,6 +37,8 @@ public class BookController {
     FormService formService;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    BookRepository bookRepository;
 
     @GetMapping(path = "/getBookDetailsForm", produces = "application/json")
     public @ResponseBody
@@ -154,6 +161,36 @@ public class BookController {
         }
 
         return map;
+    }
+
+    @GetMapping(path = "/booksForInitialReviews")
+    public @ResponseBody
+    ResponseEntity<List<Book>> booksForInitalReviews(@RequestParam("username") String username) {
+        ArrayList<Book> books = new ArrayList<>();
+        ArrayList<Book> ret = new ArrayList<>();
+        User user = userRepository.findUserByUsername(username);
+        books = bookRepository.findAllByEditor(user);
+        for(Book b : books) {
+            if(b.getDocument() == null) {
+                ret.add(b);
+            }
+        }
+
+        return new ResponseEntity<>(ret, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/getBooksForWriter")
+    public @ResponseBody
+    ResponseEntity<List<Book>> getBooksForWriter(@RequestParam("username") String username) {
+        ArrayList<Book> books = new ArrayList<>();
+        ArrayList<Book> ret = new ArrayList<>();
+        User user = userRepository.findUserByUsername(username);
+        for(Book b : user.getBooks()) {
+            if(b.getIsbn() == null && b.isAccepted()) {
+                ret.add(b);
+            }
+        }
+        return new ResponseEntity<>(ret, HttpStatus.OK);
     }
 
 }

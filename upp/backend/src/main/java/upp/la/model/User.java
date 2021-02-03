@@ -37,7 +37,8 @@ public class User {
   
   @Column private Boolean confirmed;
 
-  @Column private int points;
+
+  @Column() private int points;
 
   // Genres readers are interested in
   @ManyToMany(

@@ -100,7 +100,7 @@ public class InsertUsersOnCreate implements JavaDelegate {
     Group lecturers = identityService.newGroup("lecturers");
     lecturers.setName("Lecturer Committee");
     betaReaders.setType("WORKFLOW");
-    identityService.saveGroup(betaReaders);
+    // identityService.saveGroup(betaReaders);
 
     identityService.createMembership("demo", "lecturers");
     identityService.createMembership("lecturer1", "lecturers");

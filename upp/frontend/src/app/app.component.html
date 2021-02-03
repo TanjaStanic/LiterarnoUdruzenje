@@ -22,10 +22,13 @@
     </mat-nav-list>
     <mat-nav-list *ngIf="isEditor()">
       <a mat-list-item routerLink="/editorHome">Home</a>
+      <a mat-list-item routerLink="/initialBookReview">Review books</a>
       <a mat-list-item (click)="onLogout()">Logout</a>
     </mat-nav-list>
     <mat-nav-list *ngIf="isWriter()">
       <a mat-list-item routerLink="/writerHome">Home</a>
+      <a mat-list-item routerLink="/publishBook">Publish book</a>
+      <a mat-list-item routerLink="/submitManuscript">Submit manuscript</a>
       <a mat-list-item (click)="onLogout()">Logout</a>
     </mat-nav-list>
     <mat-nav-list *ngIf="isWriterFiles()">

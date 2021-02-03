@@ -10,6 +10,9 @@ import {HomepageWriterComponent} from './components/homepage-writer/homepage-wri
 import {WriterDialogComponent} from './components/writer-dialog/writer-dialog.component';
 import {WriterReviewComponent} from './components/writer-review/writer-review.component';
 import {WriterPaymentComponent} from './components/writer-payment/writer-payment.component';
+import {PublishBookComponent} from './components/publish-book/publish-book.component';
+import {InitialBookReviewComponent} from './components/initial-book-review/initial-book-review.component';
+import {SubmitManuscriptComponent} from './components/submit-manuscript/submit-manuscript.component';
 
 
 const routes: Routes = [
@@ -56,6 +59,18 @@ const routes: Routes = [
   {
     path: 'writerPayment',
     component: WriterPaymentComponent,
+  },
+  {
+    path: 'publishBook',
+    component: PublishBookComponent,
+  },
+  {
+    path: 'initialBookReview',
+    component: InitialBookReviewComponent,
+  },
+  {
+    path: 'submitManuscript',
+    component: SubmitManuscriptComponent,
   }
 ];
 

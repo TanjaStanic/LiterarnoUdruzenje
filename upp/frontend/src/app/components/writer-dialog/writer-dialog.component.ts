@@ -68,6 +68,7 @@ export class WriterDialogComponent implements OnInit {
 
   onSubmit() {
     if (this.files !== undefined) {
+      console.log(this.files);
       this.userService.uploadFiles(this.files).subscribe(
         (res) => {
           alert('Successfully uploaded files');

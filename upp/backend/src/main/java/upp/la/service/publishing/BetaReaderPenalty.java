@@ -22,7 +22,6 @@ public class BetaReaderPenalty implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        //Videti kako ovde dobaciti username od usera
         List<FormFieldDto> dtos = (List<FormFieldDto>) delegateExecution.getVariable("Beta reader comments");
         User user = new User();
         for(FormFieldDto f : dtos) {

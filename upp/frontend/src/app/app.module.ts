@@ -30,6 +30,12 @@ import { WriterReviewComponent } from './components/writer-review/writer-review.
 import { WriterReviewDialogComponent } from './components/writer-review-dialog/writer-review-dialog.component';
 import { WriterPaymentComponent } from './components/writer-payment/writer-payment.component';
 import { GenericFormComponent } from './components/generic-form/generic-form.component';
+import { GenericInputRowComponent } from './components/generic-input-row/generic-input-row.component';
+import { PublishBookComponent } from './components/publish-book/publish-book.component';
+import { InitialBookReviewComponent } from './components/initial-book-review/initial-book-review.component';
+import { InitialBookReviewDialogComponent } from './components/initial-book-review-dialog/initial-book-review-dialog.component';
+import { SubmitManuscriptComponent } from './components/submit-manuscript/submit-manuscript.component';
+import { SubmitManuscriptDialogComponent } from './components/submit-manuscript-dialog/submit-manuscript-dialog.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +52,13 @@ import { GenericFormComponent } from './components/generic-form/generic-form.com
     WriterReviewComponent,
     WriterReviewDialogComponent,
     WriterPaymentComponent,
-    GenericFormComponent
+    GenericFormComponent,
+    GenericInputRowComponent,
+    PublishBookComponent,
+    InitialBookReviewComponent,
+    InitialBookReviewDialogComponent,
+    SubmitManuscriptComponent,
+    SubmitManuscriptDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -70,6 +82,6 @@ import { GenericFormComponent } from './components/generic-form/generic-form.com
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [ReaderDialogComponent, WriterReviewDialogComponent]
+  entryComponents: [ReaderDialogComponent, WriterReviewDialogComponent, InitialBookReviewDialogComponent, SubmitManuscriptDialogComponent]
 })
 export class AppModule { }

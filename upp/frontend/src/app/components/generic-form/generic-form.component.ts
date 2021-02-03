@@ -13,18 +13,22 @@ export class GenericFormComponent implements OnInit, OnDestroy {
   @Input('fields') fields: Array<GenericFormType> = [];
   private changeSubscriptions: Array<Subscription> = [];
 
-  constructor(private fb: FormBuilder) { }
-
-  ngOnInit() {
+  constructor(private fb: FormBuilder) {
     this.myForm = this.fb.group({});
     this.initFormFields();
     this.initFormConstraints();
   }
 
+  ngOnInit() {
+  }
+
   ngOnDestroy() { this.changeSubscriptions.map(cs => cs.unsubscribe()); }
 
+  public f() {
+    return this.myForm.controls;
+  }
 
-  private initFormFields() {
+  public initFormFields() {
     for (const field of this.fields) {
       if (GenericHelper.isControl(field)) {
         this.myForm.addControl(field.name, this.initControl(field as GenericFormControl));
@@ -120,7 +124,7 @@ export interface GenericFormBase {
 }
 
 export interface GenericFormControl extends GenericFormBase {
-  inputType: 'text' | 'number' | 'checkbox' | 'select' | 'dropdown' | 'autocomplete';
+  inputType: 'text' | 'number' | 'checkbox' | 'select' | 'textarea' | 'radio' | 'file';
   label: string;
 
   value?: any;
