@@ -48,6 +48,10 @@ public class Book {
   private User lecturer;
 
   @ManyToMany
+  @JoinTable(
+          name = "book_comment",
+          joinColumns = {@JoinColumn(name = "book_id", referencedColumnName = "id")},
+          inverseJoinColumns = {@JoinColumn(name = "book_comments_id", referencedColumnName = "id",  nullable=true)})
   private List<BookComments> comments;
 
   //Document object containing the path to the file

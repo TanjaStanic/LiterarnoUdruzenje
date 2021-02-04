@@ -27,5 +27,7 @@ public interface ClientService {
     void saveRange(Collection<Client> clients);
     
     Client save(Client client);
+    
+    Client updatePaymentMethod(String paymentMethodName,String email);
 
 }
