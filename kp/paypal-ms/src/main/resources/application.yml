@@ -7,7 +7,7 @@ server:
     key-store-password: paypal
     key-password: paypal
     keyStoreType: JKS
-    keyAlias: paypal (localhost)
+    keyAlias: paypal-ms
     trust-store: classpath:paypal_truststore.jks
     trust-store-password: paypal
     trust-store-type: JKS

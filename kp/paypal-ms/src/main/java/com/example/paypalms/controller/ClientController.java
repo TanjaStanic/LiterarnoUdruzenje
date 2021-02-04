@@ -51,8 +51,29 @@ public class ClientController {
         return "registration";
     }
 
+
     @PostMapping("/register")
     public Object register(@Valid @ModelAttribute("registrationDTO") RegisterClientDTO registerClientDTO, Model model) {
+        if (clientService.insert(
+                new Client(registerClientDTO.getEmail(), registerClientDTO.getClientId(), registerClientDTO.getClientSecret(),
+                        Long.parseLong(registerClientDTO.getPcClientId()))) != null) {
+
+            HttpHeaders headersRedirect = new HttpHeaders();
+            headersRedirect.add("Location", MessageFormat.format("https://localhost:8762/api/pc_info/view/select-payment-methods/{0}", registerClientDTO.getPcClientId()));
+            headersRedirect.add("Access-Control-Allow-Origin", "*");
+            return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+
+        } else {
+            model.addAttribute("registrationDTO", registerClientDTO);
+            model.addAttribute("error", "Something went wrong, please try again.");
+            return "registration";
+
+        }
+
+    }
+
+    @PostMapping("/support")
+    public Object supportPaymentMethod(@Valid @ModelAttribute("registrationDTO") RegisterClientDTO registerClientDTO, Model model) {
         if (clientService.insert(
                 new Client(registerClientDTO.getEmail(), registerClientDTO.getClientId(), registerClientDTO.getClientSecret(),
                         Long.parseLong(registerClientDTO.getPcClientId()))) != null) {

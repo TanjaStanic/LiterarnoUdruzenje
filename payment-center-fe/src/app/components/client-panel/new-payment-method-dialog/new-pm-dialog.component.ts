@@ -10,16 +10,16 @@ import { FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, Ng
 })
 export class NewPmDialogComponent implements OnInit {
 
-	dataSourceNoPaymentMethods: MatTableDataSource<any>;
-	displayedColumnsPaymentMethods: string[] = ['name', 'subscriptionSupported', 'serviceId', 'actions'];
+  dataSourceNoPaymentMethods: MatTableDataSource<any>;
+  displayedColumnsPaymentMethods: string[] = ['name', 'subscriptionSupported', 'actions'];
 
   constructor(
-		  public dialogRef: MatDialogRef<NewPmDialogComponent>,
-		    @Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder) { 
+    public dialogRef: MatDialogRef<NewPmDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any, private formBuilder: FormBuilder) {
 
   }
   ngOnInit() {
-	  this.dataSourceNoPaymentMethods =  this.data.dataSourceNoPaymentMethods;
+    this.dataSourceNoPaymentMethods = this.data.dataSourceNoPaymentMethods;
 
   }
 
