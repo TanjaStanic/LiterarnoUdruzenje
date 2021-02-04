@@ -39,9 +39,11 @@ public class PaymentController {
             String response = paymentService.initiatePayment(request);
             // response je url fronta bankacq gde kupac unosi podatke o kartici
             // i taj link treba da se salje literarnom udruzenju
+            log.info("NEW | Bitcoin payment");
             return ResponseEntity.ok().body(response);
         } catch (Exception exception) {
             exception.printStackTrace();
+            log.error(exception);
             return ResponseEntity.badRequest().body("Transaction failed.");
         }
     }
@@ -59,6 +61,8 @@ public class PaymentController {
                 return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
             }
         }
+        
+        log.error("ERROR | TRANSACTION WITH ID: " + id + " NOT FOUND");
 
         return ResponseEntity.badRequest().build();
     }

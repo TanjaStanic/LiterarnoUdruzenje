@@ -124,5 +124,8 @@
       }
     }
   },
-  "defaultProject": "food-delivery-app"
+  "defaultProject": "food-delivery-app",
+  "cli": {
+    "analytics": "44849362-fd0f-41c9-82a9-5a3543e50078"
+  }
 }

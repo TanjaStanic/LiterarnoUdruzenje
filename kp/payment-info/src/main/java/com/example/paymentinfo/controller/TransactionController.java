@@ -89,4 +89,22 @@ public class TransactionController {
         calendar.add(Calendar.HOUR_OF_DAY, hours);
         return calendar.getTime();
     }
+    
+    @GetMapping("checkStatus/{merchantOrderId}")
+    public ResponseEntity<String> checkStatus(@PathVariable long merchantOrderId){
+    	
+    	Transaction t = transactionService.findByMerchantOrderId(merchantOrderId);
+    	System.out.println(merchantOrderId);
+    	System.out.println(t.getStatus());
+    	
+    	if (t.getStatus() == null) {
+    		log.error("Error while trying to check transaction status: transaction status not found.");
+            return ResponseEntity.badRequest().build();
+    	} else {
+            log.info("TRANSACTION with PAYMENT ID: " + t.getPaymentID() + "   STATUS: " + t.getStatus());
+
+    	}
+        return ResponseEntity.ok(t.getStatus().toString());
+    	
+    }
 }
