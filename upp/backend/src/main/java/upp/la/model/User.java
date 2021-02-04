@@ -41,6 +41,7 @@ public class User {
   @Column() private int points;
 
   // Genres readers are interested in
+  @JsonIgnore
   @ManyToMany(
       cascade = {CascadeType.ALL},
       fetch = FetchType.LAZY)
@@ -51,6 +52,7 @@ public class User {
   private Collection<Genre> genres;
 
   // Genres beta-readers are interested in
+  @JsonIgnore
   @ManyToMany(
       cascade = {CascadeType.ALL},
       fetch = FetchType.LAZY)

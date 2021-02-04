@@ -43,3 +43,12 @@
   <label [for]="field.name">{{field.label}}</label>
   <input type="file" #fileInput class="form-control" [id]="field.name" [formControl]="formGroup.get(field.name)" (change)="uploadFileEvt($event)"/>
 </div>
+
+<div *ngIf="field.inputType == 'multiple-select'" class="form-group">
+  <label [for]="field.name">{{field.label}}</label>
+  <select multiple="multiple" (click)="getKeys(field.lookups)" class="form-control" [id]="field.name" [formControl]="formGroup.get(field.name)">
+    <option *ngFor="let genre of enumValues" [value]="genre">
+      {{field.lookups.type.values[genre]}}
+    </option>
+  </select>
+</div>

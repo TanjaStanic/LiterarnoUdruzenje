@@ -86,7 +86,7 @@ export class SubmitManuscriptDialogComponent implements OnInit {
     d.push({fieldId : 'pagesId', fieldValue: this.f.pagesId.value});
     const tmp = this.bookService.postForm(d, this.taskId).subscribe(
       next => {
-        this.dialogRef.close();
+        this.dialogRef.close(true);
       },
       error => {
         console.log(error);

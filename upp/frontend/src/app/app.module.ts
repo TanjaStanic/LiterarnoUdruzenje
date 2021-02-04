@@ -36,6 +36,16 @@ import { InitialBookReviewComponent } from './components/initial-book-review/ini
 import { InitialBookReviewDialogComponent } from './components/initial-book-review-dialog/initial-book-review-dialog.component';
 import { SubmitManuscriptComponent } from './components/submit-manuscript/submit-manuscript.component';
 import { SubmitManuscriptDialogComponent } from './components/submit-manuscript-dialog/submit-manuscript-dialog.component';
+import { BookReviewComponent } from './components/book-review/book-review.component';
+import { BookReviewDialogComponent } from './components/book-review-dialog/book-review-dialog.component';
+import { BookReviewDialogBetaReadersComponent } from './components/book-review-dialog-beta-readers/book-review-dialog-beta-readers.component';
+import { BetaReaderCommentComponent } from './components/beta-reader-comment/beta-reader-comment.component';
+import { BetaReaderCommentDialogComponent } from './components/beta-reader-comment-dialog/beta-reader-comment-dialog.component';
+import { ImproveManuscriptDialogComponent } from './components/improve-manuscript-dialog/improve-manuscript-dialog.component';
+import { NeedMoreWorkDialogComponent } from './components/need-more-work-dialog/need-more-work-dialog.component';
+import { LecturerNotesTyposComponent } from './components/lecturer-notes-typos/lecturer-notes-typos.component';
+import { LecturerNotesTyposDialogComponent } from './components/lecturer-notes-typos-dialog/lecturer-notes-typos-dialog.component';
+import { EditorHaveSuggestionDialogComponent } from './components/editor-have-suggestion-dialog/editor-have-suggestion-dialog.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +69,16 @@ import { SubmitManuscriptDialogComponent } from './components/submit-manuscript-
     InitialBookReviewDialogComponent,
     SubmitManuscriptComponent,
     SubmitManuscriptDialogComponent,
+    BookReviewComponent,
+    BookReviewDialogComponent,
+    BookReviewDialogBetaReadersComponent,
+    BetaReaderCommentComponent,
+    BetaReaderCommentDialogComponent,
+    ImproveManuscriptDialogComponent,
+    NeedMoreWorkDialogComponent,
+    LecturerNotesTyposComponent,
+    LecturerNotesTyposDialogComponent,
+    EditorHaveSuggestionDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -82,6 +102,8 @@ import { SubmitManuscriptDialogComponent } from './components/submit-manuscript-
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [ReaderDialogComponent, WriterReviewDialogComponent, InitialBookReviewDialogComponent, SubmitManuscriptDialogComponent]
+  entryComponents: [ReaderDialogComponent, WriterReviewDialogComponent, InitialBookReviewDialogComponent, SubmitManuscriptDialogComponent,
+  BookReviewDialogComponent, BookReviewDialogBetaReadersComponent, BetaReaderCommentDialogComponent, ImproveManuscriptDialogComponent,
+  NeedMoreWorkDialogComponent, LecturerNotesTyposDialogComponent, EditorHaveSuggestionDialogComponent]
 })
 export class AppModule { }

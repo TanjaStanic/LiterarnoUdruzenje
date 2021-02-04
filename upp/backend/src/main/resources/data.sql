@@ -14,6 +14,9 @@ INSERT INTO upp_db.user(username, first_name, last_name, password, email, city, 
     VALUES ('breader123', 'Beta_Reader1', 'Beta_Reader1', '$2a$10$BPGCvrv4ROnM70RrwZETwuU4irNlKFAQvXwYuiUrvevEIjDmhNSXi', 'email@beta_reader.com', 'NS', 'SRB', true, 'BETA_READER',0);
 
 INSERT INTO upp_db.user(username, first_name, last_name, password, email, city, country, activated, role, points)
+VALUES ('breader456', 'Beta_Reader1', 'Beta_Reader1', '$2a$10$BPGCvrv4ROnM70RrwZETwuU4irNlKFAQvXwYuiUrvevEIjDmhNSXi', 'email1@beta_reader.com', 'NS', 'SRB', true, 'BETA_READER',0);
+
+INSERT INTO upp_db.user(username, first_name, last_name, password, email, city, country, activated, role, points)
     VALUES ('lecturer123', 'Lecturer1', 'Lecturer1', '$2a$10$BPGCvrv4ROnM70RrwZETwuU4irNlKFAQvXwYuiUrvevEIjDmhNSXi', 'email1@lecturer.com', 'NS', 'SRB', true, 'LECTURER',0);
 
 INSERT INTO upp_db.user(username, first_name, last_name, password, email, city, country, activated, role, points)

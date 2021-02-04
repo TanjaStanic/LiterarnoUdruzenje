@@ -22,6 +22,27 @@ export class BookService {
   getSubmitManuscriptForm() {
     return this.httpClient.get('http://localhost:8080/book/submitManuscriptForm') as Observable<any>;
   }
+  acceptManuscriptAndsendToBetaReadersForm() {
+    return this.httpClient.get('http://localhost:8080/book/acceptManuscriptAndsendToBetaReadersForm') as Observable<any>;
+  }
+  betaReadersForm() {
+    return this.httpClient.get('http://localhost:8080/book/betaReadersForm') as Observable<any>;
+  }
+  BetaReaderCommentsForm() {
+    return this.httpClient.get('http://localhost:8080/book/BetaReaderCommentsForm') as Observable<any>;
+  }
+  improveManusciprtForm() {
+    return this.httpClient.get('http://localhost:8080/book/improveManuscriptForm') as Observable<any>;
+  }
+  needMoreWorkForm() {
+    return this.httpClient.get('http://localhost:8080/book/needMoreWorkForm') as Observable<any>;
+  }
+  lecturerNotesTypos() {
+    return this.httpClient.get('http://localhost:8080/book/lecturerNotesTypos') as Observable<any>;
+  }
+  editorHasSuggestionsForm() {
+    return this.httpClient.get('http://localhost:8080/book/editorHasSuggestions') as Observable<any>;
+  }
   public async getBooksForInitialReview(username: string): Promise<Book[]> {
     let params = new HttpParams();
     params = params.append('username', username);
@@ -32,6 +53,24 @@ export class BookService {
     let params = new HttpParams();
     params = params.append('username', username);
     const response: any = await this.httpClient.get('http://localhost:8080/book/getBooksForWriter', {params}).toPromise();
+    return response;
+  }
+  public async getBooksForReview(username: string): Promise<Book[]> {
+    let params = new HttpParams();
+    params = params.append('username', username);
+    const response: any = await this.httpClient.get('http://localhost:8080/book/getBooksForReview', {params}).toPromise();
+    return response;
+  }
+  public async getBooksForBetaReader(username: string): Promise<Book[]> {
+    let params = new HttpParams();
+    params = params.append('username', username);
+    const response: any = await this.httpClient.get('http://localhost:8080/book/getBooksForBetaReader', {params}).toPromise();
+    return response;
+  }
+  public async getBooksForLecturer(username: string): Promise<Book[]> {
+    let params = new HttpParams();
+    params = params.append('username', username);
+    const response: any = await this.httpClient.get('http://localhost:8080/book/getBooksForLecturer', {params}).toPromise();
     return response;
   }
   public uploadFile(file) {

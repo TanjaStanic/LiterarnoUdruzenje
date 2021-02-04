@@ -14,6 +14,7 @@
     </mat-nav-list>
     <mat-nav-list *ngIf="isBReader()">
       <a mat-list-item routerLink="/readerHome">Home</a>
+      <a mat-list-item routerLink="/betaReaderComment">Comment book</a>
       <a mat-list-item (click)="onLogout()">Logout</a>
     </mat-nav-list>
     <mat-nav-list *ngIf="isAdmin()">
@@ -22,7 +23,8 @@
     </mat-nav-list>
     <mat-nav-list *ngIf="isEditor()">
       <a mat-list-item routerLink="/editorHome">Home</a>
-      <a mat-list-item routerLink="/initialBookReview">Review books</a>
+      <a mat-list-item routerLink="/initialBookReview">Initial review</a>
+      <a mat-list-item routerLink="/bookReview">Book review</a>
       <a mat-list-item (click)="onLogout()">Logout</a>
     </mat-nav-list>
     <mat-nav-list *ngIf="isWriter()">
@@ -39,6 +41,7 @@
     <mat-nav-list *ngIf="isLecturer()">
       <a mat-list-item routerLink="/lecturerHome">Home</a>
       <a mat-list-item routerLink="/writerReview">Writer review</a>
+      <a mat-list-item routerLink="/lecturerNotesTypos">Final review</a>
       <a mat-list-item (click)="onLogout()">Logout</a>
     </mat-nav-list>
   </mat-sidenav>

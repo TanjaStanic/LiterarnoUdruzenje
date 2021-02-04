@@ -37,13 +37,14 @@ public class SaveComments implements JavaDelegate {
         for(FormFieldDto f : fields) {
             if(f.getFieldId().equals("commentId")) {
                 comment = f.getFieldValue();
+                System.out.println(comment + "-komentar");
             } else if (f.getFieldId().equals("usernameId")) {
                 u = userRepository.findUserByUsername(f.getFieldValue());
             }
         }
 
         Book book = bookRepository.findBookByTitle(tmp.get(0).getFieldValue());
-        ArrayList<BookComments> bookCommentsArrayList = (ArrayList<BookComments>) book.getComments();
+        List<BookComments> bookCommentsArrayList = book.getComments();
         for(BookComments bookComments : bookCommentsArrayList) {
             if(bookComments.getBetaReader().getUsername().equals(u.getUsername())) {
                 bookComments.setComment(comment);

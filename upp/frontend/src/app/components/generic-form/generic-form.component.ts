@@ -124,7 +124,7 @@ export interface GenericFormBase {
 }
 
 export interface GenericFormControl extends GenericFormBase {
-  inputType: 'text' | 'number' | 'checkbox' | 'select' | 'textarea' | 'radio' | 'file';
+  inputType: 'text' | 'number' | 'checkbox' | 'select' | 'textarea' | 'radio' | 'file' | 'multiple-select';
   label: string;
 
   value?: any;

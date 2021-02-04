@@ -12,4 +12,5 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     ArrayList<Book> findAll();
     Book findBookByTitle(String title);
     ArrayList<Book> findAllByEditor(User editor);
+    ArrayList<Book> findAllByLecturer(User lecturer);
 }
