@@ -1,0 +1,81 @@
+import { Component, OnInit } from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {UserService} from '../../services/user.service';
+import {PlagiarismService} from '../../services/plagiarism.service';
+import {GenericFormComponent, GenericFormType} from '../generic-form/generic-form.component';
+
+@Component({
+  selector: 'app-choose-editors',
+  templateUrl: './choose-editors.component.html',
+  styleUrls: ['./choose-editors.component.css']
+})
+export class ChooseEditorsComponent implements OnInit {
+
+	@ViewChild('genericForm', {static: true}) genericForm: GenericFormComponent;
+	private formFields = [];
+	private enumValues = [];
+	taskId: string;
+	fields: Array<GenericFormType> = [];
+	chooseEditorsForm : FormGroup;
+	
+  constructor(private plagiarismService: PlagiarismService,
+			private formBuilder: FormBuilder,
+            private router: Router,
+            private userService: UserService) {
+	  
+  	const x = plagiarismService.getEditorsForm();  
+  	 x.subscribe(
+  	      res => {
+  	        console.log(res);
+  	        this.formFields = res.formFields;
+  	        this.taskId = res.taskId;
+  	        this.formFields.forEach( (field) => {
+
+  	          if ( field.id === 'chosenEditorsId') {
+  	            this.enumValues = Object.keys(field.type.values);
+  	            console.log(this.enumValues);
+  	            this.fields.push({type: 'control', name: field.id, label: field.label, inputType: 'select', lookups: field});
+  	          } 
+  	          this.genericForm.initFormFields();
+
+  	        });
+  	      },
+  	      err => {
+  	        console.log(err);
+  	      }
+  	    );
+  	  }
+	  
+	  
+
+
+  ngOnInit() {
+	  this.chooseEditorsForm = this.formBuilder.group({
+	    });
+  }
+ 
+  get f() {
+	    return this.chooseEditorsForm.controls;
+  }
+ 
+  onSubmit() {
+	    this.chooseEditorsForm.controls = this.genericForm.myForm.controls;
+	    console.log(this.chooseEditorsForm);
+	    if (this.chooseEditorsForm.invalid) {
+	      return;
+	    }
+	    console.log(this.taskId);
+	    const d = new Array();
+	    d.push({fieldId: 'chosenEditorsId', fieldValue: this.f.genresListId.value.toString()});
+
+	    const tmp = this.plagiarismService.postForm(d, this.taskId).subscribe(
+	      next => {
+	        this.router.navigate(['/editorHome']);
+	      },
+	      error => {
+	        console.log(error);
+	      }
+	    );
+	  }
+}

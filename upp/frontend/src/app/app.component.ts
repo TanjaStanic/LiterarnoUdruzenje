@@ -44,6 +44,9 @@ export class AppComponent {
   public isEditor() {
     return this.userService.isEditor();
   }
+  public isChiefEditor() {
+	    return this.userService.isChiefEditor();
+  }
   public isAdmin() {
     return this.userService.isAdmin();
   }

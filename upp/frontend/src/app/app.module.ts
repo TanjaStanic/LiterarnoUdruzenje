@@ -46,7 +46,8 @@ import { NeedMoreWorkDialogComponent } from './components/need-more-work-dialog/
 import { LecturerNotesTyposComponent } from './components/lecturer-notes-typos/lecturer-notes-typos.component';
 import { LecturerNotesTyposDialogComponent } from './components/lecturer-notes-typos-dialog/lecturer-notes-typos-dialog.component';
 import { EditorHaveSuggestionDialogComponent } from './components/editor-have-suggestion-dialog/editor-have-suggestion-dialog.component';
-
+import { WriterComplaintComponent } from './components/writer-complaint/writer-complaint.component';
+import { ChooseEditorsComponent } from './components/choose-editors/choose-editors.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -79,6 +80,8 @@ import { EditorHaveSuggestionDialogComponent } from './components/editor-have-su
     LecturerNotesTyposComponent,
     LecturerNotesTyposDialogComponent,
     EditorHaveSuggestionDialogComponent,
+    WriterComplaintComponent,
+    ChooseEditorsComponent
   ],
   imports: [
     BrowserModule,

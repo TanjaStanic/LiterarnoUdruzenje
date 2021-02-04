@@ -28,6 +28,10 @@ INSERT INTO upp_db.user(username, first_name, last_name, password, email, city, 
 INSERT INTO upp_db.user(username, first_name, last_name, password, email, city, country, activated, role, points)
     VALUES ('editor123', 'Editor1', 'Editor1', '$2a$10$BPGCvrv4ROnM70RrwZETwuU4irNlKFAQvXwYuiUrvevEIjDmhNSXi', 'email@editor.com', 'NS', 'SRB', true, 'EDITOR',0);
 
+INSERT INTO upp_db.user(username, first_name, last_name, password, email, city, country, activated, role, points)
+    VALUES ('chiefEditor', 'Chief', 'Editor', '$2a$10$BPGCvrv4ROnM70RrwZETwuU4irNlKFAQvXwYuiUrvevEIjDmhNSXi', 'email@chiefeditor.com', 'NS', 'SRB', true, 'CHIEF_EDITOR', 0);
+
+
 INSERT INTO upp_db.genre(name)
     VALUES ('Akcioni');
 
