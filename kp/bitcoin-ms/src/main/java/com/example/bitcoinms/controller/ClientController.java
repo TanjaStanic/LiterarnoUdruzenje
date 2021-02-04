@@ -68,8 +68,21 @@ public class ClientController {
             return "registration";
         }
         if (clientService.insert(newClient) != null) {
+        	
+        	ResponseEntity<ClientInfoDto> response = null;
+
+            try {
+                response = restTemplate.getForEntity("https://localhost:8762/api/pc_info/payment-methods/updateClientsMethods/Bitcoin/" + registerClientDTO.getEmail(),
+                		ClientInfoDto.class);
+
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                return ResponseEntity.badRequest().body("Could not contact payment-info.");
+            }
+        	
+        	
             HttpHeaders headersRedirect = new HttpHeaders();
-            headersRedirect.add("Location", MessageFormat.format("https://localhost:8762/api/pc_info/view/select-payment-methods/{0}", registerClientDTO.getPcClientId()));
+            headersRedirect.add("Location", MessageFormat.format("http://localhost:4200/client", registerClientDTO.getPcClientId()));
             headersRedirect.add("Access-Control-Allow-Origin", "*");
             return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
 

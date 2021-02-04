@@ -51,7 +51,10 @@ export class PaymentMethodDialogComponent implements OnInit {
     this.paymentMethod = this.form.value;
     this.dialogRef.close(this.paymentMethod);
   }
+  submitBank() {
 
+	 this.dialogRef.close(this.paymentMethod);
+  }
 
 
 
