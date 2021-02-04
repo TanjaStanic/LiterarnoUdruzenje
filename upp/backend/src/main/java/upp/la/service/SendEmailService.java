@@ -1,8 +1,13 @@
 package upp.la.service;
 
+import org.camunda.bpm.engine.ProcessEngineException;
+import org.camunda.bpm.engine.RuntimeService;
+
 import org.camunda.bpm.engine.delegate.BpmnError;
+
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.model.bpmn.instance.MessageEventDefinition;
 import org.camunda.bpm.model.bpmn.instance.ThrowEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +22,7 @@ import upp.la.model.User;
 import upp.la.repository.ConfirmationTokenRepository;
 import upp.la.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -32,6 +38,9 @@ public class SendEmailService implements JavaDelegate{
 	@Autowired 
 	ConfirmationTokenRepository confirmationTokenRepository;
 	
+	@Autowired 
+	private RuntimeService runtimeService;
+	
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		System.out.println("EmailService");
@@ -41,8 +50,7 @@ public class SendEmailService implements JavaDelegate{
 	        .getEventDefinitions().iterator().next();
 	    String receivingMessageName = messageEventDefinition.getMessage().getName();
 	    System.out.println("message name je: " + receivingMessageName);
-	    
-	    
+
 	    String mail = "";
 	    try {
 	    	List<FormFieldDto> files =(List<FormFieldDto>) execution.getVariable("files");
@@ -51,10 +59,10 @@ public class SendEmailService implements JavaDelegate{
 	    }
         catch(Exception e) {
         	System.out.println("No user. Tek se korisnik registruje");
-			throw new BpmnError("EmailError");
+			//throw new BpmnError("EmailError");
         }
-		
-	    
+	   
+
 	    //send email to confirm registration
 	    if (receivingMessageName.equals("send_verification_email")) {
 	    	String email = "";
@@ -92,7 +100,7 @@ public class SendEmailService implements JavaDelegate{
 		      for (User l : lectors) {
 		    	  System.out.println("saljem mail na: " + l.getEmail());
 		    	  email.setAddress(l.getEmail());
-		    	  Requests.sendEmail(email);
+		    	 // Requests.sendEmail(email);
 		      }
 		 }
 	    // ACCEPTED - PAY  
@@ -101,7 +109,8 @@ public class SendEmailService implements JavaDelegate{
 	      
 			email.setAddress(mail);
 			System.out.println("mail glasi: " + email.getMessage());
-			Requests.sendEmail(email);
+
+			//Requests.sendEmail(email);
 
 	    }
 	    // NEED MORE MATERIAL
@@ -110,7 +119,7 @@ public class SendEmailService implements JavaDelegate{
 	      
 			email.setAddress(mail);
 			System.out.println("mail glasi: " + email.getMessage());
-			Requests.sendEmail(email);
+			//Requests.sendEmail(email);
 
 	    }
 	    //FAILED TRANSACTION
@@ -119,7 +128,7 @@ public class SendEmailService implements JavaDelegate{
 
 	        email.setAddress(mail);
 	        System.out.println("mail glasi: " + email.getMessage());
-	        Requests.sendEmail(email);
+	        //Requests.sendEmail(email);
 	    }
 	    //FAILED PAYMENT
 	    else if (receivingMessageName.equals("RegistrationApplicationPaymentFailedWriter")) {
@@ -127,7 +136,7 @@ public class SendEmailService implements JavaDelegate{
 
 	        email.setAddress(mail);
 	        System.out.println("mail glasi: " + email.getMessage());
-	        Requests.sendEmail(email);
+	       // Requests.sendEmail(email);
 	    }
 		//PUBLISHING DECLINED BEFORE MANUSCRIPT
 		else if (receivingMessageName.equals("BookPublishingNotifyWriterDeclined")) {
@@ -163,8 +172,34 @@ public class SendEmailService implements JavaDelegate{
 			System.out.println("mail glasi: " + email.getMessage());
 			Requests.sendEmail(email);
 		}
-	    else {
+
+	    //NOTIFY CHOSEN EDITORS
+	    String messageParam="";		
+		try {
+			messageParam = (String) runtimeService.getVariableLocal(execution.getId(), "messageId");
+		}
+		catch (ProcessEngineException  e) {
+			System.out.println("Username failed");
+		}
+	    
+		if (messageParam.equals("NotifyChosenEditors")) {
+			EmailTemplate email = EmailTemplate.PlagiarismComplaintNotifyEditors(14);
+			
+			ArrayList<org.camunda.bpm.engine.identity.User> editors = 
+					(ArrayList<org.camunda.bpm.engine.identity.User>)execution.getVariable("chosenEditors");
+			
+			for (org.camunda.bpm.engine.identity.User e : editors) {
+				email.setAddress(e.getEmail());
+				System.out.println("mail glasi: " + email.getMessage());
+				Requests.sendEmail(email);
+				
+			}
+			
+		}else {
 			throw new BpmnError("EmailError");
 		}
+	    
+	    
+
 	}
 }

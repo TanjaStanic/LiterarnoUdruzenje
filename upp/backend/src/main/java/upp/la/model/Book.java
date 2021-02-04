@@ -50,7 +50,7 @@ public class Book {
 
   @Column private boolean accepted = false;
 
-  @ManyToMany()
+  @ManyToMany
   @JoinTable(
           name = "book_comment",
           joinColumns = {@JoinColumn(name = "book_id", referencedColumnName = "id")},

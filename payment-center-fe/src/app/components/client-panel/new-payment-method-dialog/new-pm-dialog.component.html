@@ -1,8 +1,8 @@
 <div class="tp-card">
-	<h1 mat-dialog-title>Support new payment method</h1>
-	<mat-card>
+    <h1 mat-dialog-title>Support new payment method</h1>
+    <mat-card>
         <div mat-dialog-content>
-         <table mat-table [dataSource]="dataSourceNoPaymentMethods" matSort>
+            <table mat-table [dataSource]="dataSourceNoPaymentMethods" matSort>
                 <ng-container matColumnDef="name">
                     <th class="set-padding" mat-header-cell mat-sort-header *matHeaderCellDef> Name </th>
                     <td class="set-padding" mat-cell *matCellDef="let paymentMethod"> {{paymentMethod.name}} </td>
@@ -21,17 +21,12 @@
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="serviceId">
-                    <th class="set-padding" mat-header-cell mat-sort-header *matHeaderCellDef> Service ID </th>
-                    <td class="set-padding" mat-cell *matCellDef="let paymentMethod">
-                        {{paymentMethod.applicationName}} </td>
-                </ng-container>
-
                 <ng-container matColumnDef="actions">
                     <th mat-header-cell mat-sort-header *matHeaderCellDef disabled>
                     </th>
                     <td mat-cell *matCellDef="let paymentMethod">
-                        <button mat-icon-button color="success"  [mat-dialog-close]="paymentMethod">
+                        <!-- [mat-dialog-close]="paymentMethod" -->
+                        <button mat-icon-button color="success" [mat-dialog-close]="paymentMethod">
                             <mat-icon aria-label="Add payment method">add_box</mat-icon>
                         </button>
                     </td>
@@ -40,11 +35,11 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumnsPaymentMethods"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumnsPaymentMethods;"></tr>
             </table>
-     
-        </div>
-    </mat-card>
 
-	<div mat-dialog-actions>
+        </div>
+        <br /><br />
+    </mat-card>
+    <div mat-dialog-actions>
         <button mat-button (click)="onNoClick()">Cancel</button>
     </div>
 </div>

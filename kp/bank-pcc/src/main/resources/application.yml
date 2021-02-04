@@ -1,0 +1,13 @@
+#server:
+#  ssl:
+#    enabled: true
+#    protocol: TLS
+#    key-store: classpath:bankpcc.jks
+#    key-store-password: password
+#    key-password: password
+#    keyStoreType: JKS
+#    keyAlias: bank-pcc
+#    trust-store: classpath:bankpcc_truststore.jks
+#    trust-store-password: password
+#    trust-store-type: JKS
+#    client-auth: want

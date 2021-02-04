@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,6 +37,27 @@ public class ClientController {
         this.clientService = clientService;
         this.restTemplate = restTemplate;
         this.bankRepository = bankRepository;
+    }
+
+    @GetMapping("/delete-client/{clientId}")
+    public ResponseEntity<?> deleteClient(@PathVariable String clientId) {
+
+        Client client = clientService.findById(Long.parseLong(clientId));
+        try {
+            restTemplate.getForEntity("https://localhost:8445/clients/deleteClient/" + client.getEmail(),
+                    ClientInfoDto.class);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            log.error("ERROR | Could not contact payment-acq.");
+            log.error(exception.getMessage());
+            return ResponseEntity.badRequest().body("Could not contact bank acq.");
+        }
+        String redirectUrl = MessageFormat.format("http://localhost:4200/client", client.getEmail());
+        HttpHeaders headersRedirect = new HttpHeaders();
+        headersRedirect.add("Location", redirectUrl);
+        headersRedirect.add("Access-Control-Allow-Origin", "*");
+        return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
     }
 
     @GetMapping("/register-url/{clientId}")
@@ -75,8 +97,38 @@ public class ClientController {
 
     }
 
+
     @PostMapping("/register")
     public Object register(@Valid @ModelAttribute("registrationDTO") RegisterClientDTO registerClientDTO, Model model) {
+
+        Client client = clientService.findById(registerClientDTO.getClientId());
+        Bank bank = bankRepository.findById(registerClientDTO.getBankId()).get();
+
+        HttpEntity<ClientInfoDto> entity = new HttpEntity<>(new ClientInfoDto(client.getEmail(), client.getName()));
+        ResponseEntity<ClientCredentials> response = restTemplate.postForEntity(
+                bank.getUrl(), entity, ClientCredentials.class);
+
+        ClientCredentials clientCredentials = response.getBody();
+        client.setMerchantID(clientCredentials.getMerchantID());
+        client.setMerchantPassword(clientCredentials.getMerchantPassword());
+        client = clientService.update(client);
+
+        String redirectUrl;
+        if (response.getStatusCode() == HttpStatus.OK) {
+            redirectUrl = MessageFormat.format("https://localhost:8762/api/pc_info/view/select-payment-methods/{0}", client.getPcClientId());
+            HttpHeaders headersRedirect = new HttpHeaders();
+            headersRedirect.add("Location", redirectUrl);
+            headersRedirect.add("Access-Control-Allow-Origin", "*");
+            return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+        } else {
+            return ResponseEntity.badRequest().body(response.getBody());
+        }
+
+    }
+
+
+    @PostMapping("/support")
+    public Object supportPaymentMethod(@Valid @ModelAttribute("registrationDTO") RegisterClientDTO registerClientDTO, Model model) {
 
         Client client = clientService.findById(registerClientDTO.getClientId());
         Bank bank = bankRepository.findById(registerClientDTO.getBankId()).get();
@@ -94,13 +146,27 @@ public class ClientController {
             return ResponseEntity.badRequest().body("Failed to register with acquirer.");
         }
 
+        ResponseEntity<ClientInfoDto> response2 = null;
+
+        try {
+            response2 = restTemplate.getForEntity("https://localhost:8762/api/pc_info/payment-methods/updateClientsMethods/Banking/" + client.getEmail(),
+                    ClientInfoDto.class);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            log.error("ERROR | Could not contact payment-info.");
+            log.error(exception.getMessage());
+            return ResponseEntity.badRequest().body("Could not contact payment-info.");
+        }
+
         String redirectUrl;
-        if (response.getStatusCode() == HttpStatus.OK) {
+
+        if (response.getStatusCode() == HttpStatus.OK && response2.getStatusCode() == HttpStatus.OK) {
             ClientCredentials clientCredentials = response.getBody();
             client.setMerchantID(clientCredentials.getMerchantID());
             client.setMerchantPassword(clientCredentials.getMerchantPassword());
             client = clientService.update(client);
-            redirectUrl = MessageFormat.format("https://localhost:8762/api/pc_info/view/select-payment-methods/{0}", client.getPcClientId());
+            redirectUrl = MessageFormat.format("http://localhost:4200/client", client.getPcClientId());
             HttpHeaders headersRedirect = new HttpHeaders();
             headersRedirect.add("Location", redirectUrl);
             headersRedirect.add("Access-Control-Allow-Origin", "*");

@@ -3,7 +3,7 @@ server:
   ssl:
     enabled: true
     protocol: TLS
-    key-store: classpath:bitcoin.jks
+    key-store: classpath:bitcoin2.jks
     key-store-password: bitcoin
     key-password: bitcoin
     keyStoreType: JKS
@@ -12,14 +12,6 @@ server:
     trust-store-password: bitcoin
     trust-store-type: JKS
     client-auth: want
-
-spring:
-  logging:
-    pattern:
-      console: "%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([${springAppName:-},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-Span-Export:-}]){yellow} %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
-    level:
-      org.springframework: WARN
-      org.hibernate: WARN
 
 eureka:
   instance:
@@ -38,7 +30,7 @@ eureka:
     instance-info-replication-interval-seconds: 10
     registry-fetch-interval-seconds: 10
     serviceUrl:
-      defaultZone:  ${EUREKA_URI:https://localhost:8761/eureka}
+      defaultZone:  ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:https://localhost:8761/eureka}
     fetch-registry: true
     register-with-eureka: true
 

@@ -1,5 +1,6 @@
 package upp.la.service;
 
+import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,12 @@ public class VerifyAccountService implements JavaDelegate{
 	    	  
 	    	  token = confirmationTokenRepository.findOneByToken(confirmationToken);
 		}catch(Exception e) {
+			
 			System.out.println("exception");
+			if (e.getMessage().contains("username_already_exists")) {
+				throw new BpmnError("username_already_exists");
+			}
+			throw e;
 		}
 		    if (token == null) {
 		      throw new EntityNotFound(ErrorMessages.TOKEN_ERROR());
