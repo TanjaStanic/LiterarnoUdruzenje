@@ -2,7 +2,7 @@ server:
   port: ${PORT:8888}
   ssl:
     enabled: true
-    key-store: classpath:config_server.jks
+    key-store: classpath:config_server2.jks
     key-store-password: password
     key-alias: config-server
     key-store-type: JKS

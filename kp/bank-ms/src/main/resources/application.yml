@@ -3,7 +3,7 @@ server:
   ssl:
     enabled: true
     protocol: TLS
-    key-store: classpath:banking.jks
+    key-store: classpath:banking2.jks
     key-store-password: banking
     key-password: banking
     keyStoreType: JKS

@@ -3,7 +3,7 @@ server:
   ssl:
     enabled: true
     protocol: TLS
-    key-store: classpath:bitcoin.jks
+    key-store: classpath:bitcoin2.jks
     key-store-password: bitcoin
     key-password: bitcoin
     keyStoreType: JKS

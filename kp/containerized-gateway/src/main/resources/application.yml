@@ -3,7 +3,7 @@ server:
   ssl:
     enabled: true
     protocol: TLS
-    key-store: classpath:gateway.jks
+    key-store: classpath:gateway2.jks
     key-store-password: gateway
     key-password: gateway
     keyStoreType: JKS
