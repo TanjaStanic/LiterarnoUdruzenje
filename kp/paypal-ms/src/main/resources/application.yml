@@ -3,11 +3,11 @@ server:
   ssl:
     enabled: true
     protocol: TLS
-    key-store: classpath:paypal.jks
+    key-store: classpath:paypal2.jks
     key-store-password: paypal
     key-password: paypal
     keyStoreType: JKS
-    keyAlias: paypal-ms
+    keyAlias: paypal (localhost)
     trust-store: classpath:paypal_truststore.jks
     trust-store-password: paypal
     trust-store-type: JKS

@@ -2,7 +2,7 @@ server:
   ssl:
     enabled: true
     protocol: TLS
-    key-store: classpath:bankacq.jks
+    key-store: classpath:bankacq2.jks
     key-store-password: bankacq
     key-password: bankacq
     keyStoreType: JKS
