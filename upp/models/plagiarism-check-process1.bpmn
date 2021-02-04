@@ -159,7 +159,7 @@
               </camunda:validation>
             </camunda:formField>
           </camunda:formData>
-          <camunda:executionListener class="upp.la.listener.plaiarism.SaveDecisions" event="end" />
+          <camunda:executionListener class="upp.la.listener.plagiarism.SaveDecisions" event="end" />
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1py8c7u</bpmn:incoming>
         <bpmn:outgoing>Flow_0cvwe3t</bpmn:outgoing>

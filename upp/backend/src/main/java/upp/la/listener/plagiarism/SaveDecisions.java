@@ -20,7 +20,7 @@ public class SaveDecisions implements JavaDelegate {
 
     String decision = decisionForm.get(0).getFieldValue();
 
-    if (decision.equals("true")) {
+    if (decision.equals("Da")) {
       decisionsMultiInstancePositive += 1;
     } else {
       decisionsMultiInstanceNegative += 1;
