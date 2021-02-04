@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 public class InsertUsersOnCreate implements JavaDelegate {
 
   public void execute(DelegateExecution execution) throws Exception {
+
     ProcessEngine engine = execution.getProcessEngine();
 
     IdentityService identityService = engine.getIdentityService();
@@ -139,5 +140,6 @@ public class InsertUsersOnCreate implements JavaDelegate {
       identityService.createMembership("lecturer2", "lecturers");
       identityService.createMembership("lecturer3", "lecturers");
     }
+
   }
 }

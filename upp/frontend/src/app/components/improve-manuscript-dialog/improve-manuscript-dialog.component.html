@@ -1,0 +1,10 @@
+<h3>Okaciti izmenjen fajl</h3>
+<form [formGroup]="manuscriptForm" (ngSubmit)="onSubmit()">
+  <div>
+    <input type="file" #fileInput id="uploadFile" (change)="uploadFileEvt($event)" name="uploadFile"/>
+  </div>
+  <mat-dialog-actions>
+  <button mat-raised-button color="primary" class="pull-right">Submit</button>
+  </mat-dialog-actions>
+</form>
+

@@ -31,14 +31,14 @@ public class BetaReadersTaskListener implements TaskListener {
     public void notify(DelegateTask delegateTask) {
         List<User> betaReaders = userRepository.findUsersByRole(Role.BETA_READER);
         ArrayList<BetaReaderDto> betaReaderDtos = new ArrayList<>();
-        int counter = 1;
         for(User u: betaReaders) {
             BetaReaderDto b = new BetaReaderDto();
-            b.setId((long)counter);
+            b.setId(u.getId());
             b.setName(u.getUsername());
             betaReaderDtos.add(b);
-            counter++;
         }
+
+        System.out.println("Beta readers count " + betaReaderDtos.size());
 
         String taskId = delegateTask.getId();
         FormService formService = delegateTask.getProcessEngineServices().getFormService();

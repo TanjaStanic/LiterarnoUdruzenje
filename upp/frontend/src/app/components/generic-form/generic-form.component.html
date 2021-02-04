@@ -2,8 +2,8 @@
 
   <ng-template ngFor let-field [ngForOf]="fields">
 
-    <div *ngIf="field.type == 'control'">
-      <generic-input-row [field]="field" [formGroup]="myForm"></generic-input-row>
+    <div *ngIf="field.type === 'control'">
+      <app-generic-input-row [field]="field" [formGroup]="myForm"></app-generic-input-row>
     </div>
   </ng-template>
 </form>

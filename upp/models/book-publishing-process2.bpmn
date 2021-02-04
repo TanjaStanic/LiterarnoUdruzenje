@@ -12,9 +12,6 @@
 
 Listeners:
   start: # Insert users into Identity Service</bpmn:documentation>
-        <bpmn:extensionElements>
-          <camunda:executionListener class="upp.la.listener.InsertUsersOnCreate" event="start" />
-        </bpmn:extensionElements>
         <bpmn:outgoing>Flow_1dhsmcv</bpmn:outgoing>
       </bpmn:startEvent>
       <bpmn:userTask id="Activity_16l23uo" name="Book details form" camunda:assignee="${writer}">
@@ -804,13 +801,13 @@ Select one, and assing to task.</bpmn:documentation>
       <bpmndi:BPMNShape id="Activity_0bsetgj_di" bpmnElement="Activity_0bsetgj" isExpanded="true">
         <dc:Bounds x="960" y="580" width="350" height="200" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0g26fcf_di" bpmnElement="Flow_0g26fcf">
-        <di:waypoint x="1036" y="680" />
-        <di:waypoint x="1122" y="680" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0wj7s75_di" bpmnElement="Flow_0wj7s75">
         <di:waypoint x="1158" y="680" />
         <di:waypoint x="1252" y="680" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0g26fcf_di" bpmnElement="Flow_0g26fcf">
+        <di:waypoint x="1036" y="680" />
+        <di:waypoint x="1122" y="680" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_06w72e5_di" bpmnElement="Event_06w72e5">
         <dc:Bounds x="1000" y="662" width="36" height="36" />
@@ -842,13 +839,13 @@ Select one, and assing to task.</bpmn:documentation>
       <bpmndi:BPMNShape id="Activity_1ys6lde_di" bpmnElement="Activity_1ys6lde" isExpanded="true">
         <dc:Bounds x="960" y="820" width="350" height="200" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_12zrwlj_di" bpmnElement="Flow_12zrwlj">
-        <di:waypoint x="1036" y="920" />
-        <di:waypoint x="1122" y="920" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_11bu5sx_di" bpmnElement="Flow_11bu5sx">
         <di:waypoint x="1158" y="920" />
         <di:waypoint x="1252" y="920" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12zrwlj_di" bpmnElement="Flow_12zrwlj">
+        <di:waypoint x="1036" y="920" />
+        <di:waypoint x="1122" y="920" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Event_1ro7rkn_di" bpmnElement="Event_1ro7rkn">
         <dc:Bounds x="1000" y="902" width="36" height="36" />

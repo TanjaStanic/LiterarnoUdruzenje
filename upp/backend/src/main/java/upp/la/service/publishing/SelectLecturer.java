@@ -32,7 +32,7 @@ public class SelectLecturer implements JavaDelegate {
         Book book = new Book();
 
         for(FormFieldDto f1: dtos) {
-            if(f1.getFieldValue().equals("workingTitleId")) {
+            if(f1.getFieldId().equals("workingTitleId")) {
                 book = bookRepository.findBookByTitle(f1.getFieldValue());
             }
         }
@@ -40,5 +40,6 @@ public class SelectLecturer implements JavaDelegate {
         int randomNumber = rand.nextInt(lectures.size());
         User user = lectures.get(randomNumber);
         book.setLecturer(user);
+        bookRepository.save(book);
     }
 }

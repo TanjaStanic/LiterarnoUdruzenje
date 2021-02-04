@@ -1,5 +1,6 @@
 package upp.la.model;
 
+import com.sun.istack.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,15 +38,17 @@ public class Book {
 
   @Column private String placePublished;
 
-  @Column private Integer pages;
+  @Column private String pages;
 
   @Column private String synopsis;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   private User editor;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   private User lecturer;
+
+  @Column private boolean accepted = false;
 
   @ManyToMany
   @JoinTable(
