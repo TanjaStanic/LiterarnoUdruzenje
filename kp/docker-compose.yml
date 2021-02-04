@@ -1,0 +1,152 @@
+version: '3.9'
+
+services:
+
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3308:3306"
+  service-discovery:
+    image: 127.0.0.1:5000/service-discovery
+    container_name: service-discovery
+    build:
+      context: ./containerized-discovery
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+
+  config-server:
+    image: 127.0.0.1:5000/config-server
+    container_name: config-server
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+    build:
+      context: ./config-server
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    depends_on:
+      - service-discovery
+
+  gateway:
+    image: 127.0.0.1:5000/service-gateway
+    container_name: service-gateway
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+    restart: on-failure
+    build:
+      context: ./containerized-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8762:8762"
+    depends_on:
+      - config-server
+      - service-discovery
+    external_links:
+      - mysql
+
+  banking:
+    image: 127.0.0.1:5000/banking
+    container_name: banking
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+    restart: on-failure
+    build:
+      context: ./bank-ms
+      dockerfile: Dockerfile
+    ports:
+      - "8441:8441"
+    depends_on:
+      - service-discovery
+      - config-server
+#    links:
+#      - bank-acquirer
+    external_links:
+      - mysql
+
+  bitcoin:
+    image: 127.0.0.1:5000/bitcoin
+    container_name: bitcoin
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+    restart: on-failure
+    build:
+      context: ./bitcoin-ms
+      dockerfile: Dockerfile
+    ports:
+      - "8442:8442"
+    depends_on:
+      - service-discovery
+      - config-server
+    external_links:
+      - mysql
+
+  paypal:
+    image: 127.0.0.1:5000/paypal
+    container_name: paypal
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+    restart: on-failure
+    build:
+      context: ./paypal-ms
+      dockerfile: Dockerfile
+    ports:
+      - "8443:8443"
+    depends_on:
+      - service-discovery
+      - config-server
+    external_links:
+      - mysql
+
+  payment-info:
+    image: 127.0.0.1:5000/payment_info
+    container_name: payment_info
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: https://service-discovery:8761/eureka
+    restart: on-failure
+    build:
+      context: ./payment-info
+      dockerfile: Dockerfile
+    ports:
+      - "8444:8444"
+    depends_on:
+      - service-discovery
+      - config-server
+    links:
+      - banking
+    external_links:
+      - mysql
+
+#  bank-acquirer:
+#    image:  127.0.0.1:5000/bank-acquirer
+#    container_name:  bank-acquirer
+#    restart: on-failure
+#    environment:
+#      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+#    build:
+#      context: ./bank-acquirer
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8445:8445"
+#    depends_on:
+#      - service-discovery
+#    external_links:
+#      - mysql
+#
+#  bank-pcc:
+#    image: 127.0.0.1:5000/bank-pcc
+#    container_name: bank-pcc
+#    restart: on-failure
+#    environment:
+#      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka
+#    build:
+#       context: ./bank-pcc
+#       dockerfile: Dockerfile
+#    ports:
+#    - "8446:8446"
+#    depends_on:
+#    - service-discovery
+#    external_links:
+#    - mysql
