@@ -16,7 +16,9 @@ import {SubmitManuscriptComponent} from './components/submit-manuscript/submit-m
 import {BookReviewComponent} from './components/book-review/book-review.component';
 import {BetaReaderCommentComponent} from './components/beta-reader-comment/beta-reader-comment.component';
 import {LecturerNotesTyposComponent} from './components/lecturer-notes-typos/lecturer-notes-typos.component';
-
+import {WriterComplaintComponent} from './components/writer-complaint/writer-complaint.component';
+import { ChooseEditorsComponent } from './components/choose-editors/choose-editors.component';
+import {EditorPlagiarisedTableComponent} from './components/editor-plagiarised-table/editor-plagiarised-table.component';
 
 const routes: Routes = [
   {
@@ -87,6 +89,19 @@ const routes: Routes = [
     path: 'lecturerNotesTypos',
     component: LecturerNotesTyposComponent,
   }
+  ,
+  {
+    path: 'writerComplain',
+    component: WriterComplaintComponent,
+  },
+  {
+    path: 'chooseEditors',
+    component: ChooseEditorsComponent,
+  },
+  {
+    path: 'editorPlagiarisedTable',
+    component: EditorPlagiarisedTableComponent
+  },
 ];
 
 @NgModule({

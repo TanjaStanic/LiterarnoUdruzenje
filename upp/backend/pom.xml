@@ -19,8 +19,10 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 	</properties>
+	
+	
+<dependencies>
 
-	<dependencies>
 		<dependency>
 			<groupId>org.camunda.bpm.springboot</groupId>
 			<artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
@@ -31,6 +33,17 @@
 			<artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
 			<version>7.14.0</version>
 		</dependency>
+
+		<dependency>
+	        <groupId>org.camunda.bpm</groupId>
+	        <artifactId>camunda-engine-plugin-spin</artifactId>
+	        <version>7.14.0</version>
+	    </dependency>
+<dependency>
+    <groupId>org.camunda.bpm.springboot.project</groupId>
+    <artifactId>qa-plugins-spin-dataformat-all</artifactId>
+    <version>7.14.0-alpha1</version>
+</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>

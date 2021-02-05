@@ -1,0 +1,44 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef> Id </th>
+    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="writerBook">
+    <th mat-header-cell *matHeaderCellDef> Writer book </th>
+    <td mat-cell *matCellDef="let element"> {{element.plagiarismComplaint.writersBook.title}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="plagiarisedBook">
+    <th mat-header-cell *matHeaderCellDef> Plagiarised book </th>
+    <td mat-cell *matCellDef="let element"> {{element.plagiarismComplaint.plagiarisedBook.title}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="make">
+    <th mat-header-cell *matHeaderCellDef> Make </th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-flat-button color="primary" (click)="openDialog(element)"> Review </button>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="review">
+    <th mat-header-cell *matHeaderCellDef> Review </th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-flat-button color="primary" (click)="openDialog2(element)"> Review </button>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="final">
+    <th mat-header-cell *matHeaderCellDef> Final decision </th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-flat-button color="primary" (click)="openDialog3(element)"> Final </button>
+    </td>
+  </ng-container>
+
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

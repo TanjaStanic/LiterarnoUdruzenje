@@ -25,12 +25,19 @@
       <a mat-list-item routerLink="/editorHome">Home</a>
       <a mat-list-item routerLink="/initialBookReview">Initial review</a>
       <a mat-list-item routerLink="/bookReview">Book review</a>
+      <a mat-list-item routerLink="/editorPlagiarisedTable">Plagiarised</a>
+      <a mat-list-item (click)="onLogout()">Logout</a>
+    </mat-nav-list>
+    <mat-nav-list *ngIf="isChiefEditor()">
+      <a mat-list-item routerLink="/editorHome">Home</a>
+	  <a mat-list-item routerLink="/chooseEditors">Choose editors</a>
       <a mat-list-item (click)="onLogout()">Logout</a>
     </mat-nav-list>
     <mat-nav-list *ngIf="isWriter()">
       <a mat-list-item routerLink="/writerHome">Home</a>
       <a mat-list-item routerLink="/publishBook">Publish book</a>
       <a mat-list-item routerLink="/submitManuscript">Submit manuscript</a>
+	  <a mat-list-item routerLink="/writerComplain">Make a complaint</a>
       <a mat-list-item (click)="onLogout()">Logout</a>
     </mat-nav-list>
     <mat-nav-list *ngIf="isWriterFiles()">

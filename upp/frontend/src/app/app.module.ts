@@ -11,7 +11,7 @@ import {
   MatListModule, MatSelectModule,
   MatSidenavModule,
   MatToolbarModule,
-  MatDialogModule, MatRadioModule, MatTableModule
+  MatDialogModule, MatRadioModule, MatTableModule, MatInputModule
 } from '@angular/material';
 import {RouterModule} from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
@@ -46,7 +46,13 @@ import { NeedMoreWorkDialogComponent } from './components/need-more-work-dialog/
 import { LecturerNotesTyposComponent } from './components/lecturer-notes-typos/lecturer-notes-typos.component';
 import { LecturerNotesTyposDialogComponent } from './components/lecturer-notes-typos-dialog/lecturer-notes-typos-dialog.component';
 import { EditorHaveSuggestionDialogComponent } from './components/editor-have-suggestion-dialog/editor-have-suggestion-dialog.component';
-
+import { WriterComplaintComponent } from './components/writer-complaint/writer-complaint.component';
+import { ChooseEditorsComponent } from './components/choose-editors/choose-editors.component';
+import { PlagiarismEditorReviewComponent } from './components/plagiarism-editor-review/plagiarism-editor-review.component';
+import { EditorPlagiarisedTableComponent } from './components/editor-plagiarised-table/editor-plagiarised-table.component';
+import { EditorPlagiarisedDialogComponent } from './components/editor-plagiarised-dialog/editor-plagiarised-dialog.component';
+import { EditorPlagiarisedDialogReviewComponent } from './components/editor-plagiarised-dialog-review/editor-plagiarised-dialog-review.component';
+import {EditorPlagiarisedDialogFinalComponent} from './components/editor-plagiarised-dialog-final/editor-plagiarised-dialog-final.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -79,6 +85,13 @@ import { EditorHaveSuggestionDialogComponent } from './components/editor-have-su
     LecturerNotesTyposComponent,
     LecturerNotesTyposDialogComponent,
     EditorHaveSuggestionDialogComponent,
+    WriterComplaintComponent,
+    ChooseEditorsComponent,
+    PlagiarismEditorReviewComponent,
+    EditorPlagiarisedTableComponent,
+    EditorPlagiarisedDialogComponent,
+    EditorPlagiarisedDialogReviewComponent,
+    EditorPlagiarisedDialogFinalComponent
   ],
   imports: [
     BrowserModule,
@@ -98,12 +111,14 @@ import { EditorHaveSuggestionDialogComponent } from './components/editor-have-su
     MatRadioModule,
     HttpClientModule,
     FormsModule,
-    MatTableModule
+    MatTableModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent],
   entryComponents: [ReaderDialogComponent, WriterReviewDialogComponent, InitialBookReviewDialogComponent, SubmitManuscriptDialogComponent,
   BookReviewDialogComponent, BookReviewDialogBetaReadersComponent, BetaReaderCommentDialogComponent, ImproveManuscriptDialogComponent,
-  NeedMoreWorkDialogComponent, LecturerNotesTyposDialogComponent, EditorHaveSuggestionDialogComponent]
+  NeedMoreWorkDialogComponent, LecturerNotesTyposDialogComponent, EditorHaveSuggestionDialogComponent,
+  EditorPlagiarisedDialogComponent, EditorPlagiarisedDialogReviewComponent, EditorPlagiarisedDialogFinalComponent]
 })
 export class AppModule { }

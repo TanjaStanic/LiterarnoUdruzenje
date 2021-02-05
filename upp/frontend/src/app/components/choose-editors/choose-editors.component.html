@@ -1,0 +1,15 @@
+<div class="main-content">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <mat-card>
+          <h3>Proces zalbe na plagijat</h3>
+          <form [formGroup]="chooseEditorsForm" (ngSubmit)="onSubmit()">
+            <app-generic-form #genericForm [fields]="fields"></app-generic-form>
+            <button mat-raised-button color="primary" class="pull-right">Submit</button>
+          </form>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

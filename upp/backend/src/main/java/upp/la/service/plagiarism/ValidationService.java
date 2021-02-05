@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import upp.la.dto.FormFieldDto;
 import upp.la.model.Book;
+import upp.la.model.User;
 import upp.la.repository.BookRepository;
 
 @Service
@@ -24,11 +25,19 @@ public class ValidationService implements JavaDelegate {
 		List<FormFieldDto> formFields = 
         		(List<FormFieldDto>) execution.getVariable("Plagiarism complaint");
 		
+		System.out.println("Validacija servis");
 		Boolean validated = true;
 		Book myBook = null;
 		List<Book> books = new ArrayList<Book>();
-
+		
 		for (FormFieldDto f : formFields) {
+			
+			//check if book author is empty
+			if (f.getFieldId().equals("bookAuthorId")) {
+				if ((f.getFieldValue().trim().isEmpty())) {
+					validated = false;
+				}
+			}
 			
 			//check if book title is empty
 			if (f.getFieldId().equals("bookTitleId")) {				
@@ -43,21 +52,17 @@ public class ValidationService implements JavaDelegate {
 				
 				if ((f.getFieldValue().trim().isEmpty()) || myBook==null) {
 					validated = false;
-				}
+				} 
 				
 			}
-			//check if book author is empty
-			if (f.getFieldId().equals("bookAuthorId")) {
-				if ((f.getFieldValue().trim().isEmpty())) {
-					validated = false;
-				}	
-			}
-			
+
 			//check if writer book is empty or in base
 			if (f.getFieldId().equals("writerBookTitleId")) {
 				try {
 					myBook = bookRepository.findBookByTitle(f.getFieldValue());
 					books.add(myBook);
+					execution.setVariable("chief", myBook.getEditor());
+
 				}
 				catch (BpmnError e) {
 					System.out.println("There is no book with title: " + f.getFieldValue());
@@ -70,11 +75,10 @@ public class ValidationService implements JavaDelegate {
 			}
 
 		}
-
+		System.out.println("Validacija: " + validated);
 		
 		execution.setVariable("validated", validated);
-		execution.setVariable("books", books);
-		
+		//execution.setVariable("books", books);
 	}
 
 }
