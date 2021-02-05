@@ -27,7 +27,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/book")
-@RolesAllowed({"WRITER", "EDITOR"})
 public class BookController {
 
     @Autowired
@@ -41,6 +40,8 @@ public class BookController {
     @Autowired
     BookRepository bookRepository;
 
+
+    @RolesAllowed({"WRITER", "ADMIN"})
     @GetMapping(path = "/getBookDetailsForm", produces = "application/json")
     public @ResponseBody
     FormFieldsDto getBookDetailsForm() {
@@ -59,6 +60,7 @@ public class BookController {
         return new FormFieldsDto(task.getId(), "123", properties);
     }
 
+    @RolesAllowed({"EDITOR", "ADMIN"})
     @GetMapping(path = "/initialBookReviewForm", produces = "application/json")
     public @ResponseBody
     FormFieldsDto initialBookReviewForm() {
@@ -75,6 +77,7 @@ public class BookController {
         return new FormFieldsDto(task.getId(), "123", properties);
     }
 
+    @RolesAllowed({"WRITER", "ADMIN"})
     @GetMapping(path = "/submitManuscriptForm", produces = "application/json")
     public @ResponseBody
     FormFieldsDto submitManuscriptForm() {
@@ -92,6 +95,7 @@ public class BookController {
     }
 
     @GetMapping(path = "/acceptManuscriptAndsendToBetaReadersForm", produces = "application/json")
+    @RolesAllowed({"EDITOR", "ADMIN"})
     public @ResponseBody
     FormFieldsDto sendToBetaReadersForm() {
 
@@ -123,6 +127,7 @@ public class BookController {
         return new FormFieldsDto(task.getId(), "123", properties);
     }
 
+    @RolesAllowed({"BETA_READER", "ADMIN"})
     @GetMapping(path = "/BetaReaderCommentsForm", produces = "application/json")
     public @ResponseBody
     FormFieldsDto BetaReaderCommentsForm() {

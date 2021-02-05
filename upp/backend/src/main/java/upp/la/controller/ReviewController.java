@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityNotFoundException;
 
 import org.camunda.bpm.engine.FormService;
@@ -46,7 +47,8 @@ public class ReviewController {
 	@Autowired private TaskService taskService;
 	@Autowired private RuntimeService runtimeService;
 	@Autowired private SubmitPaymentService submitPaymentService;
-	
+
+	@RolesAllowed({"LECTURER", "EDITOR", "ADMIN"})
 	@PostMapping(path="/submit-review", consumes = "application/json")
 	public ResponseEntity<?> submitReview(@RequestBody List<FormFieldDto> formFields,
 										  @RequestParam("username") String username,
@@ -90,6 +92,7 @@ public class ReviewController {
 	    return map;
 	  }
 
+	@RolesAllowed({"LECTURER", "EDITOR", "ADMIN"})
 	@GetMapping(path="/get-review-flag")
 	public ResponseEntity<Boolean> flag(@RequestParam("username") String username) {
 		boolean f = true;
@@ -101,6 +104,7 @@ public class ReviewController {
 		return new ResponseEntity<>(f, HttpStatus.OK);
 	}
 
+	@RolesAllowed({"WRITER", "LECTURER", "EDITOR", "ADMIN"})
 	@GetMapping(path = "/getMoreDocumentsField", produces = "application/json")
 	public @ResponseBody
 	FormFieldsDto getFields() {
@@ -117,6 +121,7 @@ public class ReviewController {
 		}
 	}
 
+	@RolesAllowed({"WRITER", "LECTURER", "EDITOR", "ADMIN"})
 	@GetMapping(path = "/paymentFields", produces = "application/json")
 	public @ResponseBody
 	FormFieldsDto getFiledsPayment(@RequestParam("username") String username) {
@@ -140,6 +145,7 @@ public class ReviewController {
 		}
 	}
 
+	@RolesAllowed({"WRITER"})
 	@PostMapping(path = "/postPayment", produces = "application/json")
 	public @ResponseBody ResponseEntity<?> postPayment(@RequestBody List<FormFieldDto> formFields)
 			throws ValidationError{

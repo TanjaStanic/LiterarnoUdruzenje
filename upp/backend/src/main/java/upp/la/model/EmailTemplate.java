@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import upp.la.model.registration.ApplicationResponse;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -107,7 +109,30 @@ public class EmailTemplate {
 	    return "There is a new plagiarism complaint ready for a review.";
   }
 
-  
+  public static String PLAGIARISM_BETA_COMMENTS_WRITER() {
+    return "Beta readers have left comments";
+  }
+
+  public static String PLAGIARISM_BETA_COMMENTS_WRITER_MESSAGE(List<BookComments> comments) {
+    String message = "";
+
+    for (BookComments comment : comments) {
+      message += "The user: " + comment.getBetaReader().getUsername()
+        + " left a comment: " + comment.getComment() + "\n\n";
+    }
+
+    return message;
+  }
+
+  public static String PLAGIARISM_LECTURER_NOTES_WRITER() {
+    return "Lecturer reviewed your manuscript";
+  }
+
+
+  public static String PLAGIARISM_LECTURER_NOTES_WRITER_MESSAGE(String comment) {
+    return "The lecturer made these remarks: " + comment + ".";
+  }
+
   private String address;
 
   private String subject;
@@ -179,6 +204,12 @@ public class EmailTemplate {
         EmailTemplate.PLAGIARISM_COMPLAINT_NOTIFY_CHIEF_EDITOR_MESSAGE());
   }
 
+  public static EmailTemplate PublishingBetaCommentsWriter(List<BookComments> comments) {
+    return new EmailTemplate(
+        EmailTemplate.PLAGIARISM_BETA_COMMENTS_WRITER(),
+        EmailTemplate.PLAGIARISM_BETA_COMMENTS_WRITER_MESSAGE(comments));
+  }
+
   public static EmailTemplate PlagiarismNotifyWriterDecision(String decision) {
     return new EmailTemplate(
         EmailTemplate.PLAGIARISM_NOTIFY_WRITER_DECISION(),
@@ -190,5 +221,11 @@ public class EmailTemplate {
 	        EmailTemplate.PLAGIARISM_COMPLAINT_NOTIFY_EDITORS(),
 	        EmailTemplate.PLAGIARISM_COMPLAINT_NOTIFY_EDITORS_MESSAGE()
 	            + EmailTemplate.REGISTRATION_APPLICATION_DEADLINE_MESSAGE(deadlineDays));
-	  }
+  }
+
+  public static EmailTemplate PublishingLecturerNotesWriter(String comment) {
+    return new EmailTemplate(
+        EmailTemplate.PLAGIARISM_LECTURER_NOTES_WRITER(),
+        EmailTemplate.PLAGIARISM_LECTURER_NOTES_WRITER_MESSAGE(comment));
+  }
 }

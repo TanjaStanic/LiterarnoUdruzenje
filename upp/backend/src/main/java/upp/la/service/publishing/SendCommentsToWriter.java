@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 import upp.la.dto.FormFieldDto;
 import upp.la.model.Book;
 import upp.la.model.BookComments;
+import upp.la.model.EmailTemplate;
 import upp.la.model.User;
 import upp.la.repository.BookCommentsRepo;
 import upp.la.repository.BookRepository;
 import upp.la.repository.UserRepository;
+import upp.la.util.Requests;
 
 import java.util.List;
 
@@ -43,9 +45,13 @@ public class SendCommentsToWriter implements JavaDelegate {
             }
         }
 
-        // Svi komentari od beta citalaca
-        // Samo da se posalje mail piscu sa komentarima
-        // Moze da se stavis naziv usera i njegov komentar u mailu
         List<BookComments> bookComments = book.getComments();
+
+        EmailTemplate
+            email = EmailTemplate.PublishingBetaCommentsWriter(bookComments);
+
+        email.setAddress(user.getEmail());
+
+        //Requests.sendEmail(email);
     }
 }

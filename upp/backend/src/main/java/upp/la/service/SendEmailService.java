@@ -139,8 +139,20 @@ public class SendEmailService implements JavaDelegate{
 	       // Requests.sendEmail(email);
 	    }
 		//PUBLISHING DECLINED BEFORE MANUSCRIPT
+		else if (receivingMessageName.equals("BookPublishingNotifyWriterDeclinedExplanation")) {
+			List<FormFieldDto> fields = (List<FormFieldDto>) execution.getVariable("Initial book review");
+
+			String reason = fields.get(1).getFieldValue();
+
+			EmailTemplate email = EmailTemplate.PublishingDeclinedBeforeManuscript(reason);
+
+			email.setAddress(mail);
+			System.out.println("mail glasi: " + email.getMessage());
+			Requests.sendEmail(email);
+		}
+
 		else if (receivingMessageName.equals("BookPublishingNotifyWriterDeclined")) {
-			String reason = (String) execution.getVariable("reason");
+			String reason = "Declined after manuscript.";
 
 			EmailTemplate email = EmailTemplate.PublishingDeclinedBeforeManuscript(reason);
 
