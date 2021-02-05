@@ -6,6 +6,7 @@ import upp.la.model.Book;
 import upp.la.model.User;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
@@ -13,4 +14,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Book findBookByTitle(String title);
     ArrayList<Book> findAllByEditor(User editor);
     ArrayList<Book> findAllByLecturer(User lecturer);
+
+    Optional<Book> findByTitle(String title);
 }

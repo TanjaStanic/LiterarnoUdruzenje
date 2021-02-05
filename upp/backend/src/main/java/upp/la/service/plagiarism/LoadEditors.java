@@ -10,6 +10,7 @@ import upp.la.model.User;
 import upp.la.repository.UserRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class LoadEditors implements JavaDelegate{
@@ -31,6 +32,15 @@ public class LoadEditors implements JavaDelegate{
 			throw new BpmnError("LoadEditorError");
 		}
 		execution.setVariable("editors", allEditors);*/
+	/*
+		execution.setVariable("allEditors", allEditors);
+		execution.setVariable("allEditorsCamunda", allEditorsCamunda);
+		execution.setVariable("chiefEditor", chiefEditor);
+
+		execution.setVariable("decisionsMultiInstancePositive", 0);
+
+		execution.setVariable("decisionsMultiInstanceNegative", 0);
+		*/
 	}
 	
 

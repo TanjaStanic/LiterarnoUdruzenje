@@ -18,7 +18,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/rap", produces = MediaType.APPLICATION_JSON_VALUE)
-@RolesAllowed({"LECTURER"})
 public class RegistrationApplicationResponseController {
 
     @Autowired
