@@ -1,5 +1,6 @@
 package upp.la.model.plagiarism;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,7 @@ public class PlagiarismComplaint {
     private Boolean finalResponse;
 
     //Responses containing editors comments
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
         name = "complaint_comments",

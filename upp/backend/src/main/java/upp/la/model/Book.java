@@ -1,5 +1,6 @@
 package upp.la.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +28,7 @@ public class Book {
   private String isbn;
 
   //List of books writers
+  @JsonIgnore
   @ManyToMany(mappedBy = "books")
   private List<User> writers = new ArrayList<>();
 

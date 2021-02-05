@@ -43,6 +43,7 @@ export class BookService {
   editorHasSuggestionsForm() {
     return this.httpClient.get('http://localhost:8080/book/editorHasSuggestions') as Observable<any>;
   }
+
   public async getBooksForInitialReview(username: string): Promise<Book[]> {
     let params = new HttpParams();
     params = params.append('username', username);

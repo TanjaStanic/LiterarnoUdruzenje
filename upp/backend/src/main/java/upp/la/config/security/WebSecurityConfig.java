@@ -55,10 +55,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   // If all else fails - turn off security by uncommenting these 3 lines
-  //  @Override
-  //  public void configure(WebSecurity web) throws Exception {
-  //    web.ignoring().antMatchers("/**");
-  //  }
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+      web.ignoring().antMatchers("/**");
+    }
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {

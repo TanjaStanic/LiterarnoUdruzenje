@@ -26,7 +26,7 @@ import upp.la.dto.FormFieldDto;
 import upp.la.dto.FormFieldsDto;
 
 @RestController
-@RequestMapping("/plagiarism")
+@RequestMapping("/asd")
 public class PlagiarismCheckController {
 	@Autowired
     private RuntimeService runtimeService;

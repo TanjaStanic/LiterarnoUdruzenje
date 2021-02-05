@@ -11,7 +11,7 @@ import {
   MatListModule, MatSelectModule,
   MatSidenavModule,
   MatToolbarModule,
-  MatDialogModule, MatRadioModule, MatTableModule
+  MatDialogModule, MatRadioModule, MatTableModule, MatInputModule
 } from '@angular/material';
 import {RouterModule} from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
@@ -49,6 +49,10 @@ import { EditorHaveSuggestionDialogComponent } from './components/editor-have-su
 import { WriterComplaintComponent } from './components/writer-complaint/writer-complaint.component';
 import { ChooseEditorsComponent } from './components/choose-editors/choose-editors.component';
 import { PlagiarismEditorReviewComponent } from './components/plagiarism-editor-review/plagiarism-editor-review.component';
+import { EditorPlagiarisedTableComponent } from './components/editor-plagiarised-table/editor-plagiarised-table.component';
+import { EditorPlagiarisedDialogComponent } from './components/editor-plagiarised-dialog/editor-plagiarised-dialog.component';
+import { EditorPlagiarisedDialogReviewComponent } from './components/editor-plagiarised-dialog-review/editor-plagiarised-dialog-review.component';
+import {EditorPlagiarisedDialogFinalComponent} from './components/editor-plagiarised-dialog-final/editor-plagiarised-dialog-final.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -83,7 +87,11 @@ import { PlagiarismEditorReviewComponent } from './components/plagiarism-editor-
     EditorHaveSuggestionDialogComponent,
     WriterComplaintComponent,
     ChooseEditorsComponent,
-    PlagiarismEditorReviewComponent
+    PlagiarismEditorReviewComponent,
+    EditorPlagiarisedTableComponent,
+    EditorPlagiarisedDialogComponent,
+    EditorPlagiarisedDialogReviewComponent,
+    EditorPlagiarisedDialogFinalComponent
   ],
   imports: [
     BrowserModule,
@@ -103,12 +111,14 @@ import { PlagiarismEditorReviewComponent } from './components/plagiarism-editor-
     MatRadioModule,
     HttpClientModule,
     FormsModule,
-    MatTableModule
+    MatTableModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent],
   entryComponents: [ReaderDialogComponent, WriterReviewDialogComponent, InitialBookReviewDialogComponent, SubmitManuscriptDialogComponent,
   BookReviewDialogComponent, BookReviewDialogBetaReadersComponent, BetaReaderCommentDialogComponent, ImproveManuscriptDialogComponent,
-  NeedMoreWorkDialogComponent, LecturerNotesTyposDialogComponent, EditorHaveSuggestionDialogComponent]
+  NeedMoreWorkDialogComponent, LecturerNotesTyposDialogComponent, EditorHaveSuggestionDialogComponent,
+  EditorPlagiarisedDialogComponent, EditorPlagiarisedDialogReviewComponent, EditorPlagiarisedDialogFinalComponent]
 })
 export class AppModule { }

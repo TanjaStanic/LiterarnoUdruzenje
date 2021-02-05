@@ -45,7 +45,6 @@ public class SendEmailService implements JavaDelegate{
 	public void execute(DelegateExecution execution) throws Exception {
 		System.out.println("EmailService");
 
-		/*
 		ThrowEvent messageEvent = (ThrowEvent) execution.getBpmnModelElementInstance();
 	    MessageEventDefinition messageEventDefinition = (MessageEventDefinition) messageEvent
 	        .getEventDefinitions().iterator().next();
@@ -197,33 +196,35 @@ public class SendEmailService implements JavaDelegate{
 		}
 
 	    //NOTIFY CHOSEN EDITORS
-		else if (messageParam.equals("NotifyChosenEditors")) {
-			EmailTemplate email = EmailTemplate.PlagiarismComplaintNotifyEditors(14);
+		else if (receivingMessageName.equals("NotifyChosenEditors")) {
+//			EmailTemplate email = EmailTemplate.PlagiarismComplaintNotifyEditors(14);
+//
+//			List<FormFieldDto> formFields =
+//					(List<FormFieldDto>) execution.getVariable("Choose editors");
+//			List<User> editors = new ArrayList<>();
+//			User u = new User();
+//			for (FormFieldDto f : formFields) {
+//				u = userRepository.findUserById(Long.parseLong(f.getFieldValue()));
+//				editors.add(u);
+//			}
+//
+//			if (!editors.isEmpty()) {
+//				for (User e : editors) {
+//					email.setAddress(e.getEmail());
+//					System.out.println("mail glasi: " + email.getMessage());
+//					//Requests.sendEmail(email);
+//
+//				}
+//			}
+//			else {
+//				throw new BpmnError("EmailError");
+//			}
 
-			List<FormFieldDto> formFields =
-					(List<FormFieldDto>) execution.getVariable("Choose editors");
-			List<User> editors = new ArrayList<>();
-			User u = new User();
-			for (FormFieldDto f : formFields) {
-				u = userRepository.findUserById(Long.parseLong(f.getFieldValue()));
-				editors.add(u);
-			}
-			
-			if (!editors.isEmpty()) {
-				for (User e : editors) {
-					email.setAddress(e.getEmail());
-					System.out.println("mail glasi: " + email.getMessage());
-					//Requests.sendEmail(email);
-					
-				}
-			}
-			else {
-				throw new BpmnError("EmailError");
-			}
+			System.out.println("Obavesteni svi editori");
 	    
 	    
 		}
 
-		 */
+
 	}
 }

@@ -1,6 +1,7 @@
 package upp.la.service.plagiarism;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.RuntimeService;
@@ -10,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import upp.la.model.User;
+import upp.la.model.plagiarism.PlagiarismComplaint;
+import upp.la.model.plagiarism.PlagiarismComplaintResponse;
+import upp.la.repository.PlagiarismComplaintRepository;
+import upp.la.repository.PlagiarismComplaintResponseRepository;
 import upp.la.repository.UserRepository;
 
 @Service
@@ -20,9 +25,16 @@ public class RemoveEditor implements JavaDelegate{
 	
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	PlagiarismComplaintRepository plagiarismComplaintRepository;
+
+	@Autowired
+	PlagiarismComplaintResponseRepository plagiarismComplaintResponseRepository;
 	
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
+		/*
 		ArrayList<User> allEditors = (ArrayList<User>)execution.getVariable("editors");
 		ArrayList<User> chosenEditors = (ArrayList<User>)execution.getVariable("chosenEditors");
 
@@ -43,6 +55,8 @@ public class RemoveEditor implements JavaDelegate{
 		
 		execution.setVariable("chosenEditors", chosenEditors);
 		execution.setVariable("editors", allEditors);
+		 */
+
 	}
 
 }

@@ -18,6 +18,7 @@ import {BetaReaderCommentComponent} from './components/beta-reader-comment/beta-
 import {LecturerNotesTyposComponent} from './components/lecturer-notes-typos/lecturer-notes-typos.component';
 import {WriterComplaintComponent} from './components/writer-complaint/writer-complaint.component';
 import { ChooseEditorsComponent } from './components/choose-editors/choose-editors.component';
+import {EditorPlagiarisedTableComponent} from './components/editor-plagiarised-table/editor-plagiarised-table.component';
 
 const routes: Routes = [
   {
@@ -96,7 +97,11 @@ const routes: Routes = [
   {
     path: 'chooseEditors',
     component: ChooseEditorsComponent,
-  }
+  },
+  {
+    path: 'editorPlagiarisedTable',
+    component: EditorPlagiarisedTableComponent
+  },
 ];
 
 @NgModule({
