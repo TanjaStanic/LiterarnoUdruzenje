@@ -26,10 +26,16 @@ INSERT INTO upp_db.user(username, first_name, last_name, password, email, city, 
     VALUES ('lecturer789', 'Lecturer3', 'Lecturer3', '$2a$10$BPGCvrv4ROnM70RrwZETwuU4irNlKFAQvXwYuiUrvevEIjDmhNSXi', 'email3@lecturer.com', 'NS', 'SRB', true, 'LECTURER',0);
 
 INSERT INTO upp_db.user(username, first_name, last_name, password, email, city, country, activated, role, points)
-    VALUES ('editor123', 'Editor1', 'Editor1', '$2a$10$BPGCvrv4ROnM70RrwZETwuU4irNlKFAQvXwYuiUrvevEIjDmhNSXi', 'email@editor.com', 'NS', 'SRB', true, 'EDITOR',0);
+    VALUES ('editor123', 'Editor1', 'Editor1', '$2a$10$BPGCvrv4ROnM70RrwZETwuU4irNlKFAQvXwYuiUrvevEIjDmhNSXi', 'email@editor1.com', 'NS', 'SRB', true, 'EDITOR',0);
 
 INSERT INTO upp_db.user(username, first_name, last_name, password, email, city, country, activated, role, points)
-    VALUES ('chiefEditor', 'Chief', 'Editor', '$2a$10$BPGCvrv4ROnM70RrwZETwuU4irNlKFAQvXwYuiUrvevEIjDmhNSXi', 'email@chiefeditor.com', 'NS', 'SRB', true, 'CHIEF_EDITOR', 0);
+    VALUES ('editor456', 'Editor2', 'Editor2', '$2a$10$BPGCvrv4ROnM70RrwZETwuU4irNlKFAQvXwYuiUrvevEIjDmhNSXi', 'email@editor2.com', 'NS', 'SRB', true, 'EDITOR',0);
+
+INSERT INTO upp_db.user(username, first_name, last_name, password, email, city, country, activated, role, points)
+    VALUES ('editor789', 'Editor3', 'Editor3', '$2a$10$BPGCvrv4ROnM70RrwZETwuU4irNlKFAQvXwYuiUrvevEIjDmhNSXi', 'email@editor3.com', 'NS', 'SRB', true, 'EDITOR',0);
+
+INSERT INTO upp_db.user(username, first_name, last_name, password, email, city, country, activated, role, points)
+    VALUES ('editor000', 'Editor4', 'Editor4', '$2a$10$BPGCvrv4ROnM70RrwZETwuU4irNlKFAQvXwYuiUrvevEIjDmhNSXi', 'email@editor4.com', 'NS', 'SRB', true, 'EDITOR',0);
 
 
 INSERT INTO upp_db.genre(name)
@@ -71,8 +77,8 @@ INSERT INTO upp_db.document(file_url)
 INSERT INTO upp_db.document(file_url)
     VALUES('http://localhost:8080/files/download/file3.pdf');
 
-INSERT INTO upp_db.book(isbn, key_terms, pages, place_published, publisher, synopsis, title, year_published, document_id, accepted)
-    VALUES('isbn_unique_1', 'key_terms_1', 10, 'place_published_1', 'publisher_name_1', 'synopsis_1', 'Title 1', '1990', 1, false);
+INSERT INTO upp_db.book(isbn, key_terms, pages, place_published, publisher, synopsis, title, year_published, document_id, accepted,editor_id)
+    VALUES('isbn_unique_1', 'key_terms_1', 10, 'place_published_1', 'publisher_name_1', 'synopsis_1', 'Title 1', '1990', 1, false,10);
 
 INSERT INTO upp_db.book(isbn, key_terms, pages, place_published, publisher, synopsis, title, year_published, document_id, accepted)
     VALUES('isbn_unique_2', 'key_terms_2', 11, 'place_published_2', 'publisher_name_2', 'synopsis_2', 'Title 2', '1991', 2, false);
@@ -99,7 +105,7 @@ INSERT INTO upp_db.writers_books(user_id, book_id)
     VALUES(2, 1);
 
 INSERT INTO upp_db.writers_books(user_id, book_id)
-    VALUES(2, 2);
+    VALUES(3, 2);
 
 INSERT INTO upp_db.writers_books(user_id, book_id)
     VALUES(2, 3);

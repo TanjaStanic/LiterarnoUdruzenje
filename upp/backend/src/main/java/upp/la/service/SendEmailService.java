@@ -63,6 +63,15 @@ public class SendEmailService implements JavaDelegate{
         }
 	   
 
+	    //NOTIFY CHOSEN EDITORS
+	    String messageParam="";		
+		try {
+			messageParam = (String) runtimeService.getVariableLocal(execution.getId(), "messageId");
+		}
+		catch (ProcessEngineException  e) {
+			System.out.println("Username failed");
+		}
+
 	    //send email to confirm registration
 	    if (receivingMessageName.equals("send_verification_email")) {
 	    	String email = "";
@@ -159,47 +168,41 @@ public class SendEmailService implements JavaDelegate{
 		//PLAGIARISM NOTIFY CHIEF EDITOR
 		else if (receivingMessageName.equals("PlagiarismComplaintNotifyChiefEditor")) {
 			EmailTemplate email = EmailTemplate.PlagiarismComplaintNotifyChiefEditor();
-
-			email.setAddress(mail);
+			User chief = (User) execution.getVariable("chiefEditor");
+			email.setAddress(chief.getEmail());
 			System.out.println("mail glasi: " + email.getMessage());
 			Requests.sendEmail(email);
 		}
 		//PLAGIARISM NOTIFY WRITER DECISION
 		else if (receivingMessageName.equals("PlagiarismNotifyWriterDecision")) {
+			
 			EmailTemplate email = EmailTemplate.PlagiarismNotifyWriterDecision("TODO: DECISIONS");
 
 			email.setAddress(mail);
 			System.out.println("mail glasi: " + email.getMessage());
-			Requests.sendEmail(email);
+		//	Requests.sendEmail(email);
 		}
 
 	    //NOTIFY CHOSEN EDITORS
-	    String messageParam="";		
-		try {
-			messageParam = (String) runtimeService.getVariableLocal(execution.getId(), "messageId");
-		}
-		catch (ProcessEngineException  e) {
-			System.out.println("Username failed");
-		}
-	    
-		if (messageParam.equals("NotifyChosenEditors")) {
+		else if (messageParam.equals("NotifyChosenEditors")) {
 			EmailTemplate email = EmailTemplate.PlagiarismComplaintNotifyEditors(14);
 			
-			ArrayList<org.camunda.bpm.engine.identity.User> editors = 
-					(ArrayList<org.camunda.bpm.engine.identity.User>)execution.getVariable("chosenEditors");
+			ArrayList<User> editors = 
+					(ArrayList<User>)execution.getVariable("chosenEditors");
 			
-			for (org.camunda.bpm.engine.identity.User e : editors) {
-				email.setAddress(e.getEmail());
-				System.out.println("mail glasi: " + email.getMessage());
-				Requests.sendEmail(email);
-				
+			if (!editors.isEmpty()) {
+				for (User e : editors) {
+					email.setAddress(e.getEmail());
+					System.out.println("mail glasi: " + email.getMessage());
+					//Requests.sendEmail(email);
+					
+				}
 			}
-			
-		}else {
-			throw new BpmnError("EmailError");
+			else {
+				throw new BpmnError("EmailError");
+			}
+	    
+	    
 		}
-	    
-	    
-
 	}
 }

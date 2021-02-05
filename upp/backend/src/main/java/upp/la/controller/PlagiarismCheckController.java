@@ -37,7 +37,7 @@ public class PlagiarismCheckController {
     
 	@GetMapping(path = "/getComplainForm", produces = "application/json")
     public @ResponseBody
-    FormFieldsDto getBookDetailsForm() {
+    FormFieldsDto getComplainForm() {
 
         ProcessInstance pi = runtimeService.startProcessInstanceByKey("plagiarismCheckProcessId");
 
@@ -52,14 +52,14 @@ public class PlagiarismCheckController {
 
         return new FormFieldsDto(task.getId(), "123", properties);
     }
-	//Genericka forma za post formi
-    @PostMapping(path = "/postFormFields", produces = "application/json")
+
+	@PostMapping(path = "/postFormFields", produces = "application/json")
     public @ResponseBody
     ResponseEntity<?> postForms(@RequestBody List<FormFieldDto> formFields,
                            @RequestParam("taskId") String taskId) {
         Task task = taskService.createTaskQuery().taskId(taskId).list().get(0);
         System.out.println("Naziv taska je " + task.getName());
-        if(task.getName().equals("Select beta readers")) {
+       if(task.getName().equals("Make chosen editors list")) {
             List<FormFieldDto> tmp = new ArrayList<>();
             String[] parts = formFields.get(0).getFieldValue().split(",");
             for(String s : parts) {
@@ -82,6 +82,7 @@ public class PlagiarismCheckController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+	
     private HashMap<String, Object> mapListToDto(List<FormFieldDto> list) {
         HashMap<String, Object> map = new HashMap<String, Object>();
         for (FormFieldDto temp : list) {

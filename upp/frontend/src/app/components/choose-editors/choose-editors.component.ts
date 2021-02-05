@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {GenericFormComponent, GenericFormType} from '../generic-form/generic-form.component';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import {PlagiarismService} from '../../services/plagiarism.service';
-import {GenericFormComponent, GenericFormType} from '../generic-form/generic-form.component';
 
 @Component({
   selector: 'app-choose-editors',

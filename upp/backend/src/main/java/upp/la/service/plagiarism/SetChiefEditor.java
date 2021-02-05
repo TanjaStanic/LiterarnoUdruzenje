@@ -6,34 +6,29 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import upp.la.model.Role;
 import upp.la.model.User;
 import upp.la.repository.UserRepository;
 
-import java.util.ArrayList;
-
 @Service
-public class LoadEditors implements JavaDelegate{
-	
+public class SetChiefEditor implements JavaDelegate{
+
 	@Autowired
 	UserRepository userRepisotory;
 	
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
-		
-		ArrayList<User> allEditors = null;
-	
+		User chiefEditor = null;
 		try {
-			allEditors = (ArrayList<User>) userRepisotory.findAll();
-			
+			chiefEditor = (User)execution.getVariable("chief") ;
 		}
 		catch (BpmnError e) {
-			System.out.println("No editors");
-			throw new BpmnError("LoadEditorError");
+			System.out.println("No editor");
 		}
-		execution.setVariable("editors", allEditors);
-	}
-	
+		chiefEditor.setRole(Role.CHIEF_EDITOR);
+		chiefEditor = userRepisotory.save(chiefEditor);
+		execution.setVariable("chiefEditor", chiefEditor);
 
-	
+	}
 
 }
