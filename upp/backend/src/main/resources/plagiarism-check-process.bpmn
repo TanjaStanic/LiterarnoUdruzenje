@@ -67,12 +67,6 @@
       <bpmn:sequenceFlow id="Flow_1o4u251" sourceRef="Activity_0wmbfw6" targetRef="Activity_1tqhvaj" />
       <bpmn:serviceTask id="Activity_0gl7iar" name="Notify chosen editors" camunda:class="upp.la.service.SendEmailService">
         <bpmn:extensionElements>
-          <camunda:field name="Type">
-            <camunda:string>PlagiarismNotifyChosenEditors</camunda:string>
-          </camunda:field>
-          <camunda:field name="Address">
-            <camunda:string>${chosenEditors}</camunda:string>
-          </camunda:field>
           <camunda:inputOutput>
             <camunda:inputParameter name="messageI">NotifyChosenEditors</camunda:inputParameter>
           </camunda:inputOutput>
@@ -133,7 +127,7 @@
       <bpmn:boundaryEvent id="Event_1wj5pg2" attachedToRef="Activity_13g4y4p">
         <bpmn:outgoing>Flow_1lmjb5h</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_1cjw5ya">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT3M</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT30M</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:boundaryEvent>
       <bpmn:sequenceFlow id="Flow_1lmjb5h" name="Editor failed to make notes" sourceRef="Event_1wj5pg2" targetRef="Activity_1e7u81w" />

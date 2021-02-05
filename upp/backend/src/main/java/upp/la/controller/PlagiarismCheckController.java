@@ -53,13 +53,29 @@ public class PlagiarismCheckController {
         return new FormFieldsDto(task.getId(), "123", properties);
     }
 
+    @GetMapping(path = "/getEditorsForm", produces = "application/json")
+    public @ResponseBody
+    FormFieldsDto getEditorsForm() {
+
+        List<Task> tasks = taskService.createTaskQuery().taskName("Choose editors").list();
+        Task task = tasks.get(0);
+
+        TaskFormData tfd = formService.getTaskFormData(task.getId());
+        List<FormField> properties = tfd.getFormFields();
+        for (FormField fp : properties) {
+            System.out.println(fp.getId() + fp.getType());
+        }
+
+        return new FormFieldsDto(task.getId(), "123", properties);
+    }
+
 	@PostMapping(path = "/postFormFields", produces = "application/json")
     public @ResponseBody
     ResponseEntity<?> postForms(@RequestBody List<FormFieldDto> formFields,
                            @RequestParam("taskId") String taskId) {
         Task task = taskService.createTaskQuery().taskId(taskId).list().get(0);
         System.out.println("Naziv taska je " + task.getName());
-       if(task.getName().equals("Make chosen editors list")) {
+       if(task.getName().equals("Choose editors")) {
             List<FormFieldDto> tmp = new ArrayList<>();
             String[] parts = formFields.get(0).getFieldValue().split(",");
             for(String s : parts) {

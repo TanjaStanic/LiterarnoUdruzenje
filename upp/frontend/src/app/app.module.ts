@@ -48,6 +48,7 @@ import { LecturerNotesTyposDialogComponent } from './components/lecturer-notes-t
 import { EditorHaveSuggestionDialogComponent } from './components/editor-have-suggestion-dialog/editor-have-suggestion-dialog.component';
 import { WriterComplaintComponent } from './components/writer-complaint/writer-complaint.component';
 import { ChooseEditorsComponent } from './components/choose-editors/choose-editors.component';
+import { PlagiarismEditorReviewComponent } from './components/plagiarism-editor-review/plagiarism-editor-review.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -81,7 +82,8 @@ import { ChooseEditorsComponent } from './components/choose-editors/choose-edito
     LecturerNotesTyposDialogComponent,
     EditorHaveSuggestionDialogComponent,
     WriterComplaintComponent,
-    ChooseEditorsComponent
+    ChooseEditorsComponent,
+    PlagiarismEditorReviewComponent
   ],
   imports: [
     BrowserModule,

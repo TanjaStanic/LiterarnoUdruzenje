@@ -44,7 +44,8 @@ public class SendEmailService implements JavaDelegate{
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		System.out.println("EmailService");
-		
+
+		/*
 		ThrowEvent messageEvent = (ThrowEvent) execution.getBpmnModelElementInstance();
 	    MessageEventDefinition messageEventDefinition = (MessageEventDefinition) messageEvent
 	        .getEventDefinitions().iterator().next();
@@ -186,9 +187,15 @@ public class SendEmailService implements JavaDelegate{
 	    //NOTIFY CHOSEN EDITORS
 		else if (messageParam.equals("NotifyChosenEditors")) {
 			EmailTemplate email = EmailTemplate.PlagiarismComplaintNotifyEditors(14);
-			
-			ArrayList<User> editors = 
-					(ArrayList<User>)execution.getVariable("chosenEditors");
+
+			List<FormFieldDto> formFields =
+					(List<FormFieldDto>) execution.getVariable("Choose editors");
+			List<User> editors = new ArrayList<>();
+			User u = new User();
+			for (FormFieldDto f : formFields) {
+				u = userRepository.findUserById(Long.parseLong(f.getFieldValue()));
+				editors.add(u);
+			}
 			
 			if (!editors.isEmpty()) {
 				for (User e : editors) {
@@ -204,5 +211,7 @@ public class SendEmailService implements JavaDelegate{
 	    
 	    
 		}
+
+		 */
 	}
 }

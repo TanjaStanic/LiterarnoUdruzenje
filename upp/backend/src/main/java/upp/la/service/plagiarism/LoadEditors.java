@@ -20,7 +20,7 @@ public class LoadEditors implements JavaDelegate{
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		
-		ArrayList<User> allEditors = null;
+		/*ArrayList<User> allEditors = null;
 	
 		try {
 			allEditors = (ArrayList<User>) userRepisotory.findAll();
@@ -30,7 +30,7 @@ public class LoadEditors implements JavaDelegate{
 			System.out.println("No editors");
 			throw new BpmnError("LoadEditorError");
 		}
-		execution.setVariable("editors", allEditors);
+		execution.setVariable("editors", allEditors);*/
 	}
 	
 

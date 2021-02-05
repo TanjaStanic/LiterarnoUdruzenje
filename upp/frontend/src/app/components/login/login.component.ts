@@ -118,8 +118,19 @@ export class LoginComponent implements OnInit {
         } else if (this.userRole === 'EDITOR' && this.f.username.value === this.user.username) {
           this.userService.login(this.user).subscribe(
             data => {
-              this.router.navigate(['/editorHome'])
+              this.router.navigate(['/editorHome']);
               this.user.role = Role.EDITOR;
+              this.userService.setToken(this.user);
+            },
+            error => {
+              console.log(error);
+            });
+
+        } else if (this.userRole === 'CHIEF_EDITOR' && this.f.username.value === this.user.username) {
+          this.userService.login(this.user).subscribe(
+            data => {
+              this.router.navigate(['/editorHome']);
+              this.user.role = Role.CHIEF_EDITOR;
               this.userService.setToken(this.user);
             },
             error => {

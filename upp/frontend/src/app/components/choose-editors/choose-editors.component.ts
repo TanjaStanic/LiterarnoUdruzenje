@@ -11,20 +11,18 @@ import {PlagiarismService} from '../../services/plagiarism.service';
   styleUrls: ['./choose-editors.component.css']
 })
 export class ChooseEditorsComponent implements OnInit {
-
-	@ViewChild('genericForm', {static: true}) genericForm: GenericFormComponent;
+  @ViewChild('genericForm', {static: true}) genericForm: GenericFormComponent;
 	private formFields = [];
 	private enumValues = [];
 	taskId: string;
 	fields: Array<GenericFormType> = [];
-	chooseEditorsForm : FormGroup;
-	
+	chooseEditorsForm: FormGroup;
+
   constructor(private plagiarismService: PlagiarismService,
-			private formBuilder: FormBuilder,
-            private router: Router,
-            private userService: UserService) {
-	  
-  	const x = plagiarismService.getEditorsForm();  
+			private formBuilder: FormBuilder,private router: Router,
+              private userService: UserService) {
+
+  	const x = plagiarismService.getEditorsForm();
   	 x.subscribe(
   	      res => {
   	        console.log(res);
@@ -35,8 +33,8 @@ export class ChooseEditorsComponent implements OnInit {
   	          if ( field.id === 'chosenEditorsId') {
   	            this.enumValues = Object.keys(field.type.values);
   	            console.log(this.enumValues);
-  	            this.fields.push({type: 'control', name: field.id, label: field.label, inputType: 'select', lookups: field});
-  	          } 
+  	            this.fields.push({type: 'control', name: field.id, label: field.label, inputType: 'multiple-select', lookups: field});
+  	          }
   	          this.genericForm.initFormFields();
 
   	        });
@@ -46,28 +44,28 @@ export class ChooseEditorsComponent implements OnInit {
   	      }
   	    );
   	  }
-	  
-	  
+
+
 
 
   ngOnInit() {
 	  this.chooseEditorsForm = this.formBuilder.group({
 	    });
   }
- 
+
   get f() {
 	    return this.chooseEditorsForm.controls;
   }
- 
+
   onSubmit() {
 	    this.chooseEditorsForm.controls = this.genericForm.myForm.controls;
-	    console.log(this.chooseEditorsForm);
+	    console.log(this.f.chosenEditorsId.value);
 	    if (this.chooseEditorsForm.invalid) {
 	      return;
 	    }
 	    console.log(this.taskId);
 	    const d = new Array();
-	    d.push({fieldId: 'chosenEditorsId', fieldValue: this.f.genresListId.value.toString()});
+	    d.push({fieldId: 'chosenEditorsId', fieldValue: this.f.chosenEditorsId.value.toString()});
 
 	    const tmp = this.plagiarismService.postForm(d, this.taskId).subscribe(
 	      next => {
