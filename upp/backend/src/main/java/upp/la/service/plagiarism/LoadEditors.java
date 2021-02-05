@@ -31,16 +31,14 @@ public class LoadEditors implements JavaDelegate{
 			System.out.println("No editors");
 			throw new BpmnError("LoadEditorError");
 		}
-		execution.setVariable("editors", allEditors);*/
-	/*
+		execution.setVariable("editors", allEditors);
 		execution.setVariable("allEditors", allEditors);
 		execution.setVariable("allEditorsCamunda", allEditorsCamunda);
-		execution.setVariable("chiefEditor", chiefEditor);
+		execution.setVariable("chiefEditor", chiefEditor)
+		*/
 
 		execution.setVariable("decisionsMultiInstancePositive", 0);
-
 		execution.setVariable("decisionsMultiInstanceNegative", 0);
-		*/
 	}
 	
 
