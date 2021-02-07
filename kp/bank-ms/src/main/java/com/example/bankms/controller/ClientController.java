@@ -177,5 +177,83 @@ public class ClientController {
         }
 
     }
+    @GetMapping("/support/{clientId}")
+    public Object supportForm(Model model, @PathVariable String clientId) {
+        Client client = new Client();
+        ResponseEntity<ClientInfoDto> clientInfo = restTemplate.getForEntity(
+                "https://localhost:8762/api/pc_info/auth/clients/" + clientId,
+                ClientInfoDto.class);
+
+        if (clientInfo.getStatusCode() == HttpStatus.OK) {
+            client.setEmail(clientInfo.getBody().getEmail());
+            client.setName(clientInfo.getBody().getName());
+        } else {
+            return ResponseEntity.badRequest().body(clientInfo.getBody());
+        }
+
+        client.setPcClientId(Long.parseLong(clientId));
+        client = clientService.insert(client);
+
+        Map<Long, String> banks = bankRepository.findAll().stream()
+                .collect(Collectors.toMap(
+                        Bank::getId,
+                        Bank::getName));
+
+        model.addAttribute("banks", banks);
+
+        RegisterClientDTO registerClientDTO = new RegisterClientDTO();
+        registerClientDTO.setClientId(client.getId());
+        model.addAttribute("registrationDTO", registerClientDTO);
+        return "supporting";
+
+    }
+    @PostMapping("/support")
+    public Object support(@Valid @ModelAttribute("registrationDTO") RegisterClientDTO registerClientDTO, Model model) {
+
+    	System.out.println("In support method");
+        Client client = clientService.findById(registerClientDTO.getClientId());
+        Bank bank = bankRepository.findById(registerClientDTO.getBankId()).get();
+
+        HttpEntity<ClientInfoDto> entity = new HttpEntity<>(new ClientInfoDto(client.getEmail(), client.getName()));
+        ResponseEntity<ClientCredentials> response = null;
+
+        try {
+            response = restTemplate.postForEntity(
+                    bank.getUrl(), entity, ClientCredentials.class);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            log.error(exception);
+            clientService.delete(client);
+            return ResponseEntity.badRequest().body("Failed to register with acquirer.");
+        }
+        ResponseEntity<ClientInfoDto> response2 = null;
+        try {
+            response2 = restTemplate.getForEntity("https://localhost:8762/api/pc_info/payment-methods/updateClientsMethods/Banking/" + client.getEmail() ,
+            		ClientInfoDto.class);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            log.error("ERROR | Could not contact payment-info.");
+            log.error(exception.getMessage());
+            return ResponseEntity.badRequest().body("Could not contact payment-info.");
+        }
+        
+        String redirectUrl;
+        if (response.getStatusCode() == HttpStatus.OK && response2.getStatusCode() == HttpStatus.OK) {
+            ClientCredentials clientCredentials = response.getBody();
+            client.setMerchantID(clientCredentials.getMerchantID());
+            client.setMerchantPassword(clientCredentials.getMerchantPassword());
+            client = clientService.update(client);
+            redirectUrl = MessageFormat.format("http://localhost:4200/client", client.getPcClientId());
+            HttpHeaders headersRedirect = new HttpHeaders();
+            headersRedirect.add("Location", redirectUrl);
+            headersRedirect.add("Access-Control-Allow-Origin", "*");
+            return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+        } else {
+            clientService.delete(client);
+            return ResponseEntity.badRequest().body(response.getBody());
+        }
+
+    }
 
 }

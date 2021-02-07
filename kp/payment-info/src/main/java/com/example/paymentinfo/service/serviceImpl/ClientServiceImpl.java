@@ -83,6 +83,7 @@ public class ClientServiceImpl implements ClientService {
 	public Client updatePaymentMethod(String paymentMethodName, String email) {
 		Client client = clientRepository.findByEmail(email);
 		PaymentMethod paymentMethod = paymentMethodRepository.findByName(paymentMethodName);
+
 		
 		client.addPaymentMethod(paymentMethod);
 		paymentMethod.addClient(client);

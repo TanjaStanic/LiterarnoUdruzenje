@@ -70,6 +70,56 @@ export class ClientPanelComponent implements OnInit {
 		this.dataSourceNoPaymentMethods.sort = this.sortNoPaymentMethodsTable;
 		this.dataSourceNoPaymentMethods.paginator = this.paginatorNoPaymentMethodsTable;
 	}
+  
+  remove(paymentMethod){
+	  if(confirm("Are you sure you want to delete " + paymentMethod.name + " payment method?")) {
+		  this.paymentMethodService.deleteFromClient(this.authService.getUserId(), paymentMethod.id).subscribe(
+			      data => {
+			        let methods = this.paymentMethods.filter(method => method.id != paymentMethod.id);
+			        this.refreshPaymentMethodsDataSource(methods);
+			        
+			        this.noPaymentMethods.push(paymentMethod)
+		            this.refreshNoPaymentMethodsDataSource(this.noPaymentMethods);
+			      },
+			      (err: HttpErrorResponse) => {
+			        this.snackbarService.showMessage(err.error);
+			      }
+			    );
+		}  
+  }
+  
+  openNewPaymentMethodDialog() {
+	  const dialogRef = this.dialog.open(NewPmDialogComponent, {
+
+		    data: { dataSourceNoPaymentMethods : this.dataSourceNoPaymentMethods },
+
+	      position: {
+	        top: '0px',
+	        left: '50px'
+	      }
+	    });
+	  
+	  dialogRef.afterClosed().subscribe(paymentMethod => {
+	      console.log(paymentMethod);
+	     /* if (paymentMethod != undefined && paymentMethod != null) {
+	        this.paymentMethodService.add(this.authService.getUserId(),paymentMethod.id).subscribe(
+	          data => {
+	            this.paymentMethods.push(paymentMethod)
+	            this.refreshPaymentMethodsDataSource(this.paymentMethods);
+	            this.noPaymentMethods.pop(paymentMethod)
+	            this.refreshNoPaymentMethodsDataSource(this.noPaymentMethods);
+	          },
+	          (err: HttpErrorResponse) => {
+	            this.snackbarService.showMessage(err.error);
+	          }
+	        );
+	      }*/
+	     
+	      var url = 'https://localhost:8762/api/'+paymentMethod.name.toLowerCase()+'/auth/clients/support/'+this.authService.getUserId();     
+	      window.location.href = url;
+	    });
+  }
+ 
 
 	remove(paymentMethod) {
 		if (confirm("Are you sure you want to delete " + paymentMethod.name + " payment method?")) {
