@@ -2,6 +2,7 @@ package com.example.paymentinfo.service.serviceImpl;
 
 import com.example.paymentinfo.domain.Client;
 import com.example.paymentinfo.repository.ClientRepository;
+import com.example.paymentinfo.repository.PaymentMethodRepository;
 import com.example.paymentinfo.service.ClientService;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,13 @@ import java.util.Set;
 public class ClientServiceImpl implements ClientService {
 
     private ClientRepository clientRepository;
+    private PaymentMethodRepository paymentMethodRepository;
 
-    public ClientServiceImpl(ClientRepository clientRepository) {
-        this.clientRepository = clientRepository;
-    }
+    public ClientServiceImpl(ClientRepository clientRepository, PaymentMethodRepository paymentMethodRepository) {
+		super();
+		this.clientRepository = clientRepository;
+		this.paymentMethodRepository = paymentMethodRepository;
+	}
 
     @Override
     public Client insert(Client client) {
@@ -73,5 +77,19 @@ public class ClientServiceImpl implements ClientService {
 	@Override
 	public Client save(Client client) {
 		return clientRepository.save(client);
+	}
+
+	@Override
+	public Client updatePaymentMethod(String paymentMethodName, String email) {
+		Client client = clientRepository.findByEmail(email);
+		PaymentMethod paymentMethod = paymentMethodRepository.findByName(paymentMethodName);
+
+		client.addPaymentMethod(paymentMethod);
+		paymentMethod.addClient(client);
+
+		clientRepository.save(client);
+		paymentMethodRepository.save(paymentMethod);
+
+		return client;
 	}
 }

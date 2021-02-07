@@ -70,5 +70,41 @@ public class ClientController {
         }
 
     }
+    @GetMapping("/support/{clientId}")
+    public Object supportForm(Model model, @PathVariable String clientId) {
+        RegisterClientDTO registerClientDTO = new RegisterClientDTO();
+        ResponseEntity<ClientInfoDto> clientInfo = restTemplate.getForEntity(
+                "https://localhost:8762/api/pc_info/auth/clients/" + clientId,
+                ClientInfoDto.class);
+
+        if (clientInfo.getStatusCode() == HttpStatus.OK) {
+            registerClientDTO.setEmail(clientInfo.getBody().getEmail());
+        } else {
+            return ResponseEntity.badRequest().body(clientInfo.getBody());
+        }
+
+        registerClientDTO.setPcClientId(clientId);
+        model.addAttribute("registrationDTO", registerClientDTO);
+        return "supporting";
+    }
+    @PostMapping("/support")
+    public ResponseEntity<?> support(@Valid @ModelAttribute("registrationDTO") RegisterClientDTO registerClientDTO, Model model) {
+        if (clientService.insert(
+                new Client(registerClientDTO.getEmail(), registerClientDTO.getClientId(), registerClientDTO.getClientSecret(),
+                        Long.parseLong(registerClientDTO.getPcClientId()))) != null) {
+
+            HttpHeaders headersRedirect = new HttpHeaders();
+            headersRedirect.add("Location", MessageFormat.format("https://localhost:8762/api/pc_info/view/select-payment-methods/{0}", registerClientDTO.getPcClientId()));
+            headersRedirect.add("Access-Control-Allow-Origin", "*");
+            return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+
+        } else {
+            model.addAttribute("registrationDTO", registerClientDTO);
+            model.addAttribute("error", "Something went wrong, please try again.");
+            return null;
+
+        }
+
+    }
 
 }

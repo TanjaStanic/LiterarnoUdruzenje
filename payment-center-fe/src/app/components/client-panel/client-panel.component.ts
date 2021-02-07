@@ -101,7 +101,7 @@ export class ClientPanelComponent implements OnInit {
 	  
 	  dialogRef.afterClosed().subscribe(paymentMethod => {
 	      console.log(paymentMethod);
-	      if (paymentMethod != undefined && paymentMethod != null) {
+	     /* if (paymentMethod != undefined && paymentMethod != null) {
 	        this.paymentMethodService.add(this.authService.getUserId(),paymentMethod.id).subscribe(
 	          data => {
 	            this.paymentMethods.push(paymentMethod)
@@ -113,8 +113,10 @@ export class ClientPanelComponent implements OnInit {
 	            this.snackbarService.showMessage(err.error);
 	          }
 	        );
-	      }
-
+	      }*/
+	     
+	      var url = 'https://localhost:8762/api/'+paymentMethod.name.toLowerCase()+'/auth/clients/support/'+this.authService.getUserId();     
+	      window.location.href = url;
 	    });
   }
  

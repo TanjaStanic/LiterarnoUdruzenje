@@ -26,13 +26,13 @@ insert into account(account_number,available_funds,owner_id,bank_id,currency_id)
 	values ('$2a$10$yDqJQlLRVdZ/1mZ2wxLeEuw58e.52gTJmNOACY74q1gs6wfNaH.Oy',100, 4,1,1);
 
 insert into card(cvv,expiration_date,pan,account_id) 
-	values ('$2y$12$zrlN2XkxnumVQ4DEXBu3xeGl0YKOMYkzeYL56hV3d9.Gky9xZMX.K','03/20','$2y$12$TsFApOaR4OWZTIa7hPyxWuyEyhAzbDdNxLCIP4FG54turrOky3QEK',1);
+	values ('$2y$12$zrlN2XkxnumVQ4DEXBu3xeGl0YKOMYkzeYL56hV3d9.Gky9xZMX.K','03/22','$2y$12$TsFApOaR4OWZTIa7hPyxWuyEyhAzbDdNxLCIP4FG54turrOky3QEK',1);
 insert into card(cvv,expiration_date,pan,account_id) 
-	values ('$2y$12$jGE.NW7MOYRpl19vp6SOoOUviur7Z38HsWe7yiE9HAeDNa0LzHcPi','03/20','$2y$12$6l3xBH4XdSwwzk8AzLg.gOpadAg8QUl2oUq.3v4mHQNvzJ3PFcga2',2);
+	values ('$2y$12$jGE.NW7MOYRpl19vp6SOoOUviur7Z38HsWe7yiE9HAeDNa0LzHcPi','03/22','$2y$12$6l3xBH4XdSwwzk8AzLg.gOpadAg8QUl2oUq.3v4mHQNvzJ3PFcga2',2);
 insert into card(cvv,expiration_date,pan,account_id) 
-	values ('$2y$12$jGE.NW7MOYRpl19vp6SOoOUviur7Z38HsWe7yiE9HAeDNa0LzHcPi','03/20','$2y$12$88PZbSrRgMzUJBiyECfLRuYdqWuBLcwiwlACaXRVJr2X/M1nafJBO',3);
+	values ('$2y$12$jGE.NW7MOYRpl19vp6SOoOUviur7Z38HsWe7yiE9HAeDNa0LzHcPi','03/22','$2y$12$88PZbSrRgMzUJBiyECfLRuYdqWuBLcwiwlACaXRVJr2X/M1nafJBO',3);
 insert into card(cvv,expiration_date,pan,account_id)
-	values ('$2y$12$jGE.NW7MOYRpl19vp6SOoOUviur7Z38HsWe7yiE9HAeDNa0LzHcPi','03/20','$2y$12$fEix3zg.Jr/IKrESj/UetekKd.WDVBOAZE2GO7qaG1ty902u56Yxq',4);
+	values ('$2y$12$jGE.NW7MOYRpl19vp6SOoOUviur7Z38HsWe7yiE9HAeDNa0LzHcPi','03/22','$2y$12$fEix3zg.Jr/IKrESj/UetekKd.WDVBOAZE2GO7qaG1ty902u56Yxq',4);
 
 insert into currency (code,name)  values ('USD', 'United States dollar');
 
