@@ -1,6 +1,7 @@
 package com.example.paymentinfo.service.serviceImpl;
 
 import com.example.paymentinfo.domain.Client;
+import com.example.paymentinfo.domain.PaymentMethod;
 import com.example.paymentinfo.repository.ClientRepository;
 import com.example.paymentinfo.repository.PaymentMethodRepository;
 import com.example.paymentinfo.service.ClientService;

@@ -106,7 +106,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/**/*.js",
                 "/auth/**",
                 "/view/**",
-                "/payment-methods/register/**"
+                "/payment-methods/register/**",
+                "/payment-methods/updateClientsMethods/**"
         );
         web.ignoring().antMatchers(
                 HttpMethod.PUT,
