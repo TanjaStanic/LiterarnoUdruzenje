@@ -51,6 +51,7 @@ public class ClientController {
         return "registration";
     }
 
+
     @PostMapping("/register")
     public Object register(@Valid @ModelAttribute("registrationDTO") RegisterClientDTO registerClientDTO, Model model) {
         if (clientService.insert(
@@ -102,6 +103,37 @@ public class ClientController {
             model.addAttribute("registrationDTO", registerClientDTO);
             model.addAttribute("error", "Something went wrong, please try again.");
             return null;
+
+        }
+
+    }
+
+    @PostMapping("/support")
+    public Object supportPaymentMethod(@Valid @ModelAttribute("registrationDTO") RegisterClientDTO registerClientDTO, Model model) {
+        if (clientService.insert(
+                new Client(registerClientDTO.getEmail(), registerClientDTO.getClientId(), registerClientDTO.getClientSecret(),
+                        Long.parseLong(registerClientDTO.getPcClientId()))) != null) {
+
+        	ResponseEntity<ClientInfoDto> response = null;
+
+            try {
+                response = restTemplate.getForEntity("https://localhost:8762/api/pc_info/payment-methods/updateClientsMethods/Paypal/" + registerClientDTO.getEmail(),
+                		ClientInfoDto.class);
+
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                return ResponseEntity.badRequest().body("Could not contact payment-info.");
+            }
+        	HttpHeaders headersRedirect = new HttpHeaders();
+            headersRedirect.add("Location", MessageFormat.format("http://localhost:4200/client", registerClientDTO.getPcClientId()));
+            headersRedirect.add("Access-Control-Allow-Origin", "*");
+            
+            return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
+
+        } else {
+            model.addAttribute("registrationDTO", registerClientDTO);
+            model.addAttribute("error", "Something went wrong, please try again.");
+            return "registration";
 
         }
 

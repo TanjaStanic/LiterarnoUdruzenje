@@ -108,6 +108,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/view/**",
                 "/payment-methods/register/**",
                 "/payment-methods/updateClientsMethods/**"
+
+                "/payment-methods/updateClientsMethods/**",
+                "/payment-methods/register/**"
+
         );
         web.ignoring().antMatchers(
                 HttpMethod.PUT,

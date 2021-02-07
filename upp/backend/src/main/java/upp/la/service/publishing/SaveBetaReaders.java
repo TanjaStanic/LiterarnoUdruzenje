@@ -2,6 +2,8 @@ package upp.la.service.publishing;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.variable.Variables;
+import org.camunda.bpm.engine.variable.value.ObjectValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -36,18 +38,23 @@ public class SaveBetaReaders implements JavaDelegate {
         List<FormFieldDto> tmp = (List<FormFieldDto>) delegateExecution.getVariable("Book details form");
 
         String title = tmp.get(0).getFieldValue();
+        System.out.println("title je " + title);
         Book book = bookRepository.findBookByTitle(title);
         ArrayList<BookComments> comments = new ArrayList<>();
+        ArrayList<User> betaReadersCollection = new ArrayList<>();
 
         for (FormFieldDto f: dtos) {
-            User user = userRepository.findUserByUsername(f.getFieldValue());
+            User user = userRepository.findUserById(Long.parseLong(f.getFieldValue()));
+            betaReadersCollection.add(user);
             BookComments b = new BookComments();
             b.setBetaReader(user);
-            bookCommentsRepo.save(b);
             comments.add(b);
+            bookCommentsRepo.save(b);
         }
-
         book.setComments(comments);
         bookRepository.save(book);
+
+        delegateExecution.setVariable("betaReadersSize", betaReadersCollection.size());
+
     }
 }

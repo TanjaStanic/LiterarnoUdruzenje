@@ -138,7 +138,12 @@ export class UserService {
       return this.user.role === Role.EDITOR;
     }
   }
-
+  public isChiefEditor() {
+	    if (this.isLoggedIn()) {
+	      return this.user.role === Role.CHIEF_EDITOR;
+	    }
+  }
+  
   public isAdmin() {
     if (this.isLoggedIn()) {
       return this.user.role === Role.ADMIN;

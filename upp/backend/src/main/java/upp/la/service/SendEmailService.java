@@ -1,5 +1,6 @@
 package upp.la.service;
 
+import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.RuntimeService;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
@@ -21,6 +22,7 @@ import upp.la.model.User;
 import upp.la.repository.ConfirmationTokenRepository;
 import upp.la.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -42,14 +44,13 @@ public class SendEmailService implements JavaDelegate{
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		System.out.println("EmailService");
-		
+
 		ThrowEvent messageEvent = (ThrowEvent) execution.getBpmnModelElementInstance();
 	    MessageEventDefinition messageEventDefinition = (MessageEventDefinition) messageEvent
 	        .getEventDefinitions().iterator().next();
 	    String receivingMessageName = messageEventDefinition.getMessage().getName();
 	    System.out.println("message name je: " + receivingMessageName);
-	    
-	    
+
 	    String mail = "";
 	    try {
 	    	List<FormFieldDto> files =(List<FormFieldDto>) execution.getVariable("files");
@@ -58,10 +59,19 @@ public class SendEmailService implements JavaDelegate{
 	    }
         catch(Exception e) {
         	System.out.println("No user. Tek se korisnik registruje");
-			throw new BpmnError("EmailError");
+			//throw new BpmnError("EmailError");
         }
-		
-	    
+	   
+
+	    //NOTIFY CHOSEN EDITORS
+	    String messageParam="";		
+		try {
+			messageParam = (String) runtimeService.getVariableLocal(execution.getId(), "messageId");
+		}
+		catch (ProcessEngineException  e) {
+			System.out.println("Username failed");
+		}
+
 	    //send email to confirm registration
 	    if (receivingMessageName.equals("send_verification_email")) {
 	    	String email = "";
@@ -138,8 +148,20 @@ public class SendEmailService implements JavaDelegate{
 	       // Requests.sendEmail(email);
 	    }
 		//PUBLISHING DECLINED BEFORE MANUSCRIPT
+		else if (receivingMessageName.equals("BookPublishingNotifyWriterDeclinedExplanation")) {
+			List<FormFieldDto> fields = (List<FormFieldDto>) execution.getVariable("Initial book review");
+
+			String reason = fields.get(1).getFieldValue();
+
+			EmailTemplate email = EmailTemplate.PublishingDeclinedBeforeManuscript(reason);
+
+			email.setAddress(mail);
+			System.out.println("mail glasi: " + email.getMessage());
+			Requests.sendEmail(email);
+		}
+
 		else if (receivingMessageName.equals("BookPublishingNotifyWriterDeclined")) {
-			String reason = (String) execution.getVariable("reason");
+			String reason = "Declined after manuscript.";
 
 			EmailTemplate email = EmailTemplate.PublishingDeclinedBeforeManuscript(reason);
 
@@ -158,21 +180,51 @@ public class SendEmailService implements JavaDelegate{
 		//PLAGIARISM NOTIFY CHIEF EDITOR
 		else if (receivingMessageName.equals("PlagiarismComplaintNotifyChiefEditor")) {
 			EmailTemplate email = EmailTemplate.PlagiarismComplaintNotifyChiefEditor();
-
-			email.setAddress(mail);
+			User chief = (User) execution.getVariable("chiefEditor");
+			email.setAddress(chief.getEmail());
 			System.out.println("mail glasi: " + email.getMessage());
 			Requests.sendEmail(email);
 		}
 		//PLAGIARISM NOTIFY WRITER DECISION
 		else if (receivingMessageName.equals("PlagiarismNotifyWriterDecision")) {
+			
 			EmailTemplate email = EmailTemplate.PlagiarismNotifyWriterDecision("TODO: DECISIONS");
 
 			email.setAddress(mail);
 			System.out.println("mail glasi: " + email.getMessage());
-			Requests.sendEmail(email);
+		//	Requests.sendEmail(email);
 		}
-	    else {
-			throw new BpmnError("EmailError");
+
+	    //NOTIFY CHOSEN EDITORS
+		else if (receivingMessageName.equals("NotifyChosenEditors")) {
+//			EmailTemplate email = EmailTemplate.PlagiarismComplaintNotifyEditors(14);
+//
+//			List<FormFieldDto> formFields =
+//					(List<FormFieldDto>) execution.getVariable("Choose editors");
+//			List<User> editors = new ArrayList<>();
+//			User u = new User();
+//			for (FormFieldDto f : formFields) {
+//				u = userRepository.findUserById(Long.parseLong(f.getFieldValue()));
+//				editors.add(u);
+//			}
+//
+//			if (!editors.isEmpty()) {
+//				for (User e : editors) {
+//					email.setAddress(e.getEmail());
+//					System.out.println("mail glasi: " + email.getMessage());
+//					//Requests.sendEmail(email);
+//
+//				}
+//			}
+//			else {
+//				throw new BpmnError("EmailError");
+//			}
+
+			System.out.println("Obavesteni svi editori");
+	    
+	    
 		}
+
+
 	}
 }

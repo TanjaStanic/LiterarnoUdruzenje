@@ -121,6 +121,7 @@ public class PaymentServiceImpl implements PaymentService {
         String url = response.getBody().getPayment_url();
         Transaction savedOrder = this.transactionRepository.save(transaction);
         sendTransactionUpdate(new TransactionDto(savedOrder));
+        log.info("COMPLETED | Bitcoin payment");
         return url;
 
     }
@@ -131,6 +132,7 @@ public class PaymentServiceImpl implements PaymentService {
         try {
             transaction = this.transactionService.findById(id);
         } catch (Exception exception) {
+            log.error("ERROR | TRANSACTION WITH ID: " + id + " NOT FOUND");
             return null;
         }
         HttpHeaders requestHeaders = new HttpHeaders();
@@ -143,6 +145,7 @@ public class PaymentServiceImpl implements PaymentService {
             responseEntity = restTemplate.exchange("https://api-sandbox.coingate.com/v2/orders/" + transaction.getPaymentId(),
                     HttpMethod.GET, request, PaymentResponseDTO.class);
         } catch (Exception e) {
+             log.error(e);
 
         }
 

@@ -29,17 +29,25 @@ public class SaveManuscript implements JavaDelegate {
         List<FormFieldDto> dtos = (List<FormFieldDto>) delegateExecution.getVariable("Book details form");
         Document d = new Document();
         Book book = new Book();
-        for(FormFieldDto f: fields) {
-            if(f.getFieldId().equals("ManuscriptLinkId")) {
-                d = documentRepository.findDocumentByFileUrl("http://localhost:8080/files/download/" + f.getFieldValue());
-            }
-        }
-
         for(FormFieldDto f1: dtos) {
-            if(f1.getFieldValue().equals("workingTitleId")) {
+            if(f1.getFieldId().equals("workingTitleId")) {
                 book = bookRepository.findBookByTitle(f1.getFieldValue());
             }
         }
+        for(FormFieldDto f: fields) {
+            if(f.getFieldId().equals("ManuscriptLinkId")) {
+                d = documentRepository.findDocumentByFileUrl("http://localhost:8080/files/download/" + f.getFieldValue());
+            } else if(f.getFieldId().equals("isbnId")) {
+                book.setIsbn(f.getFieldValue());
+            } else if (f.getFieldId().equals("keyTermsId")) {
+                book.setKeyTerms(f.getFieldValue());
+            } else if (f.getFieldId().equals("publisherId")) {
+                book.setPublisher(f.getFieldValue());
+            } else if (f.getFieldId().equals("pagesId")) {
+                book.setPages(f.getFieldValue());
+            }
+        }
+
         book.setDocument(d);
         d.setBook(book);
         documentRepository.save(d);

@@ -11,7 +11,7 @@ import {
   MatListModule, MatSelectModule,
   MatSidenavModule,
   MatToolbarModule,
-  MatDialogModule, MatRadioModule, MatTableModule
+  MatDialogModule, MatRadioModule, MatTableModule, MatInputModule
 } from '@angular/material';
 import {RouterModule} from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
@@ -30,7 +30,29 @@ import { WriterReviewComponent } from './components/writer-review/writer-review.
 import { WriterReviewDialogComponent } from './components/writer-review-dialog/writer-review-dialog.component';
 import { WriterPaymentComponent } from './components/writer-payment/writer-payment.component';
 import { GenericFormComponent } from './components/generic-form/generic-form.component';
-
+import { GenericInputRowComponent } from './components/generic-input-row/generic-input-row.component';
+import { PublishBookComponent } from './components/publish-book/publish-book.component';
+import { InitialBookReviewComponent } from './components/initial-book-review/initial-book-review.component';
+import { InitialBookReviewDialogComponent } from './components/initial-book-review-dialog/initial-book-review-dialog.component';
+import { SubmitManuscriptComponent } from './components/submit-manuscript/submit-manuscript.component';
+import { SubmitManuscriptDialogComponent } from './components/submit-manuscript-dialog/submit-manuscript-dialog.component';
+import { BookReviewComponent } from './components/book-review/book-review.component';
+import { BookReviewDialogComponent } from './components/book-review-dialog/book-review-dialog.component';
+import { BookReviewDialogBetaReadersComponent } from './components/book-review-dialog-beta-readers/book-review-dialog-beta-readers.component';
+import { BetaReaderCommentComponent } from './components/beta-reader-comment/beta-reader-comment.component';
+import { BetaReaderCommentDialogComponent } from './components/beta-reader-comment-dialog/beta-reader-comment-dialog.component';
+import { ImproveManuscriptDialogComponent } from './components/improve-manuscript-dialog/improve-manuscript-dialog.component';
+import { NeedMoreWorkDialogComponent } from './components/need-more-work-dialog/need-more-work-dialog.component';
+import { LecturerNotesTyposComponent } from './components/lecturer-notes-typos/lecturer-notes-typos.component';
+import { LecturerNotesTyposDialogComponent } from './components/lecturer-notes-typos-dialog/lecturer-notes-typos-dialog.component';
+import { EditorHaveSuggestionDialogComponent } from './components/editor-have-suggestion-dialog/editor-have-suggestion-dialog.component';
+import { WriterComplaintComponent } from './components/writer-complaint/writer-complaint.component';
+import { ChooseEditorsComponent } from './components/choose-editors/choose-editors.component';
+import { PlagiarismEditorReviewComponent } from './components/plagiarism-editor-review/plagiarism-editor-review.component';
+import { EditorPlagiarisedTableComponent } from './components/editor-plagiarised-table/editor-plagiarised-table.component';
+import { EditorPlagiarisedDialogComponent } from './components/editor-plagiarised-dialog/editor-plagiarised-dialog.component';
+import { EditorPlagiarisedDialogReviewComponent } from './components/editor-plagiarised-dialog-review/editor-plagiarised-dialog-review.component';
+import {EditorPlagiarisedDialogFinalComponent} from './components/editor-plagiarised-dialog-final/editor-plagiarised-dialog-final.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,7 +68,30 @@ import { GenericFormComponent } from './components/generic-form/generic-form.com
     WriterReviewComponent,
     WriterReviewDialogComponent,
     WriterPaymentComponent,
-    GenericFormComponent
+    GenericFormComponent,
+    GenericInputRowComponent,
+    PublishBookComponent,
+    InitialBookReviewComponent,
+    InitialBookReviewDialogComponent,
+    SubmitManuscriptComponent,
+    SubmitManuscriptDialogComponent,
+    BookReviewComponent,
+    BookReviewDialogComponent,
+    BookReviewDialogBetaReadersComponent,
+    BetaReaderCommentComponent,
+    BetaReaderCommentDialogComponent,
+    ImproveManuscriptDialogComponent,
+    NeedMoreWorkDialogComponent,
+    LecturerNotesTyposComponent,
+    LecturerNotesTyposDialogComponent,
+    EditorHaveSuggestionDialogComponent,
+    WriterComplaintComponent,
+    ChooseEditorsComponent,
+    PlagiarismEditorReviewComponent,
+    EditorPlagiarisedTableComponent,
+    EditorPlagiarisedDialogComponent,
+    EditorPlagiarisedDialogReviewComponent,
+    EditorPlagiarisedDialogFinalComponent
   ],
   imports: [
     BrowserModule,
@@ -66,10 +111,14 @@ import { GenericFormComponent } from './components/generic-form/generic-form.com
     MatRadioModule,
     HttpClientModule,
     FormsModule,
-    MatTableModule
+    MatTableModule,
+    MatInputModule
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [ReaderDialogComponent, WriterReviewDialogComponent]
+  entryComponents: [ReaderDialogComponent, WriterReviewDialogComponent, InitialBookReviewDialogComponent, SubmitManuscriptDialogComponent,
+  BookReviewDialogComponent, BookReviewDialogBetaReadersComponent, BetaReaderCommentDialogComponent, ImproveManuscriptDialogComponent,
+  NeedMoreWorkDialogComponent, LecturerNotesTyposDialogComponent, EditorHaveSuggestionDialogComponent,
+  EditorPlagiarisedDialogComponent, EditorPlagiarisedDialogReviewComponent, EditorPlagiarisedDialogFinalComponent]
 })
 export class AppModule { }

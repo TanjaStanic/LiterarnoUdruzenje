@@ -27,7 +27,7 @@ public class PaymentMethod {
     @Setter
     private boolean subscriptionSupported;
 
-    @Column(unique = true)
+    @Column
     private String applicationName;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "paymentMethods")

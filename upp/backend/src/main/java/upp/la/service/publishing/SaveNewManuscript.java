@@ -35,7 +35,7 @@ public class SaveNewManuscript implements JavaDelegate {
         }
 
         for(FormFieldDto f1: dtos) {
-            if(f1.getFieldValue().equals("workingTitleId")) {
+            if(f1.getFieldId().equals("workingTitleId")) {
                 book = bookRepository.findBookByTitle(f1.getFieldValue());
             }
         }

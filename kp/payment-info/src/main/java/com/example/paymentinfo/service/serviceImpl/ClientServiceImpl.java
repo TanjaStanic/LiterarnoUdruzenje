@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.Collection;
-import java.util.Set;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -23,7 +22,7 @@ public class ClientServiceImpl implements ClientService {
 		this.paymentMethodRepository = paymentMethodRepository;
 	}
 
-    @Override
+	@Override
     public Client insert(Client client) {
         return clientRepository.save(client);
     }
@@ -85,12 +84,13 @@ public class ClientServiceImpl implements ClientService {
 		Client client = clientRepository.findByEmail(email);
 		PaymentMethod paymentMethod = paymentMethodRepository.findByName(paymentMethodName);
 
+		
 		client.addPaymentMethod(paymentMethod);
 		paymentMethod.addClient(client);
-
+		
 		clientRepository.save(client);
 		paymentMethodRepository.save(paymentMethod);
-
+		
 		return client;
 	}
 }

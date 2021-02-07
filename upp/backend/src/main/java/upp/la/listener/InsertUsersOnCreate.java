@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 public class InsertUsersOnCreate implements JavaDelegate {
 
   public void execute(DelegateExecution execution) throws Exception {
+
     ProcessEngine engine = execution.getProcessEngine();
 
     IdentityService identityService = engine.getIdentityService();
@@ -31,6 +32,13 @@ public class InsertUsersOnCreate implements JavaDelegate {
     identityService.saveUser(user);
 
     if (group1 == null) {
+     User user0 = identityService.newUser("editor0");
+     user0.setFirstName("Angela");
+     user0.setLastName("Doe");
+     user0.setPassword("123456");
+     user0.setEmail("email@editor0.org");
+     identityService.saveUser(user0);
+    	
       User user1 = identityService.newUser("editor1");
       user1.setFirstName("John");
       user1.setLastName("Doe");
@@ -132,5 +140,6 @@ public class InsertUsersOnCreate implements JavaDelegate {
       identityService.createMembership("lecturer2", "lecturers");
       identityService.createMembership("lecturer3", "lecturers");
     }
+
   }
 }

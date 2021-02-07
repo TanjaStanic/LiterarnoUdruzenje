@@ -1,0 +1,25 @@
+server:
+  port: ${PORT:8449}
+eureka:
+  instance:
+    hostname: localhost
+    nonSecurePortEnabled: false
+    securePortEnabled: true
+    securePort: ${server.port}
+    #prefer-ip-address: true
+    statusPageUrl: https://${eureka.instance.hostname}:${server.port}/info
+    healthCheckUrl: https://${eureka.instance.hostname}:${server.port}/health
+    homePageUrl: https://${eureka.instance.hostname}:${server.port}
+    lease-expiration-duration-in-seconds: 20
+    lease-renewal-interval-in-seconds: 10
+  client:
+    enabled: true
+    instance-info-replication-interval-seconds: 10
+    registry-fetch-interval-seconds: 10
+    serviceUrl:
+      defaultZone:  ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:https://localhost:8761/eureka}
+    fetch-registry: true
+    register-with-eureka: true
+spring:
+  application:
+    name: demo

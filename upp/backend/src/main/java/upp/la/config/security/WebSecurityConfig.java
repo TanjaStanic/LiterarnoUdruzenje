@@ -1,11 +1,18 @@
 package upp.la.config.security;
 
+import org.camunda.bpm.engine.impl.cfg.ProcessEnginePlugin;
+import org.camunda.bpm.spring.boot.starter.spin.SpringBootSpinProcessEnginePlugin;
+import org.camunda.spin.plugin.impl.SpinProcessEnginePlugin;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -48,10 +55,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   // If all else fails - turn off security by uncommenting these 3 lines
-  //  @Override
-  //  public void configure(WebSecurity web) throws Exception {
-  //    web.ignoring().antMatchers("/**");
-  //  }
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+      web.ignoring().antMatchers("/**");
+    }
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -83,9 +90,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .permitAll()
         .antMatchers("/review/**")
         .permitAll()
-            .antMatchers("/camunda-welcome/**")
-            .permitAll()
-            .antMatchers("/rap/**")
+        .antMatchers("/camunda-welcome/**")
+        .permitAll()
+        .antMatchers("/rap/**")
+        .permitAll()
+        .antMatchers("/book/**")
+        .permitAll()
+        .antMatchers("/engine-rest/**")
+        .permitAll()
+        .antMatchers("/rest/**")
+        .permitAll()
+		.antMatchers("/plagiarism/**")
             .permitAll()
         // Our private endpoints
         .anyRequest()
@@ -109,5 +124,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+  
+  @ConditionalOnClass(SpinProcessEnginePlugin.class)
+  @Configuration
+  static class SpinConfiguration {
+
+    @Bean
+    @ConditionalOnMissingBean(name = "spinProcessEnginePlugin")
+    public static ProcessEnginePlugin spinProcessEnginePlugin() {
+      return new SpringBootSpinProcessEnginePlugin();
+    }
+
   }
 }
