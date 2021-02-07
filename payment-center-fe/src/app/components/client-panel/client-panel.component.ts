@@ -102,7 +102,7 @@ export class ClientPanelComponent implements OnInit {
 		dialogRef.afterClosed().subscribe(paymentMethod => {
 			console.log(paymentMethod);
 
-			var url = 'https://localhost:8762/api/' + paymentMethod.name.toLowerCase() + '/auth/clients/register/' + this.authService.getUserId();
+			var url = 'https://localhost:8762/api/' + paymentMethod.name.toLowerCase() + '/auth/clients/support/' + this.authService.getUserId();
 			window.location.href = url;
 
 		});
