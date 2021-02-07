@@ -20,7 +20,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:4201", allowedHeaders = "*", maxAge = 3600)
 public class AuthController {
 
     private AuthService authService;

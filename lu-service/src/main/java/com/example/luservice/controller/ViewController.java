@@ -29,9 +29,9 @@ public class ViewController {
             transaction.setStatus(paymentResponse.getStatus());
             transaction.setPaymentID(paymentResponse.getPaymentID());
             transactionService.save(transaction);
-            return ResponseEntity.ok("http://localhost:4200/success");
+            return ResponseEntity.ok("http://localhost:4201/success");
         }
-        return ResponseEntity.ok("http://localhost:4200/error");
+        return ResponseEntity.ok("http://localhost:4201/error");
 
     }
 
@@ -43,9 +43,9 @@ public class ViewController {
             transaction.setStatus(paymentResponse.getStatus());
             transaction.setPaymentID(paymentResponse.getPaymentID());
             transactionService.save(transaction);
-            return ResponseEntity.ok("http://localhost:4200/fail");
+            return ResponseEntity.ok("http://localhost:4201/fail");
         }
-        return ResponseEntity.ok("http://localhost:4200/error");
+        return ResponseEntity.ok("http://localhost:4201/error");
     }
 
     @PostMapping("/error")
@@ -57,9 +57,9 @@ public class ViewController {
             transaction.setStatus(paymentResponse.getStatus());
             transaction.setPaymentID(paymentResponse.getPaymentID());
             transactionService.save(transaction);
-            return ResponseEntity.ok("http://localhost:4200/error");
+            return ResponseEntity.ok("http://localhost:4201/error");
         }
-        return ResponseEntity.ok("http://localhost:4200/error");
+        return ResponseEntity.ok("http://localhost:4201/error");
     }
 
 
@@ -71,9 +71,9 @@ public class ViewController {
             transaction.setStatus(paymentResponse.getStatus());
             transaction.setPaymentID(paymentResponse.getPaymentID());
             transactionService.save(transaction);
-            return ResponseEntity.ok("http://localhost:4200/cancel");
+            return ResponseEntity.ok("http://localhost:4201/cancel");
         }
-        return ResponseEntity.ok("http://localhost:4200/error");
+        return ResponseEntity.ok("http://localhost:4201/error");
     }
 
     @GetMapping("/order")

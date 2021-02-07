@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth/orders")
-@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:4201", allowedHeaders = "*", maxAge = 3600)
 public class OrderController {
     private TransactionService transactionService;
     private RestTemplate restTemplate;

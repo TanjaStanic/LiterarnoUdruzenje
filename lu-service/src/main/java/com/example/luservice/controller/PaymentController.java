@@ -20,7 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Date;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:4201", allowedHeaders = "*", maxAge = 3600)
 public class PaymentController {
 
     private PaymentService paymentService;

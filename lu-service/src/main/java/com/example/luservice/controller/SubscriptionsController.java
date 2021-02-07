@@ -42,6 +42,6 @@ public class SubscriptionsController {
         userSubscription.setSubscriptionStatus(subscription.getSubscriptionStatus());
         userSubscription.setExpirationDate(subscription.getExpirationDate());
         subscriptionRepository.save(userSubscription);
-        return ResponseEntity.ok("http://localhost:4200/dashboard");
+        return ResponseEntity.ok("http://localhost:4201/dashboard");
     }
 }
