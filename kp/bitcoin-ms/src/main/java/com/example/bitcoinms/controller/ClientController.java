@@ -81,6 +81,26 @@ public class ClientController {
 
     }
 
+
+    @GetMapping("/support/{clientId}")
+    public Object supportForm(Model model, @PathVariable String clientId) {
+        RegisterClientDTO registerClientDTO = new RegisterClientDTO();
+        ResponseEntity<ClientInfoDto> clientInfo = restTemplate.getForEntity(
+                "https://localhost:8762/api/pc_info/auth/clients/" + clientId,
+                ClientInfoDto.class);
+
+        if (clientInfo.getStatusCode() == HttpStatus.OK) {
+            registerClientDTO.setEmail(clientInfo.getBody().getEmail());
+            registerClientDTO.setName(clientInfo.getBody().getName());
+        } else {
+            return ResponseEntity.badRequest().body(clientInfo.getBody());
+        }
+
+        registerClientDTO.setPcClientId(clientId);
+        model.addAttribute("registrationDTO", registerClientDTO);
+        return "support";
+    }
+
     @PostMapping("/support")
     public Object supportPaymentMethod(@Valid @ModelAttribute("registrationDTO") RegisterClientDTO registerClientDTO, Model model) {
         Client newClient = new Client();

@@ -107,8 +107,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/auth/**",
                 "/view/**",
                 "/payment-methods/register/**",
-                "/payment-methods/updateClientsMethods/**"
-
+                "/payment-methods/updateClientsMethods/**",
                 "/payment-methods/updateClientsMethods/**",
                 "/payment-methods/register/**"
 

@@ -126,57 +126,6 @@ public class ClientController {
 
     }
 
-
-    @PostMapping("/support")
-    public Object supportPaymentMethod(@Valid @ModelAttribute("registrationDTO") RegisterClientDTO registerClientDTO, Model model) {
-
-        Client client = clientService.findById(registerClientDTO.getClientId());
-        Bank bank = bankRepository.findById(registerClientDTO.getBankId()).get();
-
-        HttpEntity<ClientInfoDto> entity = new HttpEntity<>(new ClientInfoDto(client.getEmail(), client.getName()));
-        ResponseEntity<ClientCredentials> response = null;
-
-        try {
-            response = restTemplate.postForEntity(
-                    bank.getUrl(), entity, ClientCredentials.class);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            log.error(exception);
-            clientService.delete(client);
-            return ResponseEntity.badRequest().body("Failed to register with acquirer.");
-        }
-
-        ResponseEntity<ClientInfoDto> response2 = null;
-
-        try {
-            response2 = restTemplate.getForEntity("https://localhost:8762/api/pc_info/payment-methods/updateClientsMethods/Banking/" + client.getEmail(),
-                    ClientInfoDto.class);
-
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            log.error("ERROR | Could not contact payment-info.");
-            log.error(exception.getMessage());
-            return ResponseEntity.badRequest().body("Could not contact payment-info.");
-        }
-
-        String redirectUrl;
-
-        if (response.getStatusCode() == HttpStatus.OK && response2.getStatusCode() == HttpStatus.OK) {
-            ClientCredentials clientCredentials = response.getBody();
-            client.setMerchantID(clientCredentials.getMerchantID());
-            client.setMerchantPassword(clientCredentials.getMerchantPassword());
-            client = clientService.update(client);
-            redirectUrl = MessageFormat.format("http://localhost:4200/client", client.getPcClientId());
-            HttpHeaders headersRedirect = new HttpHeaders();
-            headersRedirect.add("Location", redirectUrl);
-            headersRedirect.add("Access-Control-Allow-Origin", "*");
-            return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
-        } else {
-            clientService.delete(client);
-            return ResponseEntity.badRequest().body(response.getBody());
-        }
-
-    }
     @GetMapping("/support/{clientId}")
     public Object supportForm(Model model, @PathVariable String clientId) {
         Client client = new Client();

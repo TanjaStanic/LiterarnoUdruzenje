@@ -198,18 +198,5 @@ public class PaymentMethodController {
 
     	return ResponseEntity.ok().build();
     }
-    
-    @GetMapping("/updateClientsMethods/{paymentMethod}/{clientEmail}")
-    public ResponseEntity<?> updateClient(@PathVariable String paymentMethodName,
-    			@PathVariable String clientEmail){
-    	System.out.println("tu saaaaaaaaaaaaaaam");
-    	try {
-    		clientService.updatePaymentMethod(paymentMethodName, clientEmail);
-    	} catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Failed to update new payment method. ");
-        }
 
-    	return ResponseEntity.ok().build();
-    }
 }

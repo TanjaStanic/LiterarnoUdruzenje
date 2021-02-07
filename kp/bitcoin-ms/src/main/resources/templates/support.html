@@ -23,26 +23,19 @@
             <div class="bg-white rounded-lg shadow-sm p-5">
 
                 <div>
-                    <form id="forma" class="needs-validation" th:action="@{https://localhost:8762/api/paypal/auth/clients/support}"
+                    <form id="forma" class="needs-validation" th:action="@{https://localhost:8762/api/bitcoin/auth/clients/support}"
                           method="POST" role="form"
                           th:object="${registrationDTO}">
 
                         <div class="form-group">
-                            <label for="clientId">Client ID</label>
+                            <label for="clientId">Token</label>
                             <input type="hidden" th:field="*{email}" id="email">
                             <input type="hidden" th:field="*{pcClientId}" id="pcClientId">
-                            <input type=text name="clientId" id="clientId"  required class="form-control"
-                                   th:field="*{clientId}"><br/>
-                            <div class="invalid-feedback">Please fill out this field.</div>
-                        </div>
+                            <input type="hidden" th:field="*{name}" id="name">
 
-                        <div class="form-group">
-                            <label for="clientSecret">Client secret</label>
-                            <div class="input-group">
-                                <input type="password" name="clientSecret" id="clientSecret"
-                                       class="form-control" required th:field="*{clientSecret}"><br/>
-                                <div class="invalid-feedback">Please fill out this field.</div>
-                            </div>
+                            <input type="password" name="clientId" id="clientId"  required class="form-control"
+                                   th:field="*{token}"><br/>
+                            <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
 
 
