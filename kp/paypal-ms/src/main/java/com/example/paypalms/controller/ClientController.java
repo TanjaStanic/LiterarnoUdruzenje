@@ -95,7 +95,7 @@ public class ClientController {
                         Long.parseLong(registerClientDTO.getPcClientId()))) != null) {
 
             HttpHeaders headersRedirect = new HttpHeaders();
-            headersRedirect.add("Location", MessageFormat.format("https://localhost:8762/api/pc_info/payment-methods/updateClientsMethods/Paypal/{0}", registerClientDTO.getEmail()));
+            headersRedirect.add("Location", "http://localhost:4200/client");
             headersRedirect.add("Access-Control-Allow-Origin", "*");
             return new ResponseEntity<byte[]>(null, headersRedirect, HttpStatus.FOUND);
 
