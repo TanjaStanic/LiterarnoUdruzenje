@@ -113,7 +113,7 @@ public class ClientController {
 
         if (client != null) {
             model.addAttribute("error", "Email already in use.");
-            return "registration";
+            return "support";
         }
         if (clientService.insert(newClient) != null) {
         	
@@ -137,7 +137,7 @@ public class ClientController {
         } else {
             model.addAttribute("registrationDTO", registerClientDTO);
             model.addAttribute("error", "Something went wrong, please try again.");
-            return "registration";
+            return "support";
         }
 
     }
