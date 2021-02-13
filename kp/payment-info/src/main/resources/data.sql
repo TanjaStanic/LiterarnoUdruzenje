@@ -5,13 +5,13 @@ insert into client (tax_identification_number, company_registration_number, emai
  values ("123", "123", "test@gmail.com", "Pero Peric", "$2a$10$hU3/RmxoPdJhSSrAdfNhlepQI0Y/sx78rrprOI4Twlw6BjiCMc1gq", true, true, null, 2, null);
 
  insert into client (tax_identification_number, company_registration_number, email, name, password, active, enabled, last_password_reset_date, role_id, token)
-  values ("12345", "12345", "sb-zx3ys4123984@business.example.com", "Mico Micic", "$2a$10$hU3/RmxoPdJhSSrAdfNhlepQI0Y/sx78rrprOI4Twlw6BjiCMc1gq", true, true, null, 2, null);
+  values ("12345", "12345", "abc4@example.com", "Mico Micic", "$2a$10$hU3/RmxoPdJhSSrAdfNhlepQI0Y/sx78rrprOI4Twlw6BjiCMc1gq", true, true, null, 2, null);
 
 insert into client (tax_identification_number, company_registration_number, email, name, password, active, enabled, last_password_reset_date, role_id, token)
  values ("1234567", "1234567", "test2@gmail.com", "Zika Zikic", "$2a$10$hU3/RmxoPdJhSSrAdfNhlepQI0Y/sx78rrprOI4Twlw6BjiCMc1gq", true, true, null, 2, null);
 
 insert into client (tax_identification_number, company_registration_number, email, name, password, active, enabled, last_password_reset_date, role_id, token)
- values (null, null, "natasal96@outlook.com", "Janko Jankovic", "$2a$10$hU3/RmxoPdJhSSrAdfNhlepQI0Y/sx78rrprOI4Twlw6BjiCMc1gq", true, true, null, 1, null);
+ values (null, null, "aaa@aaa.com", "Janko Jankovic", "$2a$10$hU3/RmxoPdJhSSrAdfNhlepQI0Y/sx78rrprOI4Twlw6BjiCMc1gq", true, true, null, 1, null);
 
 insert into payment_method (name, subscription_supported, application_name) values ("Banking", false , "bank-ms");
 insert into payment_method (name, subscription_supported, application_name) values ("Paypal", true, "paypal-ms");
